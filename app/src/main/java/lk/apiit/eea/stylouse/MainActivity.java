@@ -1,6 +1,5 @@
 package lk.apiit.eea.stylouse;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -9,6 +8,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import butterknife.BindString;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import lk.apiit.eea.stylouse.dto.requests.AuthRequest;
 import lk.apiit.eea.stylouse.dto.responses.AuthResponse;
 import lk.apiit.eea.stylouse.interfaces.AuthInterface;
@@ -19,19 +21,17 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView displayMessage;
-    private EditText etUsername;
-    private EditText etPassword;
-    private Button btnLogin;
+    @BindString(R.string.baseURL) String BASE_URL;
+    @BindView(R.id.action_text) TextView displayMessage;
+    @BindView(R.id.btn_login) Button btnLogin;
+    @BindView(R.id.et_username) EditText etUsername;
+    @BindView(R.id.et_password) EditText etPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        displayMessage = findViewById(R.id.action_text);
-        etUsername = findViewById(R.id.et_username);
-        etPassword = findViewById(R.id.et_password);
-        btnLogin = findViewById(R.id.btn_login);
+        ButterKnife.bind(this);
 
         handleButtonClick();
     }
@@ -65,9 +65,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private Retrofit getClient() {
-        Resources resources = this.getResources();
-        String BASE_URL = resources.getString(R.string.baseURL);
-
         return new Retrofit
                 .Builder()
                 .baseUrl(BASE_URL)
