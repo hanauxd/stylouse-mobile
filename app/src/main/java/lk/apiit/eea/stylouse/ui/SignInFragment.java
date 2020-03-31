@@ -37,7 +37,7 @@ public class SignInFragment extends RootBaseFragment implements View.OnClickList
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StylouseApp applicationInstance = (StylouseApp) getActivity().getApplicationContext();
+        StylouseApp applicationInstance = (StylouseApp) activity.getApplicationContext();
         applicationInstance.getAppComponent().inject(this);
     }
 

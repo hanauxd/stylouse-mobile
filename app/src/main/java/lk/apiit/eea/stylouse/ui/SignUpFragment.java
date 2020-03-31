@@ -1,7 +1,6 @@
 package lk.apiit.eea.stylouse.ui;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -31,7 +30,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener, Ap
     private FragmentSignUpBinding binding;
     private NavController navController;
     private Activity activity;
-    private Dialog dialog;
 
     @Inject
     AuthService authService;
