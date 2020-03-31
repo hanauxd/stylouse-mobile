@@ -1,4 +1,4 @@
-package lk.apiit.eea.stylouse.dto.responses;
+package lk.apiit.eea.stylouse.models.responses;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -9,7 +9,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Getter
-public class AuthResponse {
+public class SignInResponse {
     @SerializedName("userId")
     private final String userId;
     @SerializedName("tokenValidation")
