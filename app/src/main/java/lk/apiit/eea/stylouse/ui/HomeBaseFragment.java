@@ -19,8 +19,8 @@ import lk.apiit.eea.stylouse.di.UserStore;
 
 public class HomeBaseFragment extends Fragment {
 
-    private Activity activity;
-    private NavController parentNavController;
+    protected Activity activity;
+    protected NavController parentNavController;
 
     @Inject
     UserStore userStore;
@@ -42,7 +42,7 @@ public class HomeBaseFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if(!userStore.getUserDetails(activity)) {
+        if(userStore.getUserDetails(activity) == null) {
             parentNavController.navigate(R.id.signInFragment);
         }
     }
