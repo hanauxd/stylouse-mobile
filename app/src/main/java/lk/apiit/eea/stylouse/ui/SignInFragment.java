@@ -1,17 +1,13 @@
 package lk.apiit.eea.stylouse.ui;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -21,12 +17,13 @@ import lk.apiit.eea.stylouse.R;
 import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.FragmentSignInBinding;
+import lk.apiit.eea.stylouse.di.UserStore;
 import lk.apiit.eea.stylouse.models.requests.SignInRequest;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 import lk.apiit.eea.stylouse.services.AuthService;
 import retrofit2.Response;
 
-public class SignInFragment extends Fragment implements View.OnClickListener, ApiResponseCallback {
+public class SignInFragment extends RootBaseFragment implements View.OnClickListener, ApiResponseCallback {
 
     private static final String TAG = "SignInFragment";
     private FragmentSignInBinding binding;
@@ -34,6 +31,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener, Ap
 
     @Inject
     AuthService authService;
+    @Inject
+    UserStore userStore;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,25 +83,24 @@ public class SignInFragment extends Fragment implements View.OnClickListener, Ap
             SignInRequest signInRequest = new SignInRequest(username, password);
             authService.login(signInRequest, this);
         } else {
-            displayMessage("Username and Password cannot be empty.", View.VISIBLE);
+            displayMessage("Username and Password cannot be empty.");
         }
     }
 
     @Override
     public void onSuccess(Response<?> response) {
-        //TODO update sharedPreference
         SignInResponse signInResponse = (SignInResponse) response.body();
-        Log.i(TAG, "onSuccess: " + signInResponse.toString());
-       displayMessage("", View.GONE);
+        userStore.putUserDetails(signInResponse, activity);
+        navController.navigate(R.id.mainFragment);
     }
 
     @Override
     public void onFailure(String message) {
-        displayMessage(message, View.VISIBLE);
+        displayMessage(message);
     }
 
-    private void displayMessage(String message, int visibility) {
-        binding.errorMessage.setVisibility(visibility);
+    private void displayMessage(String message) {
+        binding.errorMessage.setVisibility(View.VISIBLE);
         binding.errorMessage.setText(message);
     }
 }

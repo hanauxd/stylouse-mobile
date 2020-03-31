@@ -87,7 +87,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener, Ap
 
     @Override
     public void onFailure(String message) {
-        displayMessage(message, View.VISIBLE);
+        displayMessage(message);
     }
 
     private void onSignUpClick() {
@@ -104,17 +104,16 @@ public class SignUpFragment extends Fragment implements View.OnClickListener, Ap
                         || TextUtils.isEmpty(email)
                         || TextUtils.isEmpty(password)
         ) {
-            displayMessage("Fields cannot be empty.", View.VISIBLE);
+            displayMessage("Fields cannot be empty.");
         } else {
-            displayMessage("", View.GONE);
             String role = "ROLE_USER";
             SignUpRequest signUpRequest = new SignUpRequest(role, firstName, lastName, phone, email, password);
             authService.register(signUpRequest, this);
         }
     }
 
-    private void displayMessage(String message, int visibility) {
+    private void displayMessage(String message) {
         binding.errorMessage.setText(message);
-        binding.errorMessage.setVisibility(visibility);
+        binding.errorMessage.setVisibility(View.VISIBLE);
     }
 }
