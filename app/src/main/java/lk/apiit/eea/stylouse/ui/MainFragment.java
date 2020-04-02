@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
@@ -19,10 +18,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import lk.apiit.eea.stylouse.R;
 import lk.apiit.eea.stylouse.databinding.FragmentMainBinding;
 
-public class MainFragment extends Fragment {
+public class MainFragment extends RootBaseFragment {
 
     private FragmentMainBinding binding;
-    private Activity activity;
     private BottomNavigationView bottomNavigationView;
 
     @Override

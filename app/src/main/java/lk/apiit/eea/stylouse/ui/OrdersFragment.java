@@ -5,11 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.fragment.app.Fragment;
-
 import lk.apiit.eea.stylouse.databinding.FragmentOrdersBinding;
 
-public class OrdersFragment extends Fragment {
+public class OrdersFragment extends AuthFragment {
 
     private FragmentOrdersBinding binding;
 

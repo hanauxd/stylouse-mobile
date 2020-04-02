@@ -1,6 +1,5 @@
 package lk.apiit.eea.stylouse.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -24,12 +22,11 @@ import lk.apiit.eea.stylouse.models.requests.SignUpRequest;
 import lk.apiit.eea.stylouse.services.AuthService;
 import retrofit2.Response;
 
-public class SignUpFragment extends Fragment implements View.OnClickListener, ApiResponseCallback {
+public class SignUpFragment extends RootBaseFragment implements View.OnClickListener, ApiResponseCallback {
 
     private static final String TAG = "SignUpFragment";
     private FragmentSignUpBinding binding;
     private NavController navController;
-    private Activity activity;
 
     @Inject
     AuthService authService;

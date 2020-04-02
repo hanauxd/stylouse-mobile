@@ -5,11 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.fragment.app.Fragment;
-
 import lk.apiit.eea.stylouse.databinding.FragmentWishlistBinding;
 
-public class WishlistFragment extends Fragment {
+public class WishlistFragment extends AuthFragment {
 
     private FragmentWishlistBinding binding;
 
