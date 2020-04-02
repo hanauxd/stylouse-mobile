@@ -11,13 +11,16 @@ import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import java.util.Date;
+
 import javax.inject.Inject;
 
 import lk.apiit.eea.stylouse.R;
 import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.FragmentSignInBinding;
-import lk.apiit.eea.stylouse.di.UserStore;
+import lk.apiit.eea.stylouse.di.AuthSession;
+import lk.apiit.eea.stylouse.interfaces.ActivityHandler;
 import lk.apiit.eea.stylouse.models.requests.SignInRequest;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 import lk.apiit.eea.stylouse.services.AuthService;
@@ -32,7 +35,7 @@ public class SignInFragment extends RootBaseFragment implements View.OnClickList
     @Inject
     AuthService authService;
     @Inject
-    UserStore userStore;
+    AuthSession session;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,9 +92,14 @@ public class SignInFragment extends RootBaseFragment implements View.OnClickList
 
     @Override
     public void onSuccess(Response<?> response) {
-        SignInResponse signInResponse = (SignInResponse) response.body();
-        userStore.putUserDetails(signInResponse, activity);
-        navController.navigate(R.id.mainFragment);
+        SignInResponse body = (SignInResponse) response.body();
+        if (body != null) {
+            ((ActivityHandler)activity).create(body.getTokenValidation());
+            Date expiresAt = new Date(new Date().getTime() + body.getTokenValidation());
+            body.setExpiresAt(expiresAt);
+            session.setAuthState(body);
+            navController.navigate(R.id.action_signInFragment_to_mainFragment);
+        }
     }
 
     @Override
