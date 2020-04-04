@@ -22,7 +22,6 @@
                 android:orientation="vertical">
 
                 <EditText
-                    android:text="Chicken"
                     android:id="@+id/first_name"
                     android:inputType="text"
                     android:layout_width="match_parent"
@@ -30,7 +29,6 @@
                     android:hint="First Name"/>
 
                 <EditText
-                    android:text="Nuggets"
                     android:id="@+id/last_name"
                     android:inputType="text"
                     android:layout_width="match_parent"
@@ -38,7 +36,6 @@
                     android:hint="Last Name"/>
 
                 <EditText
-                    android:text="0876554"
                     android:id="@+id/phone"
                     android:inputType="number"
                     android:layout_width="match_parent"
@@ -46,7 +43,6 @@
                     android:hint="Phone"/>
 
                 <EditText
-                    android:text="nuggets@test.com"
                     android:id="@+id/username"
                     android:inputType="textEmailAddress"
                     android:layout_width="match_parent"
@@ -54,7 +50,6 @@
                     android:hint="Username"/>
 
                 <EditText
-                    android:text="pass"
                     android:id="@+id/password"
                     android:inputType="textPassword"
                     android:layout_width="match_parent"

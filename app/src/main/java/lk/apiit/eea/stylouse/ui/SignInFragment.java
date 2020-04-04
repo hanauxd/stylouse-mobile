@@ -5,7 +5,6 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,11 +31,9 @@ import retrofit2.Response;
 
 public class SignInFragment extends RootBaseFragment implements View.OnClickListener, ApiResponseCallback {
 
-    private static final String TAG = "SignInFragment";
     private FragmentSignInBinding binding;
     private NavController navController;
     private AwesomeValidation validation;
-    private ProgressBar progressBar;
 
     @Inject
     AuthService authService;

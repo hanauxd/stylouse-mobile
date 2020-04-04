@@ -28,7 +28,6 @@ import retrofit2.Response;
 
 public class SignUpFragment extends RootBaseFragment implements View.OnClickListener, ApiResponseCallback {
 
-    private static final String TAG = "SignUpFragment";
     private FragmentSignUpBinding binding;
     private NavController navController;
     private AwesomeValidation validation;
