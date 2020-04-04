@@ -17,7 +17,9 @@ public class RetroFitCallback<T> implements Callback<T> {
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
         if (!response.isSuccessful() && response.errorBody() != null) {
-            String errorMessage = new Gson().fromJson(response.errorBody().charStream(), ErrorResponse.class).getMessage();
+            String errorMessage = new Gson()
+                    .fromJson(response.errorBody().charStream(), ErrorResponse.class)
+                    .getMessage();
             callback.onFailure(errorMessage);
         }
 
