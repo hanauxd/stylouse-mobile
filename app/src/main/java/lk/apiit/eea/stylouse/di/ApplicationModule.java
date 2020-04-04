@@ -12,6 +12,7 @@ import dagger.Provides;
 import lk.apiit.eea.stylouse.R;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 import lk.apiit.eea.stylouse.services.AuthService;
+import lk.apiit.eea.stylouse.services.ProductService;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -61,5 +62,11 @@ public class ApplicationModule {
     @Singleton
     public AuthService provideAuthServiceInstance(Retrofit retrofit) {
         return new AuthService(retrofit);
+    }
+
+    @Provides
+    @Singleton
+    public ProductService provideProductServiceInstance(Retrofit retrofit) {
+        return new ProductService(retrofit);
     }
 }
