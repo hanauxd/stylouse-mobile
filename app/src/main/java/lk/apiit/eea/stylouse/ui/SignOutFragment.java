@@ -22,7 +22,7 @@ public class SignOutFragment extends RootBaseFragment implements Runnable{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        new Handler().postDelayed(this, 1000);
+        new Handler().postDelayed(this, Long.parseLong(getString(R.string.delay)));
     }
 
     @Override
