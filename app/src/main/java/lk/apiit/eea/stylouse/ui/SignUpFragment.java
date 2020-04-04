@@ -2,7 +2,7 @@ package lk.apiit.eea.stylouse.ui;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 
 import javax.inject.Inject;
 
@@ -27,6 +31,7 @@ public class SignUpFragment extends RootBaseFragment implements View.OnClickList
     private static final String TAG = "SignUpFragment";
     private FragmentSignUpBinding binding;
     private NavController navController;
+    private AwesomeValidation validation;
 
     @Inject
     AuthService authService;
@@ -42,6 +47,9 @@ public class SignUpFragment extends RootBaseFragment implements View.OnClickList
         super.onCreate(savedInstanceState);
         StylouseApp app = (StylouseApp) activity.getApplicationContext();
         app.getAppComponent().inject(this);
+
+        validation = new AwesomeValidation(ValidationStyle.UNDERLABEL);
+        validation.setContext(activity);
     }
 
     @Override
@@ -55,8 +63,11 @@ public class SignUpFragment extends RootBaseFragment implements View.OnClickList
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
+
         binding.btnSignIn.setOnClickListener(this);
         binding.btnSignUp.setOnClickListener(this);
+
+        addFormValidation();
     }
 
     @Override
@@ -83,32 +94,38 @@ public class SignUpFragment extends RootBaseFragment implements View.OnClickList
     @Override
     public void onFailure(String message) {
         displayMessage(message);
+        binding.layoutSpinner.setVisibility(View.GONE);
+        binding.layoutSignUpForm.setVisibility(View.VISIBLE);
     }
 
     private void onSignUpClick() {
-        String firstName = binding.firstName.getText().toString();
-        String lastName = binding.lastName.getText().toString();
-        String phone = binding.phone.getText().toString();
-        String email = binding.username.getText().toString();
-        String password = binding.password.getText().toString();
-
-        if (
-                TextUtils.isEmpty(firstName)
-                        || TextUtils.isEmpty(lastName)
-                        || TextUtils.isEmpty(phone)
-                        || TextUtils.isEmpty(email)
-                        || TextUtils.isEmpty(password)
-        ) {
-            displayMessage("Fields cannot be empty.");
-        } else {
+        if (validation.validate()) {
             String role = "ROLE_USER";
+            String firstName = binding.firstName.getText().toString();
+            String lastName = binding.lastName.getText().toString();
+            String phone = binding.phone.getText().toString();
+            String email = binding.username.getText().toString();
+            String password = binding.password.getText().toString();
+
             SignUpRequest signUpRequest = new SignUpRequest(role, firstName, lastName, phone, email, password);
             authService.register(signUpRequest, this);
+
+            binding.layoutSpinner.setVisibility(View.VISIBLE);
+            binding.layoutSignUpForm.setVisibility(View.GONE);
+
         }
     }
 
     private void displayMessage(String message) {
         binding.errorMessage.setText(message);
         binding.errorMessage.setVisibility(View.VISIBLE);
+    }
+
+    private void addFormValidation() {
+        validation.addValidation(binding.firstName, RegexTemplate.NOT_EMPTY, getString(R.string.error_field));
+        validation.addValidation(binding.lastName, RegexTemplate.NOT_EMPTY, getString(R.string.error_field));
+        validation.addValidation(binding.phone, getString(R.string.regex_phone), getString(R.string.error_phone));
+        validation.addValidation(binding.username, Patterns.EMAIL_ADDRESS, getString(R.string.error_email));
+        validation.addValidation(binding.password, getString(R.string.password_length), getString(R.string.error_password));
     }
 }

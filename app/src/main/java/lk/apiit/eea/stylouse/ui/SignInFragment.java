@@ -1,15 +1,19 @@
 package lk.apiit.eea.stylouse.ui;
 
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.ValidationStyle;
 
 import java.util.Date;
 
@@ -31,6 +35,8 @@ public class SignInFragment extends RootBaseFragment implements View.OnClickList
     private static final String TAG = "SignInFragment";
     private FragmentSignInBinding binding;
     private NavController navController;
+    private AwesomeValidation validation;
+    private ProgressBar progressBar;
 
     @Inject
     AuthService authService;
@@ -42,6 +48,9 @@ public class SignInFragment extends RootBaseFragment implements View.OnClickList
         super.onCreate(savedInstanceState);
         StylouseApp applicationInstance = (StylouseApp) activity.getApplicationContext();
         applicationInstance.getAppComponent().inject(this);
+
+        validation = new AwesomeValidation(ValidationStyle.UNDERLABEL);
+        validation.setContext(activity);
     }
 
     @Override
@@ -55,8 +64,12 @@ public class SignInFragment extends RootBaseFragment implements View.OnClickList
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
+
         binding.btnSignIn.setOnClickListener(this);
         binding.btnSignUp.setOnClickListener(this);
+
+        validation.addValidation(binding.username, Patterns.EMAIL_ADDRESS, getString(R.string.error_email));
+        validation.addValidation(binding.password, getString(R.string.password_length), getString(R.string.error_password));
     }
 
     @Override
@@ -80,13 +93,15 @@ public class SignInFragment extends RootBaseFragment implements View.OnClickList
     }
 
     private void onSignInClick() {
-        String username = binding.username.getText().toString();
-        String password = binding.password.getText().toString();
-        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
+        if (validation.validate()) {
+            String username = binding.username.getText().toString();
+            String password = binding.password.getText().toString();
+
             SignInRequest signInRequest = new SignInRequest(username, password);
             authService.login(signInRequest, this);
-        } else {
-            displayMessage("Username and Password cannot be empty.");
+
+            binding.layoutSpinner.setVisibility(View.VISIBLE);
+            binding.layoutSignInForm.setVisibility(View.GONE);
         }
     }
 
@@ -105,6 +120,8 @@ public class SignInFragment extends RootBaseFragment implements View.OnClickList
     @Override
     public void onFailure(String message) {
         displayMessage(message);
+        binding.layoutSpinner.setVisibility(View.GONE);
+        binding.layoutSignInForm.setVisibility(View.VISIBLE);
     }
 
     private void displayMessage(String message) {
