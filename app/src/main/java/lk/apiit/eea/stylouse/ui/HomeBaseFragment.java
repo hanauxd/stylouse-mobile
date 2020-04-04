@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 import javax.inject.Inject;
 
 import lk.apiit.eea.stylouse.R;
-import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 
@@ -23,7 +22,6 @@ public class HomeBaseFragment extends RootBaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
     }
 
     @Override

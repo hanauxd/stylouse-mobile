@@ -25,8 +25,7 @@ public class ProfileFragment extends AuthFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StylouseApp applicationInstance = (StylouseApp) activity.getApplicationContext();
-        applicationInstance.getAppComponent().inject(this);
+        ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
         setHasOptionsMenu(true);
     }
 
