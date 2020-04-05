@@ -1,4 +1,4 @@
-package lk.apiit.eea.stylouse.models;
+package lk.apiit.eea.stylouse.models.responses;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Product {
+public class ProductResponse {
     private String id;
     private String name;
     private int quantity;
     private double price;
     private String description;
-    private List<ProductCategory> productCategories = new ArrayList<>();
-    private List<ProductImage> productImages = new ArrayList<>();
+    private List<ProductCategoryResponse> productCategories = new ArrayList<>();
+    private List<ProductImageResponse> productImages = new ArrayList<>();
 }
