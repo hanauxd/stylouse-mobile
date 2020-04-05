@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.apis.ProductAPI;
 import lk.apiit.eea.stylouse.apis.RetroFitCallback;
-import lk.apiit.eea.stylouse.models.Product;
+import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
@@ -20,12 +20,12 @@ public class ProductService {
     }
 
     public void getProducts(ApiResponseCallback callback) {
-        Call<List<Product>> productsCall = productAPI.getProducts();
+        Call<List<ProductResponse>> productsCall = productAPI.getProducts();
         productsCall.enqueue(new RetroFitCallback<>(callback));
     }
 
     public void getProduct(String id, ApiResponseCallback callback) {
-        Call<Product> productCall = productAPI.getProduct(id);
+        Call<ProductResponse> productCall = productAPI.getProduct(id);
         productCall.enqueue(new RetroFitCallback<>(callback));
     }
 }
