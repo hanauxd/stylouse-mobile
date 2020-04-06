@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId "lk.apiit.eea.stylouse"
-        minSdkVersion 24
+        minSdkVersion 28
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -78,4 +78,7 @@ dependencies {
 
     def awesome_validation_version = "4.2"
     implementation "com.basgeekball:awesome-validation:$awesome_validation_version"
+
+    def number_picker_version = "v1.0.3"
+    implementation "com.github.sephiroth74:NumberSlidingPicker:$number_picker_version"
 }
