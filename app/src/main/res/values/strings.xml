@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">stylouse-mobile</string>
+    <string name="app_name">Stylouse</string>
     <string name="error_email">Invalid email address</string>
     <string name="error_password">Password should be 4 to 10 characters long</string>
     <string name="password_length">\\b\\w{4,10}\\b</string>
