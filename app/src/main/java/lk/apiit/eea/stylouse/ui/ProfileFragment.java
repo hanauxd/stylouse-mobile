@@ -13,25 +13,19 @@ import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import javax.inject.Inject;
-
 import lk.apiit.eea.stylouse.R;
 import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.FragmentProfileBinding;
-import lk.apiit.eea.stylouse.di.UserStore;
+import lk.apiit.eea.stylouse.interfaces.ActivityHandler;
 
-public class ProfileFragment extends HomeBaseFragment {
+public class ProfileFragment extends AuthFragment {
 
     private NavController navController;
-
-    @Inject
-    UserStore userStore;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StylouseApp applicationInstance = (StylouseApp) activity.getApplicationContext();
-        applicationInstance.getAppComponent().inject(this);
+        ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
         setHasOptionsMenu(true);
     }
 
@@ -50,8 +44,7 @@ public class ProfileFragment extends HomeBaseFragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        int resourceId = userStore.getUserDetails(activity) != null ? R.menu.profile_items_auth : R.menu.profile_items_unauth;
-        activity.getMenuInflater().inflate(resourceId, menu);
+        activity.getMenuInflater().inflate(R.menu.profile_items_auth, menu);
     }
 
     @Override
@@ -62,11 +55,8 @@ public class ProfileFragment extends HomeBaseFragment {
                 break;
             }
             case R.id.action_logout:{
-                userStore.clearUserDetails(activity);
-            }
-            case R.id.action_sign_in: {
-                parentNavController.navigate(R.id.signInFragment);
-                break;
+                ((ActivityHandler)activity).destroy();
+                session.setAuthState(null);
             }
             default: {}
         }

@@ -5,21 +5,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.fragment.app.Fragment;
+import androidx.annotation.Nullable;
 
-import lk.apiit.eea.stylouse.R;
+import lk.apiit.eea.stylouse.application.StylouseApp;
+import lk.apiit.eea.stylouse.databinding.FragmentCartBinding;
 
-public class CartFragment extends Fragment {
+public class CartFragment extends AuthFragment {
+    private FragmentCartBinding binding;
 
-    public CartFragment() {
-        // Required empty public constructor
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cart, container, false);
+        binding = FragmentCartBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 }
