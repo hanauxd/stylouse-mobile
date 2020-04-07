@@ -7,6 +7,7 @@ import lk.apiit.eea.stylouse.MainActivity;
 import lk.apiit.eea.stylouse.ui.CartFragment;
 import lk.apiit.eea.stylouse.ui.HomeFragment;
 import lk.apiit.eea.stylouse.ui.OrdersFragment;
+import lk.apiit.eea.stylouse.ui.ProductFragment;
 import lk.apiit.eea.stylouse.ui.ProfileFragment;
 import lk.apiit.eea.stylouse.ui.SignInFragment;
 import lk.apiit.eea.stylouse.ui.SignUpFragment;
@@ -25,4 +26,5 @@ public interface ApplicationComponent {
     void inject(CartFragment fragment);
     void inject(WishlistFragment fragment);
     void inject(OrdersFragment fragment);
+    void inject(ProductFragment fragment);
 }
