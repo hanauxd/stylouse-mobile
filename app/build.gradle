@@ -59,7 +59,6 @@ dependencies {
     def dagger_version = "2.27"
     implementation "com.google.dagger:dagger:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
-
     implementation "com.google.dagger:dagger-android:$dagger_version"
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
@@ -79,6 +78,12 @@ dependencies {
     def awesome_validation_version = "4.2"
     implementation "com.basgeekball:awesome-validation:$awesome_validation_version"
 
-    def number_picker_version = "v1.0.3"
+    def number_picker_version = "v.1.1.1"
     implementation "com.github.sephiroth74:NumberSlidingPicker:$number_picker_version"
+
+    def loading_button_version = "2.2.0"
+    implementation "br.com.simplepass:loading-button-android:$loading_button_version"
+
+    def dynamic_toast_version = "3.2.0"
+    implementation "com.pranavpandey.android:dynamic-toasts:$dynamic_toast_version"
 }
