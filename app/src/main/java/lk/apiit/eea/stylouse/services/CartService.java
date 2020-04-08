@@ -20,13 +20,22 @@ public class CartService {
         this.cartAPI = retrofit.create(CartAPI.class);
     }
 
-    public void addCart(CartRequest cartRequest, ApiResponseCallback callback, String token) {
-        Call<List<CartResponse>> cartCall = cartAPI.addCart(cartRequest, "Bearer ".concat(token));
+    public void addCart(CartRequest cartRequest, ApiResponseCallback callback, String jwt) {
+        Call<List<CartResponse>> cartCall = cartAPI.addCart(cartRequest, token(jwt));
         cartCall.enqueue(new RetroFitCallback<>(callback));
     }
 
-    public void getCarts(ApiResponseCallback callback, String token) {
-        Call<List<CartResponse>> cartsCall = cartAPI.getCarts("Bearer ".concat(token));
+    public void getCarts(ApiResponseCallback callback, String jwt) {
+        Call<List<CartResponse>> cartsCall = cartAPI.getCarts(token(jwt));
         cartsCall.enqueue(new RetroFitCallback<>(callback));
+    }
+
+    public void deleteCart(ApiResponseCallback callback, String jwt, String id) {
+        Call<List<CartResponse>> cartsCall = cartAPI.deleteCart(token(jwt), id);
+        cartsCall.enqueue(new RetroFitCallback<>(callback));
+    }
+
+    private String token(String jwt) {
+        return "Bearer ".concat(jwt);
     }
 }
