@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
@@ -15,17 +17,20 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import lk.apiit.eea.stylouse.adapters.CartAdapter;
 import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.FragmentCartBinding;
 import lk.apiit.eea.stylouse.di.AuthSession;
+import lk.apiit.eea.stylouse.interfaces.AdapterItemClickListener;
 import lk.apiit.eea.stylouse.models.responses.CartResponse;
 import lk.apiit.eea.stylouse.services.CartService;
 import retrofit2.Response;
 
-public class CartFragment extends AuthFragment implements ApiResponseCallback {
+public class CartFragment extends AuthFragment implements ApiResponseCallback, AdapterItemClickListener {
     private FragmentCartBinding binding;
     private List<CartResponse> carts = new ArrayList<>();
+    private CartAdapter adapter;
 
     @Inject
     AuthSession session;
@@ -55,6 +60,7 @@ public class CartFragment extends AuthFragment implements ApiResponseCallback {
     @Override
     public void onSuccess(Response<?> response) {
         this.carts = (List<CartResponse>)response.body();
+        initRecyclerView();
         displayLayout();
     }
 
@@ -64,8 +70,34 @@ public class CartFragment extends AuthFragment implements ApiResponseCallback {
         DynamicToast.makeError(activity, message).show();
     }
 
+    @Override
+    public void onItemClick(String cartId) {
+        cartService.deleteCart(new CartHandler(), session.getAuthState().getJwt(), cartId);
+    }
+
     private void displayLayout() {
         binding.layoutSpinner.setVisibility(View.GONE);
         binding.layoutCart.setVisibility(View.VISIBLE);
+    }
+
+    private void initRecyclerView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(activity, RecyclerView.VERTICAL, false);
+        adapter = new CartAdapter(carts, this);
+        binding.cartList.setLayoutManager(layoutManager);
+        binding.cartList.setAdapter(adapter);
+    }
+
+    class CartHandler implements ApiResponseCallback {
+
+        @Override
+        public void onSuccess(Response<?> response) {
+            DynamicToast.makeSuccess(activity, "Product removed successfully.").show();
+            adapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onFailure(String message) {
+            DynamicToast.makeError(activity, "Failed to remove product.").show();
+        }
     }
 }
