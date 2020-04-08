@@ -42,7 +42,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         return products.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         private ProductListItemBinding binding;
         private AdapterItemClickListener listener;
 
