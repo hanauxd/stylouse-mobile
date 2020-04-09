@@ -42,7 +42,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         return products.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         private ProductListItemBinding binding;
         private AdapterItemClickListener listener;
 
@@ -58,9 +58,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             String productJSON = new Gson().toJson(product);
             binding.root.setOnClickListener(view -> listener.onItemClick(productJSON));
 
-            String url = binding.getRoot().getResources().getString(R.string.baseURL) +
-                    "product/images/download/" +
-                    product.getProductImages().get(0).getFilename();
+            String url = binding.getRoot().getResources().getString(R.string.baseURL)
+                    .concat("product/images/download/")
+                    .concat(product.getProductImages().get(0).getFilename());
             Glide.with(binding.getRoot())
                     .load(url)
                     .into(binding.thumbnail);

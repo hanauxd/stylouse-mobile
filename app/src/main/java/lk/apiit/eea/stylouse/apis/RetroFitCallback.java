@@ -6,6 +6,7 @@ import lk.apiit.eea.stylouse.models.responses.ErrorResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 public class RetroFitCallback<T> implements Callback<T> {
     private ApiResponseCallback callback;
@@ -30,6 +31,9 @@ public class RetroFitCallback<T> implements Callback<T> {
 
     @Override
     public void onFailure(Call<T> call, Throwable t) {
+        if (t.getMessage() != null) {
+            Timber.e("onFailure: %s", t.getMessage());
+        }
         callback.onFailure("Network error occurred. Please try again later.");
     }
 }

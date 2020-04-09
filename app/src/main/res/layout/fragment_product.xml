@@ -29,7 +29,7 @@
                     android:layout_margin="16dp"
                     android:backgroundTint="@color/colorWhite"
                     app:borderWidth="0dp"
-                    app:rippleColor="#CCCCCC"
+                    app:rippleColor="@color/colorLightGray"
                     app:srcCompat="@drawable/icon_wishlist"
                     style="@style/Widget.MaterialComponents.FloatingActionButton"/>
 

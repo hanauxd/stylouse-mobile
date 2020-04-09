@@ -12,4 +12,5 @@ public class CartResponse {
     private ProductResponse product;
     private int quantity;
     private String size;
+    private double totalPrice;
 }

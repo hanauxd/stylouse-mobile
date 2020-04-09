@@ -16,7 +16,15 @@
         android:id="@+id/navigation_cart"
         android:name="lk.apiit.eea.stylouse.ui.CartFragment"
         android:label="fragment_cart"
-        tools:layout="@layout/fragment_cart"/>
+        tools:layout="@layout/fragment_cart">
+        <action
+            android:id="@+id/action_navigation_cart_to_shippingFragment"
+            app:destination="@id/shippingFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_wishlist"
@@ -45,5 +53,11 @@
         android:name="lk.apiit.eea.stylouse.ui.OrdersFragment"
         android:label="OrdersFragment"
         tools:layout="@layout/fragment_orders"/>
+
+    <fragment
+        android:id="@+id/shippingFragment"
+        android:name="lk.apiit.eea.stylouse.ui.ShippingFragment"
+        android:label="ShippingFragment"
+        tools:layout="@layout/fragment_shipping"/>
 
 </navigation>
