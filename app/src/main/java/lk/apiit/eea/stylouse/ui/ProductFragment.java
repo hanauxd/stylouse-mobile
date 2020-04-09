@@ -30,7 +30,7 @@ import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.services.CartService;
 import retrofit2.Response;
 
-public class ProductFragment extends RootBaseFragment implements View.OnClickListener, ApiResponseCallback {
+public class ProductFragment extends RootBaseFragment {
     private FragmentProductBinding binding;
     private RecyclerView productSizeList;
     private SizeAdapter adapter;
@@ -58,10 +58,35 @@ public class ProductFragment extends RootBaseFragment implements View.OnClickLis
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.productSizeList = binding.sizeList;
-        binding.btnWishlist.setOnClickListener(this);
-        binding.btnCart.setOnClickListener(this);
+        binding.btnWishlist.setOnClickListener(this::onAddToWishlistClick);
+        binding.btnCart.setOnClickListener(this::onAddToCartClick);
         initRecyclerView();
+        bindProductToView();
+    }
 
+    private ApiResponseCallback addCartCallback = new ApiResponseCallback() {
+        @Override
+        public void onSuccess(Response<?> response) {
+            binding.btnCart.revertAnimation();
+            DynamicToast.makeSuccess(activity, "Product added to cart.").show();
+            parentNavController.navigate(R.id.action_productFragment_to_mainFragment);
+        }
+
+        @Override
+        public void onFailure(String message) {
+            binding.btnCart.revertAnimation();
+            DynamicToast.makeError(activity, message).show();
+        }
+    };
+
+    private void initRecyclerView() {
+        GridLayoutManager layoutManager = new GridLayoutManager(activity, 4);
+        adapter = new SizeAdapter(Arrays.asList("S", "M", "L", "XL"));
+        productSizeList.setLayoutManager(layoutManager);
+        productSizeList.setAdapter(adapter);
+    }
+
+    private void bindProductToView() {
         String productJSON = getArguments() != null ? getArguments().getString("product") : null;
         ProductResponse product = new Gson().fromJson(productJSON, ProductResponse.class);
         binding.setProduct(product);
@@ -74,44 +99,7 @@ public class ProductFragment extends RootBaseFragment implements View.OnClickLis
                 .into(binding.productImage);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_cart: {
-                onAddToCartClick();
-                break;
-            }
-            case R.id.btn_wishlist: {
-                binding.btnWishlist.setImageResource(R.drawable.icon_favorite);
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-    }
-
-    @Override
-    public void onSuccess(Response<?> response) {
-        binding.btnCart.revertAnimation();
-        DynamicToast.makeSuccess(activity, "Product added to cart.").show();
-        parentNavController.navigate(R.id.action_productFragment_to_mainFragment);
-    }
-
-    @Override
-    public void onFailure(String message) {
-        binding.btnCart.revertAnimation();
-        DynamicToast.makeError(activity, message).show();
-    }
-
-    private void initRecyclerView() {
-        GridLayoutManager layoutManager = new GridLayoutManager(activity, 4);
-        adapter = new SizeAdapter(Arrays.asList("S", "M", "L", "XL"));
-        productSizeList.setLayoutManager(layoutManager);
-        productSizeList.setAdapter(adapter);
-    }
-
-    private void onAddToCartClick() {
+    private void onAddToCartClick(View view) {
         if (session.getAuthState() != null) {
             int quantity = binding.numberPicker.getProgress();
             String productId = binding.getProduct().getId();
@@ -122,7 +110,7 @@ public class ProductFragment extends RootBaseFragment implements View.OnClickLis
                 binding.btnCart.startAnimation();
                 cartService.addCart(
                         new CartRequest(productId, adapter.getSize(), quantity),
-                        this,
+                        addCartCallback,
                         session.getAuthState().getJwt()
                 );
             }
