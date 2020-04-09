@@ -76,4 +76,10 @@ public class ApplicationModule {
     public CartService provideCartServiceInstance(Retrofit retrofit) {
         return new CartService(retrofit);
     }
+
+    @Provides
+    @Singleton
+    public OrderService provideOrderServiceInstance(Retrofit retrofit) {
+        return new OrderService(retrofit);
+    }
 }
