@@ -28,17 +28,11 @@ public class HomeBaseFragment extends RootBaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (state != null) {
-            session.setObserver(this, appState -> {
+            session.setObserver(getViewLifecycleOwner(), appState -> {
                 if (appState == null) {
                     parentNavController.navigate(R.id.action_mainFragment_to_signOutFragment);
                 }
             });
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        session.removeObserver(this);
     }
 }
