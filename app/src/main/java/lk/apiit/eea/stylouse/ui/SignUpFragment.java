@@ -26,7 +26,7 @@ import lk.apiit.eea.stylouse.models.requests.SignUpRequest;
 import lk.apiit.eea.stylouse.services.AuthService;
 import retrofit2.Response;
 
-public class SignUpFragment extends RootBaseFragment implements View.OnClickListener, ApiResponseCallback {
+public class SignUpFragment extends RootBaseFragment {
 
     private FragmentSignUpBinding binding;
     private NavController navController;
@@ -62,42 +62,12 @@ public class SignUpFragment extends RootBaseFragment implements View.OnClickList
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
-
-        binding.btnSignIn.setOnClickListener(this);
-        binding.btnSignUp.setOnClickListener(this);
-
-        addFormValidation();
+        binding.btnSignIn.setOnClickListener(this::onSignInClick);
+        binding.btnSignUp.setOnClickListener(this::onSignUpClick);
+        validateInput();
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_sign_up: {
-                onSignUpClick();
-                break;
-            }
-            case R.id.btn_sign_in: {
-                navController.navigate(R.id.action_signUpFragment_to_signInFragment);
-                break;
-            }
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public void onSuccess(Response<?> response) {
-        navController.navigate(R.id.action_signUpFragment_to_signInFragment);
-    }
-
-    @Override
-    public void onFailure(String message) {
-        displayMessage(message);
-        binding.layoutSpinner.setVisibility(View.GONE);
-        binding.layoutSignUpForm.setVisibility(View.VISIBLE);
-    }
-
-    private void onSignUpClick() {
+    private void onSignUpClick(View view) {
         if (validation.validate()) {
             String role = "ROLE_USER";
             String firstName = binding.firstName.getText().toString();
@@ -107,12 +77,15 @@ public class SignUpFragment extends RootBaseFragment implements View.OnClickList
             String password = binding.password.getText().toString();
 
             SignUpRequest signUpRequest = new SignUpRequest(role, firstName, lastName, phone, email, password);
-            authService.register(signUpRequest, this);
+            authService.register(signUpRequest, registerCallback);
 
             binding.layoutSpinner.setVisibility(View.VISIBLE);
             binding.layoutSignUpForm.setVisibility(View.GONE);
-
         }
+    }
+
+    private void onSignInClick(View view) {
+        navController.navigate(R.id.action_signUpFragment_to_signInFragment);
     }
 
     private void displayMessage(String message) {
@@ -120,11 +93,25 @@ public class SignUpFragment extends RootBaseFragment implements View.OnClickList
         binding.errorMessage.setVisibility(View.VISIBLE);
     }
 
-    private void addFormValidation() {
+    private void validateInput() {
         validation.addValidation(binding.firstName, RegexTemplate.NOT_EMPTY, getString(R.string.error_field));
         validation.addValidation(binding.lastName, RegexTemplate.NOT_EMPTY, getString(R.string.error_field));
         validation.addValidation(binding.phone, getString(R.string.regex_phone), getString(R.string.error_phone));
         validation.addValidation(binding.username, Patterns.EMAIL_ADDRESS, getString(R.string.error_email));
         validation.addValidation(binding.password, getString(R.string.password_length), getString(R.string.error_password));
     }
+
+    private ApiResponseCallback registerCallback = new ApiResponseCallback() {
+        @Override
+        public void onSuccess(Response<?> response) {
+            navController.navigate(R.id.action_signUpFragment_to_signInFragment);
+        }
+
+        @Override
+        public void onFailure(String message) {
+            displayMessage(message);
+            binding.layoutSpinner.setVisibility(View.GONE);
+            binding.layoutSignUpForm.setVisibility(View.VISIBLE);
+        }
+    };
 }
