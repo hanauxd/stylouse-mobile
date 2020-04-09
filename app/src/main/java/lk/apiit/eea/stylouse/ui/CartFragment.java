@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +19,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import lk.apiit.eea.stylouse.R;
 import lk.apiit.eea.stylouse.adapters.CartAdapter;
 import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.application.StylouseApp;
@@ -31,6 +34,7 @@ public class CartFragment extends AuthFragment implements ApiResponseCallback, A
     private FragmentCartBinding binding;
     private List<CartResponse> carts = new ArrayList<>();
     private CartAdapter adapter;
+    private NavController navController;
 
     @Inject
     AuthSession session;
@@ -53,6 +57,7 @@ public class CartFragment extends AuthFragment implements ApiResponseCallback, A
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
         String token = session.getAuthState().getJwt();
         cartService.getCarts(this, token);
     }
@@ -60,6 +65,7 @@ public class CartFragment extends AuthFragment implements ApiResponseCallback, A
     @Override
     public void onSuccess(Response<?> response) {
         this.carts = (List<CartResponse>)response.body();
+        bindCartDetails();
         initRecyclerView();
         displayLayout();
     }
@@ -87,11 +93,25 @@ public class CartFragment extends AuthFragment implements ApiResponseCallback, A
         binding.cartList.setAdapter(adapter);
     }
 
+    private void bindCartDetails() {
+        binding.setCount(String.valueOf(carts.size()));
+        binding.setTotal(String.valueOf(cartTotal()));
+        binding.btnCheckout.setOnClickListener(v -> navController.navigate(R.id.action_navigation_cart_to_shippingFragment));
+    }
+
+    private double cartTotal() {
+        double total = 0;
+        for (CartResponse cart : carts) total += cart.getTotalPrice();
+        return total;
+    }
+
     class CartHandler implements ApiResponseCallback {
 
         @Override
         public void onSuccess(Response<?> response) {
             DynamicToast.makeSuccess(activity, "Product removed successfully.").show();
+            binding.setCount(String.valueOf(carts.size()));
+            binding.setTotal(String.valueOf(cartTotal()));
             adapter.notifyDataSetChanged();
         }
 
