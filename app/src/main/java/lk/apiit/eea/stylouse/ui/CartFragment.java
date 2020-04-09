@@ -96,7 +96,13 @@ public class CartFragment extends AuthFragment implements ApiResponseCallback, A
     private void bindCartDetails() {
         binding.setCount(String.valueOf(carts.size()));
         binding.setTotal(String.valueOf(cartTotal()));
-        binding.btnCheckout.setOnClickListener(v -> navController.navigate(R.id.action_navigation_cart_to_shippingFragment));
+        binding.btnCheckout.setOnClickListener(v -> {
+            if (carts.size() > 0) {
+                navController.navigate(R.id.action_navigation_cart_to_shippingFragment);
+            } else {
+                DynamicToast.make(activity, "Add items to cart.").show();
+            }
+        });
     }
 
     private double cartTotal() {
