@@ -27,7 +27,7 @@ import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.services.ProductService;
 import retrofit2.Response;
 
-public class HomeFragment extends HomeBaseFragment implements ApiResponseCallback, AdapterItemClickListener {
+public class HomeFragment extends HomeBaseFragment {
     private FragmentHomeBinding binding;
     private List<ProductResponse> products;
     private RecyclerView productList;
@@ -53,7 +53,7 @@ public class HomeFragment extends HomeBaseFragment implements ApiResponseCallbac
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.productList = binding.productList;
-        productService.getProducts(this);
+        productService.getProducts(productsCallback);
     }
 
     @Override
@@ -76,33 +76,33 @@ public class HomeFragment extends HomeBaseFragment implements ApiResponseCallbac
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onSuccess(Response<?> response) {
-        this.products = (List<ProductResponse>) response.body();
-        initRecyclerView();
-        binding.layoutSpinner.setVisibility(View.GONE);
-        binding.layoutHome.setVisibility(View.VISIBLE);
-    }
+    private ApiResponseCallback productsCallback = new ApiResponseCallback() {
+        @Override
+        public void onSuccess(Response<?> response) {
+            products = (List<ProductResponse>) response.body();
+            initRecyclerView();
+            binding.layoutSpinner.setVisibility(View.GONE);
+            binding.layoutHome.setVisibility(View.VISIBLE);
+        }
 
-    @Override
-    public void onFailure(String message) {
-        binding.layoutSpinner.setVisibility(View.GONE);
-        binding.layoutHome.setVisibility(View.VISIBLE);
-    }
+        @Override
+        public void onFailure(String message) {
+            binding.layoutSpinner.setVisibility(View.GONE);
+            binding.layoutHome.setVisibility(View.VISIBLE);
+        }
+    };
+
+    private AdapterItemClickListener productClickListener = productJSON -> {
+        Bundle bundle = new Bundle();
+        bundle.putString("product", productJSON);
+        parentNavController.navigate(R.id.action_mainFragment_to_productFragment, bundle);
+    };
 
     private void initRecyclerView() {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(activity, 2);
-        ProductAdapter productAdapter = new ProductAdapter(products, this);
+        ProductAdapter productAdapter = new ProductAdapter(products, productClickListener);
         productList.setLayoutManager(gridLayoutManager);
         productList.setAdapter(productAdapter);
         productList.setVisibility(View.VISIBLE);
-
-    }
-
-    @Override
-    public void onItemClick(String json) {
-        Bundle bundle = new Bundle();
-        bundle.putString("product", json);
-        parentNavController.navigate(R.id.action_mainFragment_to_productFragment, bundle);
     }
 }

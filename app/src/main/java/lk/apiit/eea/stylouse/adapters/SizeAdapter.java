@@ -14,7 +14,7 @@ import lk.apiit.eea.stylouse.R;
 import lk.apiit.eea.stylouse.databinding.ProductSizeBinding;
 import lk.apiit.eea.stylouse.interfaces.AdapterItemClickListener;
 
-public class SizeAdapter  extends RecyclerView.Adapter<SizeAdapter.ViewHolder> implements AdapterItemClickListener {
+public class SizeAdapter  extends RecyclerView.Adapter<SizeAdapter.ViewHolder> {
     private List<String> productSizes;
     private int selectedPosition = -1;
     private String size = null;
@@ -27,7 +27,7 @@ public class SizeAdapter  extends RecyclerView.Adapter<SizeAdapter.ViewHolder> i
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ProductSizeBinding binding = ProductSizeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new ViewHolder(this, binding);
+        return new ViewHolder(this::onSizeClick, binding);
     }
 
     @Override
@@ -40,8 +40,7 @@ public class SizeAdapter  extends RecyclerView.Adapter<SizeAdapter.ViewHolder> i
         return productSizes.size();
     }
 
-    @Override
-    public void onItemClick(String size) {
+    private void onSizeClick(String size) {
         selectedPosition = productSizes.indexOf(size);
         this.size = size;
         notifyDataSetChanged();

@@ -9,6 +9,7 @@ import lk.apiit.eea.stylouse.ui.HomeFragment;
 import lk.apiit.eea.stylouse.ui.OrdersFragment;
 import lk.apiit.eea.stylouse.ui.ProductFragment;
 import lk.apiit.eea.stylouse.ui.ProfileFragment;
+import lk.apiit.eea.stylouse.ui.ShippingFragment;
 import lk.apiit.eea.stylouse.ui.SignInFragment;
 import lk.apiit.eea.stylouse.ui.SignUpFragment;
 import lk.apiit.eea.stylouse.ui.SplashFragment;
@@ -27,4 +28,5 @@ public interface ApplicationComponent {
     void inject(WishlistFragment fragment);
     void inject(OrdersFragment fragment);
     void inject(ProductFragment fragment);
+    void inject(ShippingFragment fragment);
 }
