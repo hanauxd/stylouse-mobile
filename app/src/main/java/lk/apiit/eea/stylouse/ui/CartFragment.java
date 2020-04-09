@@ -25,12 +25,11 @@ import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.FragmentCartBinding;
 import lk.apiit.eea.stylouse.di.AuthSession;
-import lk.apiit.eea.stylouse.interfaces.AdapterItemClickListener;
 import lk.apiit.eea.stylouse.models.responses.CartResponse;
 import lk.apiit.eea.stylouse.services.CartService;
 import retrofit2.Response;
 
-public class CartFragment extends AuthFragment implements ApiResponseCallback, AdapterItemClickListener {
+public class CartFragment extends AuthFragment {
     private FragmentCartBinding binding;
     private List<CartResponse> carts = new ArrayList<>();
     private CartAdapter adapter;
@@ -58,42 +57,24 @@ public class CartFragment extends AuthFragment implements ApiResponseCallback, A
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
+
         String token = session.getAuthState().getJwt();
-        cartService.getCarts(this, token);
-    }
-
-    @Override
-    public void onSuccess(Response<?> response) {
-        this.carts = (List<CartResponse>)response.body();
-        bindCartDetails();
-        initRecyclerView();
-        displayLayout();
-    }
-
-    @Override
-    public void onFailure(String message) {
-        displayLayout();
-        DynamicToast.makeError(activity, message).show();
-    }
-
-    @Override
-    public void onItemClick(String cartId) {
-        cartService.deleteCart(new CartHandler(), session.getAuthState().getJwt(), cartId);
-    }
-
-    private void displayLayout() {
-        binding.layoutSpinner.setVisibility(View.GONE);
-        binding.layoutCart.setVisibility(View.VISIBLE);
+        cartService.getCarts(getCartsCallback, token);
     }
 
     private void initRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity, RecyclerView.VERTICAL, false);
-        adapter = new CartAdapter(carts, this);
+        adapter = new CartAdapter(carts, this::onDeleteCartClick);
         binding.cartList.setLayoutManager(layoutManager);
         binding.cartList.setAdapter(adapter);
     }
 
-    private void bindCartDetails() {
+    private void onDeleteCartClick(String cartId) {
+        String jwt = session.getAuthState().getJwt();
+        cartService.deleteCart(deleteCallback, jwt, cartId);
+    }
+
+    private void bindCartToView() {
         binding.setCount(String.valueOf(carts.size()));
         binding.setTotal(String.valueOf(cartTotal()));
         binding.btnCheckout.setOnClickListener(v -> {
@@ -111,8 +92,28 @@ public class CartFragment extends AuthFragment implements ApiResponseCallback, A
         return total;
     }
 
-    class CartHandler implements ApiResponseCallback {
+    private void displayLayout() {
+        binding.layoutSpinner.setVisibility(View.GONE);
+        binding.layoutCart.setVisibility(View.VISIBLE);
+    }
 
+    private ApiResponseCallback getCartsCallback = new ApiResponseCallback() {
+        @Override
+        public void onSuccess(Response<?> response) {
+            carts = (List<CartResponse>)response.body();
+            bindCartToView();
+            initRecyclerView();
+            displayLayout();
+        }
+
+        @Override
+        public void onFailure(String message) {
+            displayLayout();
+            DynamicToast.makeError(activity, message).show();
+        }
+    };
+
+    private ApiResponseCallback deleteCallback = new ApiResponseCallback() {
         @Override
         public void onSuccess(Response<?> response) {
             DynamicToast.makeSuccess(activity, "Product removed successfully.").show();
@@ -125,5 +126,5 @@ public class CartFragment extends AuthFragment implements ApiResponseCallback, A
         public void onFailure(String message) {
             DynamicToast.makeError(activity, "Failed to remove product.").show();
         }
-    }
+    };
 }
