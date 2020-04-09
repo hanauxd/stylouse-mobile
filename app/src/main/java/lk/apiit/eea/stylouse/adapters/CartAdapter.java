@@ -53,7 +53,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
         void bind(CartResponse cart) {
             binding.setCart(cart);
-            binding.setTotal(String.valueOf(cart.getQuantity() * cart.getProduct().getPrice()));
+            binding.setTotal(String.valueOf(cart.getTotalPrice()));
 
             binding.btnRemove.setOnClickListener(v -> {
                 listener.onItemClick(cart.getId());
