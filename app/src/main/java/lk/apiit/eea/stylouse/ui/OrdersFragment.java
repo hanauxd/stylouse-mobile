@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
 import java.util.ArrayList;
@@ -93,8 +94,12 @@ public class OrdersFragment extends AuthFragment {
 
     private void initRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity, RecyclerView.VERTICAL, false);
-        OrderAdapter adapter = new OrderAdapter(orders);
+        OrderAdapter adapter = new OrderAdapter(orders, this::onOrderClick);
         binding.ordersList.setLayoutManager(layoutManager);
         binding.ordersList.setAdapter(adapter);
+    }
+
+    private void onOrderClick(String orderJSON) {
+        OrdersResponse ordersResponse = new Gson().fromJson(orderJSON, OrdersResponse.class);
     }
 }
