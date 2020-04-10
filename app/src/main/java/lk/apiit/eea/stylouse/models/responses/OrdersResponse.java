@@ -1,6 +1,7 @@
 package lk.apiit.eea.stylouse.models.responses;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -16,6 +17,6 @@ public class OrdersResponse {
     private String city;
     private String postalCode;
     private String paymentMethod;
-    private String date;
+    private Date date;
     private List<OrderItemResponse> orderItems = new ArrayList<>();
 }
