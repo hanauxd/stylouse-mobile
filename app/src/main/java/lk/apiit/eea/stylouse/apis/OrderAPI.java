@@ -8,6 +8,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 
 public interface OrderAPI {
-    @GET("orders")
+    @GET("orders?sort=date,desc")
     Call<List<OrdersResponse>> getOrders(@Header("Authorization") String token);
 }
