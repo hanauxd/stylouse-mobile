@@ -19,13 +19,16 @@
         android:background="@drawable/cart_item_background">
 
         <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             android:text="@{date}"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:text="CONFIRMED"/>
 
         <com.google.android.material.textview.MaterialTextView

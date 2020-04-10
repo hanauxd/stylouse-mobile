@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
+        <import type="lk.apiit.eea.stylouse.utils.StringFormatter"/>
         <variable
             name="product"
             type="lk.apiit.eea.stylouse.models.responses.ProductResponse" />
@@ -40,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorBlack"
                     android:textSize="12sp"
-                    android:text="@{`LKR ` + String.valueOf(product.price)}"/>
+                    android:text="@{`LKR ` + StringFormatter.formatCurrency(product.price)}"/>
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
