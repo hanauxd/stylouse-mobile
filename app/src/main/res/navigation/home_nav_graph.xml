@@ -52,12 +52,26 @@
         android:id="@+id/ordersFragment"
         android:name="lk.apiit.eea.stylouse.ui.OrdersFragment"
         android:label="OrdersFragment"
-        tools:layout="@layout/fragment_orders"/>
+        tools:layout="@layout/fragment_orders">
+        <action
+            android:id="@+id/action_ordersFragment_to_orderDetailFragment"
+            app:destination="@id/orderDetailFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+    </fragment>
 
     <fragment
         android:id="@+id/shippingFragment"
         android:name="lk.apiit.eea.stylouse.ui.ShippingFragment"
         android:label="ShippingFragment"
         tools:layout="@layout/fragment_shipping"/>
+
+    <fragment
+        android:id="@+id/orderDetailFragment"
+        android:name="lk.apiit.eea.stylouse.ui.OrderDetailFragment"
+        android:label="OrderDetailFragment"
+        tools:layout="@layout/fragment_order_detail"/>
 
 </navigation>
