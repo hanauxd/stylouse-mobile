@@ -6,6 +6,7 @@ import dagger.Component;
 import lk.apiit.eea.stylouse.MainActivity;
 import lk.apiit.eea.stylouse.ui.CartFragment;
 import lk.apiit.eea.stylouse.ui.HomeFragment;
+import lk.apiit.eea.stylouse.ui.OrderDetailFragment;
 import lk.apiit.eea.stylouse.ui.OrdersFragment;
 import lk.apiit.eea.stylouse.ui.ProductFragment;
 import lk.apiit.eea.stylouse.ui.ProfileFragment;
@@ -29,4 +30,5 @@ public interface ApplicationComponent {
     void inject(OrdersFragment fragment);
     void inject(ProductFragment fragment);
     void inject(ShippingFragment fragment);
+    void inject(OrderDetailFragment fragment);
 }
