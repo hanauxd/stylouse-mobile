@@ -28,6 +28,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         CartListItemBinding binding = CartListItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        if (listener == null) {
+            binding.btnRemove.setVisibility(View.GONE);
+        }
         return new ViewHolder(binding, listener);
     }
 
