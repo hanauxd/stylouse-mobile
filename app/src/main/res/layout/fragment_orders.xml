@@ -2,16 +2,54 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <RelativeLayout
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="loading"
+            type="boolean" />
+        <variable
+            name="error"
+            type="String" />
+    </data>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.OrdersFragment">
+        tools:context=".ui.OrdersFragment"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="This is Orders Fragment"
-            android:layout_centerInParent="true"/>
+        <LinearLayout
+            android:id="@+id/layout_orders"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{!loading &amp;&amp; error == null ? View.VISIBLE : View.GONE}">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/orders_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
 
-    </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/layout_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{loading ? View.VISIBLE : View.GONE}">
+            <ProgressBar
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="@{!loading &amp;&amp; error != null ? View.VISIBLE : View.GONE}">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="An error occurred"/>
+        </LinearLayout>
+    </LinearLayout>
 </layout>

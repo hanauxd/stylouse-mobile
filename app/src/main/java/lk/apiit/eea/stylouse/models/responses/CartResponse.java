@@ -13,4 +13,11 @@ public class CartResponse {
     private int quantity;
     private String size;
     private double totalPrice;
+
+    public CartResponse(ProductResponse product, int quantity, String size, double totalPrice) {
+        this.product = product;
+        this.quantity = quantity;
+        this.size = size;
+        this.totalPrice = totalPrice;
+    }
 }

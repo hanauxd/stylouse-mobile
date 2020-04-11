@@ -27,6 +27,7 @@ import lk.apiit.eea.stylouse.databinding.FragmentCartBinding;
 import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.models.responses.CartResponse;
 import lk.apiit.eea.stylouse.services.CartService;
+import lk.apiit.eea.stylouse.utils.StringFormatter;
 import retrofit2.Response;
 
 public class CartFragment extends AuthFragment {
@@ -118,7 +119,7 @@ public class CartFragment extends AuthFragment {
         public void onSuccess(Response<?> response) {
             DynamicToast.makeSuccess(activity, "Product removed successfully.").show();
             binding.setCount(String.valueOf(carts.size()));
-            binding.setTotal(String.valueOf(cartTotal()));
+            binding.setTotal(StringFormatter.formatCurrency(cartTotal()));
             adapter.notifyDataSetChanged();
         }
 
