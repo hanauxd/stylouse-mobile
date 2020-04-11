@@ -8,10 +8,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import lk.apiit.eea.stylouse.R;
 import lk.apiit.eea.stylouse.adapters.OrderAdapter;
 import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.application.StylouseApp;
@@ -30,6 +32,7 @@ import retrofit2.Response;
 
 public class OrdersFragment extends AuthFragment {
     private FragmentOrdersBinding binding;
+    private NavController navController;
     private List<OrdersResponse> orders = new ArrayList<>();
 
     private MutableLiveData<List<OrdersResponse>> ordersData = new MutableLiveData<>(null);
@@ -57,6 +60,7 @@ public class OrdersFragment extends AuthFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
         loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
         error.observe(getViewLifecycleOwner(), this::onErrorChange);
         ordersData.observe(getViewLifecycleOwner(), this::onOrdersChange);
@@ -100,6 +104,8 @@ public class OrdersFragment extends AuthFragment {
     }
 
     private void onOrderClick(String orderJSON) {
-        OrdersResponse ordersResponse = new Gson().fromJson(orderJSON, OrdersResponse.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("order", orderJSON);
+        navController.navigate(R.id.action_ordersFragment_to_orderDetailFragment, bundle);
     }
 }
