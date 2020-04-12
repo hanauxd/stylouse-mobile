@@ -11,6 +11,7 @@ import lk.apiit.eea.stylouse.models.requests.CartRequest;
 import lk.apiit.eea.stylouse.models.requests.ShippingRequest;
 import lk.apiit.eea.stylouse.models.responses.CartResponse;
 import lk.apiit.eea.stylouse.models.responses.OrdersResponse;
+import lk.apiit.eea.stylouse.utils.StringFormatter;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
@@ -23,26 +24,22 @@ public class CartService {
     }
 
     public void addCart(CartRequest cartRequest, ApiResponseCallback callback, String jwt) {
-        Call<List<CartResponse>> cartCall = cartAPI.addCart(token(jwt), cartRequest);
+        Call<List<CartResponse>> cartCall = cartAPI.addCart(StringFormatter.formatToken(jwt), cartRequest);
         cartCall.enqueue(new RetroFitCallback<>(callback));
     }
 
     public void getCarts(ApiResponseCallback callback, String jwt) {
-        Call<List<CartResponse>> cartsCall = cartAPI.getCarts(token(jwt));
+        Call<List<CartResponse>> cartsCall = cartAPI.getCarts(StringFormatter.formatToken(jwt));
         cartsCall.enqueue(new RetroFitCallback<>(callback));
     }
 
     public void deleteCart(ApiResponseCallback callback, String jwt, String id) {
-        Call<List<CartResponse>> cartsCall = cartAPI.deleteCart(token(jwt), id);
+        Call<List<CartResponse>> cartsCall = cartAPI.deleteCart(StringFormatter.formatToken(jwt), id);
         cartsCall.enqueue(new RetroFitCallback<>(callback));
     }
 
     public void checkout(ApiResponseCallback callback, ShippingRequest shippingRequest, String jwt) {
-        Call<OrdersResponse> checkoutCall = cartAPI.checkout(token(jwt), shippingRequest);
+        Call<OrdersResponse> checkoutCall = cartAPI.checkout(StringFormatter.formatToken(jwt), shippingRequest);
         checkoutCall.enqueue(new RetroFitCallback<>(callback));
-    }
-
-    private String token(String jwt) {
-        return "Bearer ".concat(jwt);
     }
 }

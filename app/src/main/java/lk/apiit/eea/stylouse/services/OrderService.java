@@ -6,6 +6,7 @@ import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.apis.OrderAPI;
 import lk.apiit.eea.stylouse.apis.RetroFitCallback;
 import lk.apiit.eea.stylouse.models.responses.OrdersResponse;
+import lk.apiit.eea.stylouse.utils.StringFormatter;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
@@ -17,12 +18,7 @@ public class OrderService {
     }
 
     public void getOrder(ApiResponseCallback callback, String jwt) {
-        Call<List<OrdersResponse>> ordersCall = orderAPI.getOrders(token(jwt));
+        Call<List<OrdersResponse>> ordersCall = orderAPI.getOrders(StringFormatter.formatToken(jwt));
         ordersCall.enqueue(new RetroFitCallback<>(callback));
     }
-
-    private String token(String jwt) {
-        return "Bearer ".concat(jwt);
-    }
-
 }
