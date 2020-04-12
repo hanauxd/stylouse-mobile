@@ -22,7 +22,6 @@ import lk.apiit.eea.stylouse.adapters.ProductAdapter;
 import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.FragmentHomeBinding;
-import lk.apiit.eea.stylouse.interfaces.AdapterItemClickListener;
 import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.services.ProductService;
 import retrofit2.Response;
@@ -92,15 +91,15 @@ public class HomeFragment extends HomeBaseFragment {
         }
     };
 
-    private AdapterItemClickListener productClickListener = productJSON -> {
+    private void onProductClick(String productJSON) {
         Bundle bundle = new Bundle();
         bundle.putString("product", productJSON);
         parentNavController.navigate(R.id.action_mainFragment_to_productFragment, bundle);
-    };
+    }
 
     private void initRecyclerView() {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(activity, 2);
-        ProductAdapter productAdapter = new ProductAdapter(products, productClickListener);
+        ProductAdapter productAdapter = new ProductAdapter(products, this::onProductClick, null);
         productList.setLayoutManager(gridLayoutManager);
         productList.setAdapter(productAdapter);
         productList.setVisibility(View.VISIBLE);
