@@ -18,6 +18,7 @@ import lk.apiit.eea.stylouse.services.AuthService;
 import lk.apiit.eea.stylouse.services.CartService;
 import lk.apiit.eea.stylouse.services.OrderService;
 import lk.apiit.eea.stylouse.services.ProductService;
+import lk.apiit.eea.stylouse.services.UserService;
 import lk.apiit.eea.stylouse.services.WishlistService;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -96,5 +97,11 @@ public class ApplicationModule {
     @Singleton
     public WishlistService provideWishlistServiceInstance(Retrofit retrofit) {
         return new WishlistService(retrofit);
+    }
+
+    @Provides
+    @Singleton
+    public UserService provideUserServiceInstance(Retrofit retrofit) {
+        return new UserService(retrofit);
     }
 }
