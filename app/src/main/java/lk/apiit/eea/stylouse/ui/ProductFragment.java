@@ -102,6 +102,7 @@ public class ProductFragment extends RootBaseFragment {
         public void onSuccess(Response<?> response) {
             binding.btnCart.revertAnimation();
             DynamicToast.makeSuccess(activity, "Product added to cart.").show();
+            //TODO: if click back button before API call is completed throws navigation destination unknown error
             parentNavController.navigate(R.id.action_productFragment_to_mainFragment);
         }
 
