@@ -1,9 +1,20 @@
 <resources>
     <string name="app_name">Stylouse</string>
+
     <string name="error_email">Invalid email address</string>
     <string name="error_password">Password should be 4 to 10 characters long</string>
     <string name="password_length">\\b\\w{4,10}\\b</string>
     <string name="error_phone">Invalid phone number</string>
     <string name="regex_phone">^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$</string>
     <string name="error_field">Field cannot be empty</string>
+
+    <string name="email_address">Email Address</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="contact_number">Contact Number</string>
+
+    <string name="home">Home</string>
+    <string name="cart">Cart</string>
+    <string name="wishlist">Wishlist</string>
+    <string name="profile">Profile</string>
 </resources>
