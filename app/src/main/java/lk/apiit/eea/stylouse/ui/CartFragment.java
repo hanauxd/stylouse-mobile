@@ -126,7 +126,10 @@ public class CartFragment extends AuthFragment {
 
     private void onCheckoutClick(View view) {
         if (carts.size() > 0) {
-            navController.navigate(R.id.action_navigation_cart_to_shippingFragment);
+            Bundle bundle = new Bundle();
+            bundle.putString("total", "LKR ".concat(StringFormatter.formatCurrency(cartTotal())));
+            bundle.putString("numberOfItems", String.valueOf(carts.size()));
+            navController.navigate(R.id.action_navigation_cart_to_shippingFragment, bundle);
         } else {
             DynamicToast.make(activity, "Add items to cart.").show();
         }
