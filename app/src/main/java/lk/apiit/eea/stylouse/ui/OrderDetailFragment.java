@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +18,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
+import lk.apiit.eea.stylouse.R;
 import lk.apiit.eea.stylouse.adapters.CartAdapter;
 import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.FragmentOrderDetailBinding;
@@ -26,6 +29,7 @@ import lk.apiit.eea.stylouse.utils.StringFormatter;
 
 public class OrderDetailFragment extends AuthFragment {
     private FragmentOrderDetailBinding binding;
+    private NavController navController;
     private List<CartResponse> carts = new ArrayList<>();
 
     @Override
@@ -45,6 +49,7 @@ public class OrderDetailFragment extends AuthFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
         bindOrderToView();
         initRecyclerView();
     }
@@ -67,9 +72,15 @@ public class OrderDetailFragment extends AuthFragment {
 
     private void initRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity, RecyclerView.VERTICAL, false);
-        CartAdapter adapter = new CartAdapter(carts, null);
+        CartAdapter adapter = new CartAdapter(carts, null, this::onProductClick);
         binding.orderItemList.setAdapter(adapter);
         binding.orderItemList.setLayoutManager(layoutManager);
+    }
+
+    private void onProductClick(String productJSON) {
+        Bundle bundle = new Bundle();
+        bundle.putString("product", productJSON);
+        navController.navigate(R.id.action_orderDetailFragment_to_productFragment, bundle);
     }
 
     private List<CartResponse> cartResponses(List<OrderItemResponse> orderItems) {
