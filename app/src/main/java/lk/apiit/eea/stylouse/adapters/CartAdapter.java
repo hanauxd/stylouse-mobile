@@ -1,6 +1,7 @@
 package lk.apiit.eea.stylouse.adapters;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -58,10 +59,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             binding.setCart(cart);
             binding.setTotal(String.valueOf(cart.getTotalPrice()));
 
-            binding.btnRemove.setOnClickListener(v -> {
-                listener.onItemClick(cart.getId());
-                carts.remove(cart);
-            });
+            if (listener != null) {
+                binding.btnRemove.setOnClickListener(v -> {
+                    listener.onItemClick(cart.getId());
+                    carts.remove(cart);
+                });
+            }
 
             String url = binding.getRoot().getResources().getString(R.string.baseURL)
                     .concat("product/images/download/")

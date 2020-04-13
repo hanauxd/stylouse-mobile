@@ -63,7 +63,7 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
 
-    def material_version = "1.2.0-alpha05"
+    def material_version = "1.1.0"
     implementation "com.google.android.material:material:$material_version"
 
     def lifecycle_version = "2.2.0"

@@ -5,6 +5,9 @@ import android.content.Context;
 
 import androidx.annotation.Nullable;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -13,7 +16,10 @@ import lk.apiit.eea.stylouse.R;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 import lk.apiit.eea.stylouse.services.AuthService;
 import lk.apiit.eea.stylouse.services.CartService;
+import lk.apiit.eea.stylouse.services.OrderService;
 import lk.apiit.eea.stylouse.services.ProductService;
+import lk.apiit.eea.stylouse.services.UserService;
+import lk.apiit.eea.stylouse.services.WishlistService;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -34,10 +40,14 @@ public class ApplicationModule {
     @Provides
     @Singleton
     public Retrofit provideRetrofitInstance(Context context) {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .create();
+        GsonConverterFactory factory = GsonConverterFactory.create(gson);
         return new Retrofit
                 .Builder()
                 .baseUrl(context.getResources().getString(R.string.baseURL))
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(factory)
                 .build();
     }
 
@@ -81,5 +91,17 @@ public class ApplicationModule {
     @Singleton
     public OrderService provideOrderServiceInstance(Retrofit retrofit) {
         return new OrderService(retrofit);
+    }
+
+    @Provides
+    @Singleton
+    public WishlistService provideWishlistServiceInstance(Retrofit retrofit) {
+        return new WishlistService(retrofit);
+    }
+
+    @Provides
+    @Singleton
+    public UserService provideUserServiceInstance(Retrofit retrofit) {
+        return new UserService(retrofit);
     }
 }

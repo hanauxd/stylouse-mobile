@@ -14,8 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Address"
-            app:boxStrokeColor="@color/colorLightGray"
-            app:boxStrokeErrorColor="@color/colorRed"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -30,8 +28,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="City"
-            app:boxStrokeColor="@color/colorLightGray"
-            app:boxStrokeErrorColor="@color/colorRed"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -46,8 +42,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Postal Code"
-            app:boxStrokeColor="@color/colorLightGray"
-            app:boxStrokeErrorColor="@color/colorRed"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText

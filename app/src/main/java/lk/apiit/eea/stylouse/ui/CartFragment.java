@@ -59,8 +59,10 @@ public class CartFragment extends AuthFragment {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
 
-        String token = session.getAuthState().getJwt();
-        cartService.getCarts(getCartsCallback, token);
+        if (session.getAuthState() != null) {
+            String token = session.getAuthState().getJwt();
+            cartService.getCarts(getCartsCallback, token);
+        }
     }
 
     private void initRecyclerView() {

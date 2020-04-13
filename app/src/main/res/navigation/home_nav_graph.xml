@@ -30,7 +30,15 @@
         android:id="@+id/navigation_wishlist"
         android:name="lk.apiit.eea.stylouse.ui.WishlistFragment"
         android:label="fragment_wishlist"
-        tools:layout="@layout/fragment_wishlist"/>
+        tools:layout="@layout/fragment_wishlist">
+        <action
+            android:id="@+id/action_navigation_wishlist_to_productFragment"
+            app:destination="@id/productFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_profile"
@@ -73,5 +81,11 @@
         android:name="lk.apiit.eea.stylouse.ui.OrderDetailFragment"
         android:label="OrderDetailFragment"
         tools:layout="@layout/fragment_order_detail"/>
+
+    <fragment
+        android:id="@+id/productFragment"
+        android:name="lk.apiit.eea.stylouse.ui.ProductFragment"
+        android:label="ProductFragment"
+        tools:layout="@layout/fragment_product"/>
 
 </navigation>

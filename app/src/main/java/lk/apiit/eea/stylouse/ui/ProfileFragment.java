@@ -13,14 +13,41 @@ import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.pranavpandey.android.dynamic.toasts.DynamicToast;
+
+import javax.inject.Inject;
+
 import lk.apiit.eea.stylouse.R;
+import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.FragmentProfileBinding;
+import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.interfaces.ActivityHandler;
+import lk.apiit.eea.stylouse.models.requests.SignUpRequest;
+import lk.apiit.eea.stylouse.services.UserService;
+import retrofit2.Response;
 
 public class ProfileFragment extends AuthFragment {
-
     private NavController navController;
+    private FragmentProfileBinding binding;
+
+    @Inject
+    AuthSession session;
+    @Inject
+    UserService userService;
+
+    private ApiResponseCallback userCallback = new ApiResponseCallback() {
+        @Override
+        public void onSuccess(Response<?> response) {
+            SignUpRequest user = (SignUpRequest) response.body();
+            binding.setUser(user);
+        }
+
+        @Override
+        public void onFailure(String message) {
+            DynamicToast.makeError(activity, message).show();
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,7 +59,7 @@ public class ProfileFragment extends AuthFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentProfileBinding binding = FragmentProfileBinding.inflate(inflater, container, false);
+        binding = FragmentProfileBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -40,6 +67,10 @@ public class ProfileFragment extends AuthFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
+
+        if (session.getAuthState() != null) {
+            userService.getUser(userCallback, session.getAuthState().getJwt());
+        }
     }
 
     @Override
