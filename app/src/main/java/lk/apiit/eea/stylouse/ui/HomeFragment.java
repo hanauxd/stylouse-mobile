@@ -38,6 +38,7 @@ public class HomeFragment extends HomeBaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
+        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle(R.string.app_name);
         setHasOptionsMenu(true);
     }
 

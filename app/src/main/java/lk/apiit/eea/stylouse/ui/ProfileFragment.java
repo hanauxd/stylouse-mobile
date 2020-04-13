@@ -2,14 +2,13 @@ package lk.apiit.eea.stylouse.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -28,6 +27,8 @@ import lk.apiit.eea.stylouse.services.UserService;
 import retrofit2.Response;
 
 public class ProfileFragment extends AuthFragment {
+    private MutableLiveData<Boolean> loading = new MutableLiveData<>(true);
+    private MutableLiveData<String> error = new MutableLiveData<>(null);
     private NavController navController;
     private FragmentProfileBinding binding;
 
@@ -41,10 +42,13 @@ public class ProfileFragment extends AuthFragment {
         public void onSuccess(Response<?> response) {
             SignUpRequest user = (SignUpRequest) response.body();
             binding.setUser(user);
+            loading.setValue(false);
         }
 
         @Override
         public void onFailure(String message) {
+            loading.setValue(false);
+            error.setValue(message);
             DynamicToast.makeError(activity, message).show();
         }
     };
@@ -53,7 +57,7 @@ public class ProfileFragment extends AuthFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
-        setHasOptionsMenu(true);
+        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Profile");
     }
 
     @Override
@@ -67,30 +71,31 @@ public class ProfileFragment extends AuthFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
+        loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
+        error.observe(getViewLifecycleOwner(), this::onErrorChange);
 
         if (session.getAuthState() != null) {
             userService.getUser(userCallback, session.getAuthState().getJwt());
         }
+
+        binding.btnLogout.setOnClickListener(this::onLogoutClick);
+        binding.btnOrders.setOnClickListener(this::onOrdersClick);
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        activity.getMenuInflater().inflate(R.menu.profile_items_auth, menu);
+    private void onErrorChange(String error) {
+        binding.setError(error);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.action_orders: {
-                navController.navigate(R.id.action_navigation_profile_to_ordersFragment);
-                break;
-            }
-            case R.id.action_logout:{
-                ((ActivityHandler)activity).destroy();
-                session.setAuthState(null);
-            }
-            default: {}
-        }
-        return super.onOptionsItemSelected(item);
+    private void onLoadingChange(Boolean aBoolean) {
+        binding.setLoading(aBoolean);
+    }
+
+    private void onOrdersClick(View view) {
+        navController.navigate(R.id.action_navigation_profile_to_ordersFragment);
+    }
+
+    private void onLogoutClick(View view) {
+        ((ActivityHandler)activity).destroy();
+        session.setAuthState(null);
     }
 }
