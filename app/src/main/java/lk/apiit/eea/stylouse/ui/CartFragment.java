@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,66 +42,6 @@ public class CartFragment extends AuthFragment {
     @Inject
     CartService cartService;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
-        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Cart");
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = FragmentCartBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
-
-        if (session.getAuthState() != null) {
-            String token = session.getAuthState().getJwt();
-            cartService.getCarts(getCartsCallback, token);
-        }
-    }
-
-    private void initRecyclerView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(activity, RecyclerView.VERTICAL, false);
-        adapter = new CartAdapter(carts, this::onDeleteCartClick);
-        binding.cartList.setLayoutManager(layoutManager);
-        binding.cartList.setAdapter(adapter);
-    }
-
-    private void onDeleteCartClick(String cartId) {
-        String jwt = session.getAuthState().getJwt();
-        cartService.deleteCart(deleteCallback, jwt, cartId);
-    }
-
-    private void bindCartToView() {
-        binding.setCount(String.valueOf(carts.size()));
-        binding.setTotal(String.valueOf(cartTotal()));
-        binding.btnCheckout.setOnClickListener(v -> {
-            if (carts.size() > 0) {
-                navController.navigate(R.id.action_navigation_cart_to_shippingFragment);
-            } else {
-                DynamicToast.make(activity, "Add items to cart.").show();
-            }
-        });
-    }
-
-    private double cartTotal() {
-        double total = 0;
-        for (CartResponse cart : carts) total += cart.getTotalPrice();
-        return total;
-    }
-
-    private void displayLayout() {
-        binding.layoutSpinner.setVisibility(View.GONE);
-        binding.layoutCart.setVisibility(View.VISIBLE);
-    }
-
     private ApiResponseCallback getCartsCallback = new ApiResponseCallback() {
         @Override
         public void onSuccess(Response<?> response) {
@@ -131,4 +72,74 @@ public class CartFragment extends AuthFragment {
             DynamicToast.makeError(activity, "Failed to remove product.").show();
         }
     };
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
+        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Cart");
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        binding = FragmentCartBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
+
+        if (session.getAuthState() != null) {
+            String token = session.getAuthState().getJwt();
+            cartService.getCarts(getCartsCallback, token);
+        }
+    }
+
+    private void bindCartToView() {
+        binding.setCount(String.valueOf(carts.size()));
+        binding.setTotal(StringFormatter.formatCurrency(cartTotal()));
+        binding.btnCheckout.setOnClickListener(this::onCheckoutClick);
+    }
+
+    private void initRecyclerView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(activity, RecyclerView.VERTICAL, false);
+        adapter = new CartAdapter(carts, this::onDeleteCartClick, this::onProductClick);
+        binding.cartList.setLayoutManager(layoutManager);
+        binding.cartList.setAdapter(adapter);
+    }
+
+    private void onDeleteCartClick(String cartId) {
+        cartService.deleteCart(
+                deleteCallback,
+                session.getAuthState().getJwt(),
+                cartId);
+    }
+
+    private void onProductClick(String productJSON) {
+        Bundle bundle = new Bundle();
+        bundle.putString("product", productJSON);
+        navController.navigate(R.id.action_navigation_cart_to_productFragment, bundle);
+    }
+
+    private void onCheckoutClick(View view) {
+        if (carts.size() > 0) {
+            navController.navigate(R.id.action_navigation_cart_to_shippingFragment);
+        } else {
+            DynamicToast.make(activity, "Add items to cart.").show();
+        }
+    }
+
+    private double cartTotal() {
+        double total = 0;
+        for (CartResponse cart : carts) total += cart.getTotalPrice();
+        return total;
+    }
+
+    private void displayLayout() {
+        binding.layoutSpinner.setVisibility(View.GONE);
+        binding.layoutCart.setVisibility(View.VISIBLE);
+    }
 }
