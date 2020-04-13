@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -34,7 +35,7 @@ public class WishlistFragment extends AuthFragment {
     private NavController navController;
     private ProductAdapter adapter;
     private List<WishlistResponse> wishlists;
-    private List<ProductResponse> products = new ArrayList<>();
+    private List<ProductResponse> products = new ArrayList<>();;
 
     @Inject
     WishlistService wishlistService;
@@ -45,6 +46,7 @@ public class WishlistFragment extends AuthFragment {
         @Override
         public void onSuccess(Response<?> response) {
             wishlists = (List<WishlistResponse>) response.body();
+            products.clear();
              for (WishlistResponse wishlist : wishlists) {
                  products.add(wishlist.getProduct());
              }
@@ -74,6 +76,7 @@ public class WishlistFragment extends AuthFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
+        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Wishlist");
     }
 
     @Override
@@ -91,10 +94,14 @@ public class WishlistFragment extends AuthFragment {
     }
 
     private void initRecyclerView() {
-        GridLayoutManager layoutManager = new GridLayoutManager(activity, 2);
-        adapter = new ProductAdapter(products, this::onProductClick, this::onWishlistClick);
-        binding.wishlistList.setLayoutManager(layoutManager);
-        binding.wishlistList.setAdapter(adapter);
+        if (binding.wishlistList.getLayoutManager() == null) {
+            GridLayoutManager layoutManager = new GridLayoutManager(activity, 2);
+            binding.wishlistList.setLayoutManager(layoutManager);
+        }
+        if (products != null) {
+            adapter = new ProductAdapter(products, this::onProductClick, this::onWishlistClick);
+            binding.wishlistList.setAdapter(adapter);
+        }
     }
 
     private void onProductClick(String productJSON) {
