@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -35,7 +36,6 @@ public class OrdersFragment extends AuthFragment {
     private NavController navController;
     private List<OrdersResponse> orders = new ArrayList<>();
 
-    private MutableLiveData<List<OrdersResponse>> ordersData = new MutableLiveData<>(null);
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(true);
     private MutableLiveData<String> error = new MutableLiveData<>(null);
 
@@ -48,6 +48,7 @@ public class OrdersFragment extends AuthFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
+        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Orders");
     }
 
     @Override
@@ -63,7 +64,6 @@ public class OrdersFragment extends AuthFragment {
         navController = Navigation.findNavController(view);
         loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
         error.observe(getViewLifecycleOwner(), this::onErrorChange);
-        ordersData.observe(getViewLifecycleOwner(), this::onOrdersChange);
 
         String jwt = session.getAuthState().getJwt();
         orderService.getOrder(orderListCallback, jwt);
@@ -71,9 +71,6 @@ public class OrdersFragment extends AuthFragment {
 
     private void onErrorChange(String error) {
         binding.setError(error);
-    }
-
-    private void onOrdersChange(List<OrdersResponse> ordersResponses) {
     }
 
     private void onLoadingChange(Boolean loading) {
