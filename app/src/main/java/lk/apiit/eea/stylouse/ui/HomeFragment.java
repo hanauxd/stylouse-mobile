@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +34,22 @@ public class HomeFragment extends HomeBaseFragment {
 
     @Inject
     ProductService productService;
+
+    private ApiResponseCallback productsCallback = new ApiResponseCallback() {
+        @Override
+        public void onSuccess(Response<?> response) {
+            products = (List<ProductResponse>) response.body();
+            initRecyclerView();
+            binding.layoutSpinner.setVisibility(View.GONE);
+            binding.layoutHome.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onFailure(String message) {
+            binding.layoutSpinner.setVisibility(View.GONE);
+            binding.layoutHome.setVisibility(View.VISIBLE);
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,36 +83,10 @@ public class HomeFragment extends HomeBaseFragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.action_sign_in: {
-                parentNavController.navigate(R.id.signInFragment);
-                break;
-            }
-            default: {}
+        if (item.getItemId() == R.id.action_sign_in) {
+            parentNavController.navigate(R.id.signInFragment);
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private ApiResponseCallback productsCallback = new ApiResponseCallback() {
-        @Override
-        public void onSuccess(Response<?> response) {
-            products = (List<ProductResponse>) response.body();
-            initRecyclerView();
-            binding.layoutSpinner.setVisibility(View.GONE);
-            binding.layoutHome.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        public void onFailure(String message) {
-            binding.layoutSpinner.setVisibility(View.GONE);
-            binding.layoutHome.setVisibility(View.VISIBLE);
-        }
-    };
-
-    private void onProductClick(String productJSON) {
-        Bundle bundle = new Bundle();
-        bundle.putString("product", productJSON);
-        parentNavController.navigate(R.id.action_mainFragment_to_productFragment, bundle);
     }
 
     private void initRecyclerView() {
@@ -104,5 +95,11 @@ public class HomeFragment extends HomeBaseFragment {
         productList.setLayoutManager(gridLayoutManager);
         productList.setAdapter(productAdapter);
         productList.setVisibility(View.VISIBLE);
+    }
+
+    private void onProductClick(String productJSON) {
+        Bundle bundle = new Bundle();
+        bundle.putString("product", productJSON);
+        parentNavController.navigate(R.id.action_mainFragment_to_productFragment, bundle);
     }
 }

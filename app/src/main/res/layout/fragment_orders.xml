@@ -49,7 +49,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="An error occurred"/>
+                android:text="@{error}"/>
         </LinearLayout>
     </LinearLayout>
 </layout>

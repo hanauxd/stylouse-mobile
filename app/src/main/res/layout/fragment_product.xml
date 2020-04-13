@@ -3,118 +3,169 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <import type="android.view.View"/>
         <import type="lk.apiit.eea.stylouse.utils.StringFormatter"/>
+        <variable
+            name="loading"
+            type="Boolean" />
+        <variable
+            name="error"
+            type="String" />
         <variable
             name="product"
             type="lk.apiit.eea.stylouse.models.responses.ProductResponse" />
     </data>
 
-    <ScrollView
+    <LinearLayout
+        tools:context=".ui.ProductFragment"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:context=".ui.ProductFragment">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/btn_wishlist"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_margin="16dp"
-                    android:backgroundTint="@color/colorWhite"
-                    app:borderWidth="0dp"
-                    app:rippleColor="@color/colorLightGray"
-                    app:srcCompat="@drawable/icon_wishlist"
-                    style="@style/Widget.MaterialComponents.FloatingActionButton"/>
-
-                <ImageView
-                    android:id="@+id/product_image"
-                    android:contentDescription="@string/app_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"/>
-            </RelativeLayout>
+            android:layout_height="match_parent"
+            android:visibility="@{!loading &amp;&amp; error == null ? View.VISIBLE : View.GONE}">
 
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_margin="14dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:padding="20dp">
 
-                <LinearLayout
-                    android:orientation="horizontal"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <TextView
-                        android:id="@+id/product_name"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:textColor="@color/colorBlack"
-                        android:text="@{product.name}"/>
-                    <TextView
-                        android:id="@+id/product_price"
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/btn_wishlist"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:textColor="@color/colorBlack"
-                        android:text="@{`LKR ` + StringFormatter.formatCurrency(product.price)}"/>
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="16dp"
+                        android:backgroundTint="@color/colorWhite"
+                        app:borderWidth="0dp"
+                        app:rippleColor="@color/colorLightGray"
+                        app:srcCompat="@drawable/icon_wishlist"
+                        style="@style/Widget.MaterialComponents.FloatingActionButton"/>
+
+                    <ImageView
+                        android:id="@+id/product_image"
+                        android:contentDescription="@string/app_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/product_name"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:text="@{product.name}"/>
+                        <TextView
+                            android:id="@+id/product_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:text="@{`LKR ` + StringFormatter.formatCurrency(product.price)}"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/product_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:text="@{product.description}"
+                        android:layout_marginVertical="20dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10sp"
+                        android:text="Select Quantity"/>
+
+                    <it.sephiroth.android.library.numberpicker.NumberPicker
+                        android:id="@+id/number_picker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/number_picker_background"
+                        app:picker_max="@{product.quantity == 0 ? 0 : product.quantity}"
+                        app:picker_min="0"
+                        app:picker_stepSize="1"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="20dp"
+                        style="@style/NumberPicker.Outlined.Horizontal"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10sp"
+                        android:text="Select Size"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/size_list"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_height="wrap_content"/>
+
+                    <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                        android:id="@+id/btn_cart"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="ADD TO CART"
+                        android:textColor="@color/colorWhite"
+                        android:background="@drawable/loading_button_background"
+                        android:outlineSpotShadowColor="@android:color/transparent"
+                        app:spinning_bar_color="@color/colorWhite"
+                        app:initialCornerAngle="50dp"
+                        app:finalCornerAngle="50dp"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_sign_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="SIGN IN"
+                        app:strokeColor="@color/colorRed"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/product_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorBlack"
-                    android:text="@{product.description}"/>
-
-                <it.sephiroth.android.library.numberpicker.NumberPicker
-                    android:id="@+id/number_picker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/number_picker_background"
-                    app:picker_max="@{product.quantity == 0 ? 0 : product.quantity}"
-                    app:picker_min="0"
-                    app:picker_stepSize="1"
-                    style="@style/NumberPicker.Outlined.Horizontal"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/size_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
-                    android:id="@+id/btn_cart"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="ADD TO CART"
-                    android:textColor="@color/colorWhite"
-                    android:background="@drawable/loading_button_background"
-                    android:outlineSpotShadowColor="@android:color/transparent"
-                    app:spinning_bar_color="@color/colorWhite"
-                    app:initialCornerAngle="50dp"
-                    app:finalCornerAngle="50dp"/>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_sign_in"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="SIGN IN"
-                    app:strokeColor="@color/colorRed"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
             </LinearLayout>
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/layout_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{loading ? View.VISIBLE : View.GONE}">
+            <ProgressBar
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="@{!loading &amp;&amp; error != null ? View.VISIBLE : View.GONE}">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{error}"/>
         </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 </layout>

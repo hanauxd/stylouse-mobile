@@ -55,7 +55,18 @@ public class ShippingFragment extends AuthFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
+        bindOrderDetailsToView();
         btnOrder.setOnClickListener(this::onOrderClick);
+    }
+
+    private void bindOrderDetailsToView() {
+        if (getArguments() == null) {
+            return;
+        }
+        String total = getArguments().getString("total", "LKR 0.00");
+        String numberOfItems = getArguments().getString("numberOfItems", "0");
+        binding.setTotal(total);
+        binding.setNumberOfItems(numberOfItems);
     }
 
     private void onOrderClick(View view) {

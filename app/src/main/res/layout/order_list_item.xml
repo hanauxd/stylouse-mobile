@@ -18,23 +18,80 @@
         android:padding="10dp"
         android:background="@drawable/cart_item_background">
 
-        <com.google.android.material.textview.MaterialTextView
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:text="Date"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{date}"
+                android:textSize="13sp"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:background="@color/colorLightGray"/>
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:text="@{date}"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="CONFIRMED"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status"
+                android:textSize="10sp"/>
 
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Confirmed"
+                android:textSize="13sp"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="0.5dp"
             android:layout_height="match_parent"
-            android:text="@{`LKR ` + total}"/>
+            android:layout_margin="5dp"
+            android:background="@color/colorLightGray"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Price"
+                android:textSize="10sp"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@{`LKR ` + total}"
+                android:textSize="13sp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
+
 </layout>
