@@ -80,6 +80,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     .concat(product.getProductImages().get(0).getFilename());
             Glide.with(binding.getRoot())
                     .load(url)
+                    .placeholder(R.drawable.stylouse_placeholder)
                     .into(binding.thumbnail);
         }
     }
