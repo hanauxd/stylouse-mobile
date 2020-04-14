@@ -8,10 +8,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
@@ -32,9 +31,11 @@ import lk.apiit.eea.stylouse.utils.StringFormatter;
 import retrofit2.Response;
 
 public class CartFragment extends AuthFragment {
+    private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
+    private MutableLiveData<String> error = new MutableLiveData<>(null);
+    private MutableLiveData<Integer> count = new MutableLiveData<>(0);
     private FragmentCartBinding binding;
     private List<CartResponse> carts = new ArrayList<>();
-    private CartAdapter adapter;
     private NavController navController;
 
     @Inject
@@ -42,34 +43,21 @@ public class CartFragment extends AuthFragment {
     @Inject
     CartService cartService;
 
-    private ApiResponseCallback getCartsCallback = new ApiResponseCallback() {
+    private ApiResponseCallback cartCallback = new ApiResponseCallback() {
         @Override
         public void onSuccess(Response<?> response) {
             carts = (List<CartResponse>)response.body();
             bindCartToView();
             initRecyclerView();
-            displayLayout();
+            loading.setValue(false);
+            count.setValue(carts.size());
         }
 
         @Override
         public void onFailure(String message) {
-            displayLayout();
-            DynamicToast.makeError(activity, message).show();
-        }
-    };
-
-    private ApiResponseCallback deleteCallback = new ApiResponseCallback() {
-        @Override
-        public void onSuccess(Response<?> response) {
-            DynamicToast.makeSuccess(activity, "Product removed successfully.").show();
-            binding.setCount(String.valueOf(carts.size()));
-            binding.setTotal(StringFormatter.formatCurrency(cartTotal()));
-            adapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void onFailure(String message) {
-            DynamicToast.makeError(activity, "Failed to remove product.").show();
+            loading.setValue(false);
+            error.setValue(message);
+            count.setValue(0);
         }
     };
 
@@ -77,7 +65,6 @@ public class CartFragment extends AuthFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
-        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Cart");
     }
 
     @Override
@@ -90,30 +77,54 @@ public class CartFragment extends AuthFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Cart");
         navController = Navigation.findNavController(view);
+        binding.btnRetry.setOnClickListener(this::fetchCartItems);
 
         if (session.getAuthState() != null) {
-            String token = session.getAuthState().getJwt();
-            cartService.getCarts(getCartsCallback, token);
+            loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
+            error.observe(getViewLifecycleOwner(), this::onErrorChange);
+            count.observe(getViewLifecycleOwner(), this::onCountChange);
+            fetchCartItems(view);
         }
     }
 
+    private void onCountChange(Integer count) {
+        binding.setCount(count);
+    }
+
+    private void fetchCartItems(View view) {
+        loading.setValue(true);
+        if (error.getValue() != null) {
+            error.setValue(null);
+        }
+        cartService.getCarts(cartCallback, session.getAuthState().getJwt());
+    }
+
+    private void onErrorChange(String error) {
+        binding.setError(error);
+    }
+
+    private void onLoadingChange(Boolean loading) {
+        binding.setLoading(loading);
+    }
+
     private void bindCartToView() {
-        binding.setCount(String.valueOf(carts.size()));
+        binding.setCount(carts.size());
         binding.setTotal(StringFormatter.formatCurrency(cartTotal()));
         binding.btnCheckout.setOnClickListener(this::onCheckoutClick);
     }
 
     private void initRecyclerView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(activity, RecyclerView.VERTICAL, false);
-        adapter = new CartAdapter(carts, this::onDeleteCartClick, this::onProductClick);
-        binding.cartList.setLayoutManager(layoutManager);
+        CartAdapter adapter = new CartAdapter(carts, this::onDeleteCartClick, this::onProductClick);
         binding.cartList.setAdapter(adapter);
     }
 
     private void onDeleteCartClick(String cartId) {
+        loading.setValue(true);
+        error.setValue(null);
         cartService.deleteCart(
-                deleteCallback,
+                cartCallback,
                 session.getAuthState().getJwt(),
                 cartId);
     }
@@ -139,10 +150,5 @@ public class CartFragment extends AuthFragment {
         double total = 0;
         for (CartResponse cart : carts) total += cart.getTotalPrice();
         return total;
-    }
-
-    private void displayLayout() {
-        binding.layoutSpinner.setVisibility(View.GONE);
-        binding.layoutCart.setVisibility(View.VISIBLE);
     }
 }
