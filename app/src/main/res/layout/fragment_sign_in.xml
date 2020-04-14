@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:dots="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="loading"
+            type="Boolean" />
+        <variable
+            name="error"
+            type="String" />
+    </data>
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -13,8 +25,7 @@
             android:layout_height="match_parent"
             tools:context=".ui.SignInFragment"
             android:padding="10dp"
-            android:visibility="visible">
-
+            android:visibility="@{loading ? View.GONE : View.VISIBLE}">
             <LinearLayout
                 android:id="@+id/layout_sign_in"
                 android:layout_width="match_parent"
@@ -24,6 +35,7 @@
 
                 <EditText
                     android:id="@+id/username"
+                    android:text="user@test.com"
                     android:inputType="textEmailAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -31,6 +43,7 @@
 
                 <EditText
                     android:id="@+id/password"
+                    android:text="pass"
                     android:inputType="textPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -41,19 +54,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="SIGN IN"/>
-
             </LinearLayout>
 
             <TextView
                 android:id="@+id/error_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Error Message"
+                android:layout_below="@id/layout_sign_in"
+                android:text="@{error}"
+                android:textColor="@color/colorRed"
                 android:gravity="center_horizontal"
                 android:padding="8dp"
-                android:textColor="@color/colorRed"
-                android:visibility="gone"
-                android:layout_below="@id/layout_sign_in"/>
+                android:visibility="@{!loading &amp;&amp; error != null ? View.VISIBLE : View.GONE}"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_sign_up"
@@ -66,17 +78,27 @@
                 style="?attr/materialButtonOutlinedStyle"/>
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/layout_spinner"
-            android:visibility="gone"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="@{loading ? View.VISIBLE : View.GONE}">
 
-            <ProgressBar
-                android:id="@+id/spinner"
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"/>
-        </RelativeLayout>
-    </RelativeLayout>
+                android:text="Signing in"
+                android:textSize="30sp"
+                android:textColor="@color/colorBlueGray"/>
+
+            <pl.tajchert.waitingdots.DotsTextView
+                android:id="@+id/dots"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:textColor="@color/colorBlueGray"
+                dots:period="1000"/>
+        </LinearLayout>
+    </LinearLayout>
 </layout>
