@@ -1,12 +1,15 @@
 package lk.apiit.eea.stylouse.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Date;
 
@@ -29,6 +32,10 @@ public class SplashFragment extends RootBaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((StylouseApp)activity.getApplication()).getAppComponent().inject(this);
+        ActionBar appBar = ((AppCompatActivity)activity).getSupportActionBar();
+        if (appBar != null) {
+            appBar.hide();
+        }
     }
 
     @Override
@@ -56,6 +63,8 @@ public class SplashFragment extends RootBaseFragment {
                 session.setAuthState(null);
             }
         }
-        parentNavController.navigate(R.id.action_splashFragment_to_mainFragment);
+        new Handler().postDelayed(() -> {
+            parentNavController.navigate(R.id.action_splashFragment_to_mainFragment);
+        }, 2000);
     }
 }
