@@ -86,4 +86,10 @@ dependencies {
 
     def dynamic_toast_version = "3.2.0"
     implementation "com.pranavpandey.android:dynamic-toasts:$dynamic_toast_version"
+
+    def shimmer_version = "0.5.0"
+    implementation "com.facebook.shimmer:shimmer:$shimmer_version"
+
+    def waiting_dots_version = "0.6.1"
+    implementation "com.github.tajchert:WaitingDots:$waiting_dots_version"
 }
