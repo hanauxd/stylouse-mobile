@@ -12,8 +12,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.pranavpandey.android.dynamic.toasts.DynamicToast;
-
 import javax.inject.Inject;
 
 import lk.apiit.eea.stylouse.R;
@@ -27,7 +25,7 @@ import lk.apiit.eea.stylouse.services.UserService;
 import retrofit2.Response;
 
 public class ProfileFragment extends AuthFragment {
-    private MutableLiveData<Boolean> loading = new MutableLiveData<>(true);
+    private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private MutableLiveData<String> error = new MutableLiveData<>(null);
     private NavController navController;
     private FragmentProfileBinding binding;
@@ -49,7 +47,6 @@ public class ProfileFragment extends AuthFragment {
         public void onFailure(String message) {
             loading.setValue(false);
             error.setValue(message);
-            DynamicToast.makeError(activity, message).show();
         }
     };
 
@@ -57,7 +54,6 @@ public class ProfileFragment extends AuthFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
-        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Profile");
     }
 
     @Override
@@ -70,16 +66,23 @@ public class ProfileFragment extends AuthFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Profile");
         navController = Navigation.findNavController(view);
-        loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
-        error.observe(getViewLifecycleOwner(), this::onErrorChange);
+        binding.btnRetry.setOnClickListener(this::fetchUser);
 
         if (session.getAuthState() != null) {
-            userService.getUser(userCallback, session.getAuthState().getJwt());
+            binding.btnLogout.setOnClickListener(this::onLogoutClick);
+            binding.btnOrders.setOnClickListener(this::onOrdersClick);
+            loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
+            error.observe(getViewLifecycleOwner(), this::onErrorChange);
+            fetchUser(view);
         }
+    }
 
-        binding.btnLogout.setOnClickListener(this::onLogoutClick);
-        binding.btnOrders.setOnClickListener(this::onOrdersClick);
+    private void fetchUser(View view) {
+        if (error.getValue() != null) error.setValue(null);
+        loading.setValue(true);
+        userService.getUser(userCallback, session.getAuthState().getJwt());
     }
 
     private void onErrorChange(String error) {
