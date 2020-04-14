@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 
@@ -54,6 +55,10 @@ public class HomeFragment extends HomeBaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
+        ActionBar appBar = ((AppCompatActivity)activity).getSupportActionBar();
+        if (appBar != null && !appBar.isShowing()) {
+            appBar.show();
+        }
         setHasOptionsMenu(true);
     }
 
