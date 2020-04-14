@@ -21,7 +21,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Order Information"
+            android:text="@string/order_information"
             android:textSize="18sp"
             android:textAlignment="center"
             android:padding="15dp"
@@ -58,7 +58,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Number of Items"/>
+                android:text="@string/number_of_items"/>
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Shipping To"
+            android:text="@string/shipping_to"
             android:textSize="18sp"
             android:textAlignment="center"
             android:padding="15dp"
@@ -140,7 +140,7 @@
             <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Save shipping information for future orders."
+                android:text="@string/save_shipping_information_for_future_orders"
                 android:textSize="12sp"
                 android:textColor="@color/colorBlueGray"
                 />
