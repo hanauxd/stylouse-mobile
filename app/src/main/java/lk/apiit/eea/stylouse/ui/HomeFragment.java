@@ -11,8 +11,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
@@ -28,9 +27,10 @@ import lk.apiit.eea.stylouse.services.ProductService;
 import retrofit2.Response;
 
 public class HomeFragment extends HomeBaseFragment {
+    private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
+    private MutableLiveData<String> error = new MutableLiveData<>(null);
     private FragmentHomeBinding binding;
     private List<ProductResponse> products;
-    private RecyclerView productList;
 
     @Inject
     ProductService productService;
@@ -40,14 +40,13 @@ public class HomeFragment extends HomeBaseFragment {
         public void onSuccess(Response<?> response) {
             products = (List<ProductResponse>) response.body();
             initRecyclerView();
-            binding.layoutSpinner.setVisibility(View.GONE);
-            binding.layoutHome.setVisibility(View.VISIBLE);
+            loading.setValue(false);
         }
 
         @Override
         public void onFailure(String message) {
-            binding.layoutSpinner.setVisibility(View.GONE);
-            binding.layoutHome.setVisibility(View.VISIBLE);
+            loading.setValue(false);
+            error.setValue(message);
         }
     };
 
@@ -55,7 +54,6 @@ public class HomeFragment extends HomeBaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
-        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle(R.string.app_name);
         setHasOptionsMenu(true);
     }
 
@@ -69,8 +67,25 @@ public class HomeFragment extends HomeBaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.productList = binding.productList;
+        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle(R.string.app_name);
+        loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
+        error.observe(getViewLifecycleOwner(), this::onErrorChange);
+        binding.btnRetry.setOnClickListener(this::fetchProducts);
+        fetchProducts(view);
+    }
+
+    private void fetchProducts(View view) {
+        if (error.getValue() != null) error.setValue(null);
+        loading.setValue(true);
         productService.getProducts(productsCallback);
+    }
+
+    private void onErrorChange(String error) {
+        binding.setError(error);
+    }
+
+    private void onLoadingChange(Boolean aBoolean) {
+        binding.setLoading(aBoolean);
     }
 
     @Override
@@ -90,11 +105,8 @@ public class HomeFragment extends HomeBaseFragment {
     }
 
     private void initRecyclerView() {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(activity, 2);
         ProductAdapter productAdapter = new ProductAdapter(products, this::onProductClick, null);
-        productList.setLayoutManager(gridLayoutManager);
-        productList.setAdapter(productAdapter);
-        productList.setVisibility(View.VISIBLE);
+        binding.productList.setAdapter(productAdapter);
     }
 
     private void onProductClick(String productJSON) {
