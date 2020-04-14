@@ -3,5 +3,5 @@
 <!--    <item name="baseURL" type="string">http://192.168.8.180:8080/</item>-->
 <!--    <item name="baseURL" type="string">http://10.0.2.2:8080/</item>-->
     <item name="baseURL" type="string">https://shielded-atoll-23230.herokuapp.com/</item>
-    <item name="delay" type="string">500</item>
+    <item name="delay" type="string">1500</item>
 </resources>

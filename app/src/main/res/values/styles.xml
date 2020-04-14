@@ -7,6 +7,7 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:textViewStyle">@style/AppTextView</item>
         <item name="materialButtonStyle">@style/MaterialButtonView</item>
+        <item name="editTextStyle">@style/AppEditText</item>
     </style>
 
     <style name="AppTextView" parent="Widget.MaterialComponents.TextView">
@@ -14,6 +15,10 @@
         <item name="android:letterSpacing">0.1</item>
     </style>
     <style name="MaterialButtonView" parent="Widget.MaterialComponents.Button">
+        <item name="fontFamily">sans-serif-light</item>
+        <item name="android:letterSpacing">0.1</item>
+    </style>
+    <style name="AppEditText" parent="Widget.AppCompat.EditText">
         <item name="fontFamily">sans-serif-light</item>
         <item name="android:letterSpacing">0.1</item>
     </style>
