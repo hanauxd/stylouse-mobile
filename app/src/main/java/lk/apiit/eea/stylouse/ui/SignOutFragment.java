@@ -10,13 +10,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import lk.apiit.eea.stylouse.R;
+import lk.apiit.eea.stylouse.databinding.FragmentSignOutBinding;
 
 public class SignOutFragment extends RootBaseFragment implements Runnable{
+    private FragmentSignOutBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_sign_out, container, false);
+        binding = FragmentSignOutBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override

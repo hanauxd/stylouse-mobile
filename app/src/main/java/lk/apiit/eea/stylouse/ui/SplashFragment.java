@@ -19,8 +19,6 @@ import lk.apiit.eea.stylouse.interfaces.ActivityHandler;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 
 public class SplashFragment extends RootBaseFragment {
-    private static final String TAG = "SplashFragment";
-
     @Inject
     AuthSession session;
     @Nullable
