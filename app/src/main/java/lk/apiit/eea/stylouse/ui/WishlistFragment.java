@@ -8,11 +8,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.GridLayoutManager;
-
-import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +29,9 @@ import lk.apiit.eea.stylouse.services.WishlistService;
 import retrofit2.Response;
 
 public class WishlistFragment extends AuthFragment {
+    private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
+    private MutableLiveData<String> error = new MutableLiveData<>(null);
+    private MutableLiveData<Integer> count = new MutableLiveData<>(0);
     private FragmentWishlistBinding binding;
     private NavController navController;
     private ProductAdapter adapter;
@@ -50,25 +51,16 @@ public class WishlistFragment extends AuthFragment {
              for (WishlistResponse wishlist : wishlists) {
                  products.add(wishlist.getProduct());
              }
-             initRecyclerView();
+             initProductAdapter();
+             count.setValue(wishlists.size());
+             loading.setValue(false);
         }
 
         @Override
         public void onFailure(String message) {
-            DynamicToast.makeError(activity, message).show();
-        }
-    };
-
-    private ApiResponseCallback deleteCallback = new ApiResponseCallback() {
-        @Override
-        public void onSuccess(Response<?> response) {
-            adapter.notifyDataSetChanged();
-            DynamicToast.makeSuccess(activity, "Product removed from wishlist.").show();
-        }
-
-        @Override
-        public void onFailure(String message) {
-            DynamicToast.makeError(activity, message).show();
+            loading.setValue(false);
+            error.setValue(message);
+            count.setValue(0);
         }
     };
 
@@ -76,7 +68,6 @@ public class WishlistFragment extends AuthFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
-        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Wishlist");
     }
 
     @Override
@@ -89,15 +80,34 @@ public class WishlistFragment extends AuthFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Wishlist");
         navController = Navigation.findNavController(view);
+        binding.btnRetry.setOnClickListener(this::fetchWishlistItems);
+        loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
+        error.observe(getViewLifecycleOwner(), this::onErrorChange);
+        count.observe(getViewLifecycleOwner(), this::onCountChange);
+        fetchWishlistItems(view);
+    }
+
+    private void onErrorChange(String error) {
+        binding.setError(error);
+    }
+
+    private void onLoadingChange(Boolean loading) {
+        binding.setLoading(loading);
+    }
+
+    private void onCountChange(Integer count) {
+        binding.setCount(count);
+    }
+
+    private void fetchWishlistItems(View view) {
+        if (error.getValue() != null) error.setValue(null);
+        loading.setValue(true);
         wishlistService.getWishlist(wishlistCallback, session.getAuthState().getJwt());
     }
 
-    private void initRecyclerView() {
-        if (binding.wishlistList.getLayoutManager() == null) {
-            GridLayoutManager layoutManager = new GridLayoutManager(activity, 2);
-            binding.wishlistList.setLayoutManager(layoutManager);
-        }
+    private void initProductAdapter() {
         if (products != null) {
             adapter = new ProductAdapter(products, this::onProductClick, this::onWishlistClick);
             binding.wishlistList.setAdapter(adapter);
@@ -111,9 +121,14 @@ public class WishlistFragment extends AuthFragment {
     }
 
     private void onWishlistClick(String productId) {
+        loading.setValue(true);
         for (WishlistResponse item : wishlists) {
             if (productId.equals(item.getProduct().getId())) {
-                wishlistService.deleteWishlist(item.getId(), deleteCallback, session.getAuthState().getJwt());
+                wishlistService.deleteWishlist(
+                        item.getId(),
+                        wishlistCallback,
+                        session.getAuthState().getJwt()
+                );
             }
         }
     }
