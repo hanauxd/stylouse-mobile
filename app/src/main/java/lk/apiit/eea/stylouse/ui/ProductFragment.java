@@ -33,6 +33,7 @@ import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.models.responses.WishlistResponse;
 import lk.apiit.eea.stylouse.services.CartService;
 import lk.apiit.eea.stylouse.services.WishlistService;
+import lk.apiit.eea.stylouse.utils.UrlBuilder;
 import retrofit2.Response;
 
 public class ProductFragment extends RootBaseFragment {
@@ -48,6 +49,8 @@ public class ProductFragment extends RootBaseFragment {
     CartService cartService;
     @Inject
     WishlistService wishlistService;
+    @Inject
+    UrlBuilder urlBuilder;
 
     private ApiResponseCallback addWishlistCallback = new ApiResponseCallback() {
         @Override
@@ -221,11 +224,9 @@ public class ProductFragment extends RootBaseFragment {
         String productJSON = getArguments() != null ? getArguments().getString("product") : null;
         ProductResponse product = new Gson().fromJson(productJSON, ProductResponse.class);
         binding.setProduct(product);
-        String url = binding.getRoot().getResources().getString(R.string.baseURL)
-                + "product/images/download/"
-                + product.getProductImages().get(0).getFilename();
+
         Glide.with(binding.getRoot())
-                .load(url)
+                .load(urlBuilder.fileUrl(product.getProductImages().get(0).getFilename()))
                 .placeholder(R.drawable.stylouse_placeholder)
                 .into(binding.productImage);
     }

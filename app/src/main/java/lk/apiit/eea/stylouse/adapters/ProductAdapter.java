@@ -12,12 +12,19 @@ import com.google.gson.Gson;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import lk.apiit.eea.stylouse.R;
+import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.ProductListItemBinding;
 import lk.apiit.eea.stylouse.interfaces.AdapterItemClickListener;
 import lk.apiit.eea.stylouse.interfaces.WishlistClickListener;
 import lk.apiit.eea.stylouse.models.responses.ProductResponse;
+import lk.apiit.eea.stylouse.utils.UrlBuilder;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
+    @Inject
+    UrlBuilder urlBuilder;
     private List<ProductResponse> products;
     private AdapterItemClickListener productListener;
     private WishlistClickListener wishlistListener;
@@ -37,6 +44,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         if (wishlistListener == null) {
             binding.btnWishlist.setVisibility(View.GONE);
         }
+        ((StylouseApp)binding.getRoot().getContext().getApplicationContext()).getAppComponent().inject(this);
         return new ViewHolder(binding, productListener, wishlistListener);
     }
 
@@ -71,15 +79,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             if (wishlistListener != null) {
                 binding.btnWishlist.setOnClickListener(view -> {
                     wishlistListener.onWishlistClick(product.getId());
-                    products.remove(product);
                 });
             }
 
-            String url = binding.getRoot().getResources().getString(R.string.baseURL)
-                    .concat("product/images/download/")
-                    .concat(product.getProductImages().get(0).getFilename());
             Glide.with(binding.getRoot())
-                    .load(url)
+                    .load(urlBuilder.fileUrl(product.getProductImages().get(0).getFilename()))
                     .placeholder(R.drawable.stylouse_placeholder)
                     .into(binding.thumbnail);
         }
