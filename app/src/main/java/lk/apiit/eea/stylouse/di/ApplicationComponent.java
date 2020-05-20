@@ -4,6 +4,8 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import lk.apiit.eea.stylouse.MainActivity;
+import lk.apiit.eea.stylouse.adapters.CartAdapter;
+import lk.apiit.eea.stylouse.adapters.ProductAdapter;
 import lk.apiit.eea.stylouse.ui.CartFragment;
 import lk.apiit.eea.stylouse.ui.HomeFragment;
 import lk.apiit.eea.stylouse.ui.OrderDetailFragment;
@@ -31,4 +33,6 @@ public interface ApplicationComponent {
     void inject(ProductFragment fragment);
     void inject(ShippingFragment fragment);
     void inject(OrderDetailFragment fragment);
+    void inject(ProductAdapter adapter);
+    void inject(CartAdapter adapter);
 }
