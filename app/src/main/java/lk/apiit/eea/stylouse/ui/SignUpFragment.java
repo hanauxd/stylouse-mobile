@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -27,7 +28,8 @@ import lk.apiit.eea.stylouse.services.AuthService;
 import retrofit2.Response;
 
 public class SignUpFragment extends RootBaseFragment {
-
+    private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
+    private MutableLiveData<String> error = new MutableLiveData<>(null);
     private FragmentSignUpBinding binding;
     private NavController navController;
     private AwesomeValidation validation;
@@ -62,35 +64,39 @@ public class SignUpFragment extends RootBaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
+        loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
+        error.observe(getViewLifecycleOwner(), this::onErrorChange);
         binding.btnSignIn.setOnClickListener(this::onSignInClick);
         binding.btnSignUp.setOnClickListener(this::onSignUpClick);
         validateInput();
     }
 
+    private void onErrorChange(String error) {
+        binding.setError(error);
+    }
+
+    private void onLoadingChange(Boolean loading) {
+        binding.setLoading(loading);
+    }
+
     private void onSignUpClick(View view) {
         if (validation.validate()) {
-            String role = "ROLE_USER";
+            String role = getString(R.string.role_user);
             String firstName = binding.firstName.getText().toString();
             String lastName = binding.lastName.getText().toString();
             String phone = binding.phone.getText().toString();
             String email = binding.username.getText().toString();
             String password = binding.password.getText().toString();
 
+            if (error.getValue() != null) error.setValue(null);
+            loading.setValue(true);
             SignUpRequest signUpRequest = new SignUpRequest(role, firstName, lastName, phone, email, password);
             authService.register(signUpRequest, registerCallback);
-
-            binding.layoutSpinner.setVisibility(View.VISIBLE);
-            binding.layoutSignUpForm.setVisibility(View.GONE);
         }
     }
 
     private void onSignInClick(View view) {
         navController.navigate(R.id.action_signUpFragment_to_signInFragment);
-    }
-
-    private void displayMessage(String message) {
-        binding.errorMessage.setText(message);
-        binding.errorMessage.setVisibility(View.VISIBLE);
     }
 
     private void validateInput() {
@@ -109,9 +115,8 @@ public class SignUpFragment extends RootBaseFragment {
 
         @Override
         public void onFailure(String message) {
-            displayMessage(message);
-            binding.layoutSpinner.setVisibility(View.GONE);
-            binding.layoutSignUpForm.setVisibility(View.VISIBLE);
+            loading.setValue(false);
+            error.setValue(message);
         }
     };
 }

@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:dots="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="loading"
+            type="Boolean" />
+        <variable
+            name="error"
+            type="String" />
+    </data>
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -11,9 +21,9 @@
             android:id="@+id/layout_sign_in_form"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".ui.SignInFragment"
-            android:padding="10dp"
-            android:visibility="visible">
+            android:padding="15dp"
+            android:visibility="@{loading ? View.GONE : View.VISIBLE}"
+            tools:context=".ui.SignInFragment">
 
             <LinearLayout
                 android:id="@+id/layout_sign_in"
@@ -22,25 +32,80 @@
                 android:layout_centerInParent="true"
                 android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/username"
-                    android:inputType="textEmailAddress"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter Username"/>
+                    android:orientation="horizontal"
+                    android:layout_marginVertical="5dp">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0.5dp"
+                        android:layout_weight="1"
+                        android:background="@color/colorLightGray"
+                        android:layout_gravity="center_vertical"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hello there, Welcome back"
+                        android:textSize="23sp"
+                        android:padding="10dp"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0.5dp"
+                        android:layout_weight="1"
+                        android:background="@color/colorLightGray"
+                        android:layout_gravity="center_vertical"/>
+
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Username"
+                    android:inputType="textEmailAddress"
+                    android:layout_marginVertical="5dp"/>
 
                 <EditText
                     android:id="@+id/password"
-                    android:inputType="textPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter Password"/>
+                    android:hint="Enter Password"
+                    android:inputType="textPassword"
+                    android:layout_marginVertical="5dp"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_sign_in"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="SIGN IN"/>
+                    android:text="SIGN IN" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Don't have an account?"
+                        android:padding="3dp"/>
+
+                    <TextView
+                        android:id="@+id/btn_sign_up"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sign up"
+                        android:padding="3dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -48,35 +113,35 @@
                 android:id="@+id/error_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Error Message"
+                android:layout_below="@id/layout_sign_in"
                 android:gravity="center_horizontal"
                 android:padding="8dp"
+                android:text="@{error}"
                 android:textColor="@color/colorRed"
-                android:visibility="gone"
-                android:layout_below="@id/layout_sign_in"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_sign_up"
-                android:text="SIGN UP"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                app:strokeWidth="1dp"
-                app:strokeColor="@color/colorRed"
-                style="?attr/materialButtonOutlinedStyle"/>
+                android:visibility="@{!loading &amp;&amp; error != null ? View.VISIBLE : View.GONE}" />
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/layout_spinner"
-            android:visibility="gone"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="@{loading ? View.VISIBLE : View.GONE}">
 
-            <ProgressBar
-                android:id="@+id/spinner"
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"/>
-        </RelativeLayout>
-    </RelativeLayout>
+                android:text="Signing in"
+                android:textSize="30sp"
+                android:textColor="@color/colorBlueGray"/>
+
+            <pl.tajchert.waitingdots.DotsTextView
+                android:id="@+id/dots"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:textColor="@color/colorBlueGray"
+                dots:period="1000"/>
+        </LinearLayout>
+    </LinearLayout>
 </layout>

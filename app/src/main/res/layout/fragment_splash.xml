@@ -3,16 +3,54 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.SplashFragment">
+        tools:context=".ui.SplashFragment"
+        android:background="@color/colorWhite"
+        android:gravity="center">
 
-        <TextView
+        <com.facebook.shimmer.ShimmerFrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="This is Splash Fragment"
-            android:layout_centerInParent="true"/>
+            android:layout_height="wrap_content">
 
-    </RelativeLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="S T Y L "
+                    android:textFontWeight="600"
+                    android:textSize="35sp"
+                    android:textColor="@color/colorAccent"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="O U S E"
+                        android:textFontWeight="300"
+                        android:textSize="35sp"
+                        android:textColor="@color/colorPrimaryDark"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorPrimaryDark"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+    </LinearLayout>
 </layout>

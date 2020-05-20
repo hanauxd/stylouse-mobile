@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Stylouse</string>
 
+    <string name="role_user">ROLE_USER</string>
     <string name="error_email">Invalid email address</string>
     <string name="error_password">Password should be 4 to 10 characters long</string>
     <string name="password_length">\\b\\w{4,10}\\b</string>
@@ -17,4 +18,13 @@
     <string name="cart">Cart</string>
     <string name="wishlist">Wishlist</string>
     <string name="profile">Profile</string>
+
+    <string name="order_information">Order Information</string>
+    <string name="number_of_items">Number of Items</string>
+    <string name="shipping_to">Shipping To</string>
+    <string name="save_shipping_information_for_future_orders">Save shipping information for future orders.</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="shipping">Shipping</string>
+    <string name="free_shipping">FREE SHIPPING</string>
+    <string name="retry">RETRY</string>
 </resources>

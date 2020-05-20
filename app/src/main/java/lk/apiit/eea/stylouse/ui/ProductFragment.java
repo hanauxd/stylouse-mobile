@@ -11,8 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -35,14 +33,13 @@ import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.models.responses.WishlistResponse;
 import lk.apiit.eea.stylouse.services.CartService;
 import lk.apiit.eea.stylouse.services.WishlistService;
+import lk.apiit.eea.stylouse.utils.UrlBuilder;
 import retrofit2.Response;
-import timber.log.Timber;
 
 public class ProductFragment extends RootBaseFragment {
-    private MutableLiveData<Boolean> loading = new MutableLiveData<>(true);
+    private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private MutableLiveData<String> error = new MutableLiveData<>(null);
     private FragmentProductBinding binding;
-    private RecyclerView productSizeList;
     private SizeAdapter adapter;
     private List<WishlistResponse> wishlists;
 
@@ -52,6 +49,8 @@ public class ProductFragment extends RootBaseFragment {
     CartService cartService;
     @Inject
     WishlistService wishlistService;
+    @Inject
+    UrlBuilder urlBuilder;
 
     private ApiResponseCallback addWishlistCallback = new ApiResponseCallback() {
         @Override
@@ -98,14 +97,13 @@ public class ProductFragment extends RootBaseFragment {
                     binding.btnWishlist.setColorFilter(Color.RED);
                 }
             }
-            binding.setLoading(false);
+            loading.setValue(false);
         }
 
         @Override
         public void onFailure(String message) {
-            binding.setLoading(false);
-            binding.setError(message);
-            Timber.e(message);
+            loading.setValue(false);
+            error.setValue(message);
         }
     };
 
@@ -114,8 +112,6 @@ public class ProductFragment extends RootBaseFragment {
         public void onSuccess(Response<?> response) {
             binding.btnCart.revertAnimation();
             DynamicToast.makeSuccess(activity, "Product added to cart.").show();
-            //TODO: if click back button before API call is completed throws navigation destination unknown error
-            parentNavController.navigate(R.id.action_productFragment_to_mainFragment);
         }
 
         @Override
@@ -129,7 +125,6 @@ public class ProductFragment extends RootBaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
-        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle(R.string.app_name);
     }
 
     @Override
@@ -142,21 +137,20 @@ public class ProductFragment extends RootBaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle(R.string.app_name);
         loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
         error.observe(getViewLifecycleOwner(), this::onErrorChange);
-
+        binding.btnRetry.setOnClickListener(this::fetchWishlist);
+        fetchWishlist(view);
         bindButtonsToClickListener();
-        this.productSizeList = binding.sizeList;
-        initRecyclerView();
+        initSizeAdapter();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void fetchWishlist(View view) {
         if (session.getAuthState() != null) {
+            loading.setValue(true);
             wishlistService.getWishlist(isWishlistCallback, session.getAuthState().getJwt());
         } else {
-            binding.setLoading(false);
             bindProductToView();
         }
     }
@@ -188,6 +182,7 @@ public class ProductFragment extends RootBaseFragment {
 
     private void onAddToWishlistClick(View view) {
         binding.btnWishlist.setClickable(false);
+        binding.btnWishlist.setColorFilter(Color.LTGRAY);
         for (WishlistResponse wishlist : wishlists) {
             if (wishlist.getProduct().getId().equals(binding.getProduct().getId())) {
                 wishlistService.deleteWishlist(wishlist.getId(), deleteWishlistCallback, session.getAuthState().getJwt());
@@ -220,22 +215,19 @@ public class ProductFragment extends RootBaseFragment {
         }
     }
 
-    private void initRecyclerView() {
-        GridLayoutManager layoutManager = new GridLayoutManager(activity, 4);
+    private void initSizeAdapter() {
         adapter = new SizeAdapter(Arrays.asList("S", "M", "L", "XL"));
-        productSizeList.setLayoutManager(layoutManager);
-        productSizeList.setAdapter(adapter);
+        binding.sizeList.setAdapter(adapter);
     }
 
     private void bindProductToView() {
         String productJSON = getArguments() != null ? getArguments().getString("product") : null;
         ProductResponse product = new Gson().fromJson(productJSON, ProductResponse.class);
         binding.setProduct(product);
-        String url = binding.getRoot().getResources().getString(R.string.baseURL)
-                + "product/images/download/"
-                + product.getProductImages().get(0).getFilename();
+
         Glide.with(binding.getRoot())
-                .load(url)
+                .load(urlBuilder.fileUrl(product.getProductImages().get(0).getFilename()))
+                .placeholder(R.drawable.stylouse_placeholder)
                 .into(binding.productImage);
     }
 }

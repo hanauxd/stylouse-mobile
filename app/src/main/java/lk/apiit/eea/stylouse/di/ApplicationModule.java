@@ -20,6 +20,7 @@ import lk.apiit.eea.stylouse.services.OrderService;
 import lk.apiit.eea.stylouse.services.ProductService;
 import lk.apiit.eea.stylouse.services.UserService;
 import lk.apiit.eea.stylouse.services.WishlistService;
+import lk.apiit.eea.stylouse.utils.UrlBuilder;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -103,5 +104,11 @@ public class ApplicationModule {
     @Singleton
     public UserService provideUserServiceInstance(Retrofit retrofit) {
         return new UserService(retrofit);
+    }
+
+    @Provides
+    @Singleton
+    public UrlBuilder provideUrlBuilderInstance(Context context) {
+        return new UrlBuilder(context);
     }
 }

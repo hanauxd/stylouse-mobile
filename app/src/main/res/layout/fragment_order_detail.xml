@@ -172,7 +172,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="Subtotal"
+                    android:text="@string/subtotal"
                     android:textSize="12sp"/>
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
@@ -190,12 +190,12 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="Shipping"
+                    android:text="@string/shipping"
                     android:textSize="12sp"/>
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="FREE SHIPPING"
+                    android:text="@string/free_shipping"
                     android:textSize="12sp"/>
             </LinearLayout>
         </LinearLayout>

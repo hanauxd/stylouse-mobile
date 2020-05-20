@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -30,7 +31,8 @@ import lk.apiit.eea.stylouse.services.AuthService;
 import retrofit2.Response;
 
 public class SignInFragment extends RootBaseFragment {
-
+    private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
+    private MutableLiveData<String> error = new MutableLiveData<>(null);
     private FragmentSignInBinding binding;
     private NavController navController;
     private AwesomeValidation validation;
@@ -61,6 +63,8 @@ public class SignInFragment extends RootBaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
+        loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
+        error.observe(getViewLifecycleOwner(), this::onErrorChange);
 
         binding.btnSignIn.setOnClickListener(this::onSignInClick);
         binding.btnSignUp.setOnClickListener(this::onSignUpClick);
@@ -69,26 +73,28 @@ public class SignInFragment extends RootBaseFragment {
         validation.addValidation(binding.password, getString(R.string.password_length), getString(R.string.error_password));
     }
 
+    private void onErrorChange(String error) {
+        binding.setError(error);
+    }
+
+    private void onLoadingChange(Boolean loading) {
+        binding.setLoading(loading);
+    }
+
     private void onSignInClick(View view) {
         if (validation.validate()) {
             String username = binding.username.getText().toString();
             String password = binding.password.getText().toString();
 
+            if (error.getValue() != null) error.setValue(null);
+            loading.setValue(true);
             SignInRequest signInRequest = new SignInRequest(username, password);
             authService.login(signInRequest, loginCallback);
-
-            binding.layoutSpinner.setVisibility(View.VISIBLE);
-            binding.layoutSignInForm.setVisibility(View.GONE);
         }
     }
 
     private void onSignUpClick(View view) {
         navController.navigate(R.id.action_signInFragment_to_signUpFragment);
-    }
-
-    private void displayMessage(String message) {
-        binding.errorMessage.setVisibility(View.VISIBLE);
-        binding.errorMessage.setText(message);
     }
 
     private ApiResponseCallback loginCallback = new ApiResponseCallback() {
@@ -106,9 +112,8 @@ public class SignInFragment extends RootBaseFragment {
 
         @Override
         public void onFailure(String message) {
-            displayMessage(message);
-            binding.layoutSpinner.setVisibility(View.GONE);
-            binding.layoutSignInForm.setVisibility(View.VISIBLE);
+            loading.setValue(false);
+            error.setValue(message);
         }
     };
 }

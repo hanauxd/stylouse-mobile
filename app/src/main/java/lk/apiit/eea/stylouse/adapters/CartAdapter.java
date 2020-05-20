@@ -12,13 +12,19 @@ import com.google.gson.Gson;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import lk.apiit.eea.stylouse.R;
+import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.CartListItemBinding;
 import lk.apiit.eea.stylouse.interfaces.AdapterItemClickListener;
 import lk.apiit.eea.stylouse.models.responses.CartResponse;
 import lk.apiit.eea.stylouse.utils.StringFormatter;
+import lk.apiit.eea.stylouse.utils.UrlBuilder;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
+    @Inject
+    UrlBuilder urlBuilder;
     private List<CartResponse> carts;
     private AdapterItemClickListener deleteClickListener;
     private AdapterItemClickListener productClickListener;
@@ -39,6 +45,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         if (deleteClickListener == null) {
             binding.btnRemove.setVisibility(View.GONE);
         }
+        ((StylouseApp)binding.getRoot().getContext().getApplicationContext()).getAppComponent().inject(this);
         return new ViewHolder(binding, deleteClickListener, productClickListener);
     }
 
@@ -81,7 +88,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
         private void onDeleteClick(View view) {
             deleteClickListener.onItemClick(cart.getId());
-            carts.remove(cart);
         }
 
         private void onProductClick(View view) {
@@ -92,11 +98,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         }
 
         private void bindImageToView() {
-            String url = binding.getRoot().getResources().getString(R.string.baseURL)
-                    .concat("product/images/download/")
-                    .concat(cart.getProduct().getProductImages().get(0).getFilename());
             Glide.with(binding.getRoot())
-                    .load(url)
+                    .load(urlBuilder.fileUrl(cart.getProduct().getProductImages().get(0).getFilename()))
+                    .placeholder(R.drawable.stylouse_placeholder)
                     .into(binding.productImage);
         }
     }
