@@ -12,6 +12,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.google.gson.Gson;
+
 import javax.inject.Inject;
 
 import lk.apiit.eea.stylouse.R;
@@ -21,6 +23,7 @@ import lk.apiit.eea.stylouse.databinding.FragmentProfileBinding;
 import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.interfaces.ActivityHandler;
 import lk.apiit.eea.stylouse.models.requests.SignUpRequest;
+import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 import lk.apiit.eea.stylouse.services.UserService;
 import retrofit2.Response;
 
@@ -73,10 +76,19 @@ public class ProfileFragment extends AuthFragment {
         if (session.getAuthState() != null) {
             binding.btnLogout.setOnClickListener(this::onLogoutClick);
             binding.btnOrders.setOnClickListener(this::onOrdersClick);
+            binding.btnChangePassword.setOnClickListener(this::onChangePasswordClick);
             loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
             error.observe(getViewLifecycleOwner(), this::onErrorChange);
             fetchUser(view);
         }
+    }
+
+    private void onChangePasswordClick(View view) {
+        SignInResponse authState = session.getAuthState();
+        String authJSON = new Gson().toJson(authState);
+        Bundle bundle = new Bundle();
+        bundle.putString("authToken", authJSON);
+        navController.navigate(R.id.action_navigation_profile_to_resetPasswordFragment, bundle);
     }
 
     private void fetchUser(View view) {
