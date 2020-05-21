@@ -45,8 +45,7 @@ public class SignInFragment extends RootBaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StylouseApp applicationInstance = (StylouseApp) activity.getApplicationContext();
-        applicationInstance.getAppComponent().inject(this);
+        ((StylouseApp) activity.getApplicationContext()).getAppComponent().inject(this);
 
         validation = new AwesomeValidation(ValidationStyle.UNDERLABEL);
         validation.setContext(activity);
@@ -68,6 +67,7 @@ public class SignInFragment extends RootBaseFragment {
 
         binding.btnSignIn.setOnClickListener(this::onSignInClick);
         binding.btnSignUp.setOnClickListener(this::onSignUpClick);
+        binding.btnForgotPassword.setOnClickListener(this::onForgotPasswordClick);
 
         validation.addValidation(binding.username, Patterns.EMAIL_ADDRESS, getString(R.string.error_email));
         validation.addValidation(binding.password, getString(R.string.password_length), getString(R.string.error_password));
@@ -95,6 +95,10 @@ public class SignInFragment extends RootBaseFragment {
 
     private void onSignUpClick(View view) {
         navController.navigate(R.id.action_signInFragment_to_signUpFragment);
+    }
+
+    private void onForgotPasswordClick(View view) {
+        navController.navigate(R.id.action_signInFragment_to_forgotPasswordFragment);
     }
 
     private ApiResponseCallback loginCallback = new ApiResponseCallback() {
