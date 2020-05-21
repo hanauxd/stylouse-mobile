@@ -84,7 +84,6 @@
 
                 </LinearLayout>
 
-
                 <EditText
                     android:id="@+id/phone"
                     android:inputType="number"
@@ -115,31 +114,6 @@
                     android:layout_height="wrap_content"
                     android:text="SIGN UP"/>
 
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Already have an account?"
-                        android:padding="3dp"/>
-
-                    <TextView
-                        android:id="@+id/btn_sign_in"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Sign in"
-                        android:padding="3dp"
-                        android:textColor="@color/colorPrimaryDark"
-                        />
-
-                </LinearLayout>
-
             </LinearLayout>
 
             <TextView
@@ -152,6 +126,31 @@
                 android:textColor="@color/colorRed"
                 android:visibility="@{!loading &amp;&amp; error != null ? View.VISIBLE : View.GONE}"
                 android:layout_below="@id/layout_sign_up"/>
+
+            <LinearLayout
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Already have an account?"
+                    android:padding="3dp"/>
+
+                <TextView
+                    android:id="@+id/btn_sign_in"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sign in"
+                    android:padding="3dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    />
+
+            </LinearLayout>
         </RelativeLayout>
 
         <LinearLayout

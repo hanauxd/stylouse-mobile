@@ -60,6 +60,13 @@
             app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_navigation_profile_to_resetPasswordFragment"
+            app:destination="@id/resetPasswordFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
 
     </fragment>
 
@@ -102,5 +109,11 @@
         android:name="lk.apiit.eea.stylouse.ui.ProductFragment"
         android:label="ProductFragment"
         tools:layout="@layout/fragment_product"/>
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        android:name="lk.apiit.eea.stylouse.ui.ResetPasswordFragment"
+        android:label="fragment_reset_password"
+        tools:layout="@layout/fragment_reset_password" >
+    </fragment>
 
 </navigation>
