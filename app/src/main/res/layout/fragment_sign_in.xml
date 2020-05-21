@@ -77,48 +77,57 @@
                     android:inputType="textPassword"
                     android:layout_marginVertical="5dp"/>
 
+                <TextView
+                    android:id="@+id/btn_forgot_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Forgot password?"
+                    android:textAlignment="textEnd"
+                    android:layout_marginBottom="15dp"/>
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_sign_in"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="SIGN IN" />
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/error_message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Don't have an account?"
-                        android:padding="3dp"/>
-
-                    <TextView
-                        android:id="@+id/btn_sign_up"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Sign up"
-                        android:padding="3dp"
-                        android:textColor="@color/colorPrimaryDark"
-                        />
-
-                </LinearLayout>
+                    android:layout_below="@id/layout_sign_in"
+                    android:gravity="center_horizontal"
+                    android:padding="8dp"
+                    android:text="@{error}"
+                    android:textColor="@color/colorRed"
+                    android:visibility="@{!loading &amp;&amp; error != null ? View.VISIBLE : View.GONE}" />
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/error_message"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/layout_sign_in"
-                android:gravity="center_horizontal"
-                android:padding="8dp"
-                android:text="@{error}"
-                android:textColor="@color/colorRed"
-                android:visibility="@{!loading &amp;&amp; error != null ? View.VISIBLE : View.GONE}" />
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Don't have an account?"
+                    android:padding="3dp"/>
+
+                <TextView
+                    android:id="@+id/btn_sign_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sign up"
+                    android:padding="3dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    />
+
+            </LinearLayout>
         </RelativeLayout>
 
         <LinearLayout
