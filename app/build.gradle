@@ -91,4 +91,7 @@ dependencies {
 
     def waiting_dots_version = "0.6.1"
     implementation "com.github.tajchert:WaitingDots:$waiting_dots_version"
+
+    def rating_bar_version = "1.4.0"
+    implementation "me.zhanghai.android.materialratingbar:library:$rating_bar_version"
 }
