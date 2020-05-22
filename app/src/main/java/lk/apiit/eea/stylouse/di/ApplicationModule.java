@@ -18,6 +18,7 @@ import lk.apiit.eea.stylouse.services.AuthService;
 import lk.apiit.eea.stylouse.services.CartService;
 import lk.apiit.eea.stylouse.services.OrderService;
 import lk.apiit.eea.stylouse.services.ProductService;
+import lk.apiit.eea.stylouse.services.ReviewService;
 import lk.apiit.eea.stylouse.services.UserService;
 import lk.apiit.eea.stylouse.services.WishlistService;
 import lk.apiit.eea.stylouse.utils.UrlBuilder;
@@ -98,6 +99,10 @@ public class ApplicationModule {
     @Singleton
     public WishlistService provideWishlistServiceInstance(Retrofit retrofit) {
         return new WishlistService(retrofit);
+    }
+
+    public ReviewService provideReviewServiceInstance(Retrofit retrofit) {
+        return new ReviewService(retrofit);
     }
 
     @Provides
