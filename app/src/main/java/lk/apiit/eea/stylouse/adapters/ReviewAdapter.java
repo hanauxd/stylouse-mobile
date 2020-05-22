@@ -38,7 +38,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     static class ViewHolder extends RecyclerView.ViewHolder {
         private ReviewListItemBinding binding;
 
-        public ViewHolder(ReviewListItemBinding binding) {
+        ViewHolder(ReviewListItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
