@@ -14,7 +14,9 @@ import lk.apiit.eea.stylouse.ui.OrdersFragment;
 import lk.apiit.eea.stylouse.ui.OtpFragment;
 import lk.apiit.eea.stylouse.ui.ProductFragment;
 import lk.apiit.eea.stylouse.ui.ProfileFragment;
+import lk.apiit.eea.stylouse.ui.RateFragment;
 import lk.apiit.eea.stylouse.ui.ResetPasswordFragment;
+import lk.apiit.eea.stylouse.ui.ReviewFragment;
 import lk.apiit.eea.stylouse.ui.ShippingFragment;
 import lk.apiit.eea.stylouse.ui.SignInFragment;
 import lk.apiit.eea.stylouse.ui.SignUpFragment;
@@ -41,6 +43,8 @@ public interface ApplicationComponent {
     void inject(ForgotPasswordFragment fragment);
     void inject(OtpFragment fragment);
     void inject(ResetPasswordFragment fragment);
+    void inject(ReviewFragment fragment);
+    void inject(RateFragment fragment);
 
     void inject(ProductAdapter adapter);
     void inject(CartAdapter adapter);
