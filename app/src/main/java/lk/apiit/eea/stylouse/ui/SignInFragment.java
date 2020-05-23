@@ -28,6 +28,7 @@ import lk.apiit.eea.stylouse.interfaces.ActivityHandler;
 import lk.apiit.eea.stylouse.models.requests.SignInRequest;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 import lk.apiit.eea.stylouse.services.AuthService;
+import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
 
 public class SignInFragment extends RootBaseFragment {
@@ -110,7 +111,7 @@ public class SignInFragment extends RootBaseFragment {
                 Date expiresAt = new Date(new Date().getTime() + body.getTokenValidation());
                 body.setExpiresAt(expiresAt);
                 session.setAuthState(body);
-                navController.navigate(R.id.action_signInFragment_to_mainFragment);
+                Navigator.navigate(navController, R.id.action_signInFragment_to_mainFragment, null);
             }
         }
 
