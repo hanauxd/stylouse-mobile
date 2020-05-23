@@ -25,6 +25,7 @@ import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.FragmentHomeBinding;
 import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.services.ProductService;
+import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
 
 public class HomeFragment extends HomeBaseFragment {
@@ -104,7 +105,7 @@ public class HomeFragment extends HomeBaseFragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_sign_in) {
-            parentNavController.navigate(R.id.signInFragment);
+            Navigator.navigate(parentNavController, R.id.signInFragment, null);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -117,6 +118,6 @@ public class HomeFragment extends HomeBaseFragment {
     private void onProductClick(String productJSON) {
         Bundle bundle = new Bundle();
         bundle.putString("product", productJSON);
-        parentNavController.navigate(R.id.action_mainFragment_to_productFragment, bundle);
+        Navigator.navigate(parentNavController, R.id.action_mainFragment_to_productFragment, bundle);
     }
 }
