@@ -34,6 +34,7 @@ import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.models.responses.WishlistResponse;
 import lk.apiit.eea.stylouse.services.CartService;
 import lk.apiit.eea.stylouse.services.WishlistService;
+import lk.apiit.eea.stylouse.utils.Navigator;
 import lk.apiit.eea.stylouse.utils.UrlBuilder;
 import retrofit2.Response;
 
@@ -187,7 +188,7 @@ public class ProductFragment extends RootBaseFragment {
     }
 
     private void onSignInClick(View view) {
-        parentNavController.navigate(R.id.action_productFragment_to_signInFragment);
+        Navigator.navigate(parentNavController, R.id.action_productFragment_to_signInFragment, null);
     }
 
     private void onAddToWishlistClick(View view) {
