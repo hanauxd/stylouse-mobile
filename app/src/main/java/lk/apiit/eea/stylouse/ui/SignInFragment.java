@@ -95,11 +95,11 @@ public class SignInFragment extends RootBaseFragment {
     }
 
     private void onSignUpClick(View view) {
-        navController.navigate(R.id.action_signInFragment_to_signUpFragment);
+        Navigator.navigate(navController, R.id.action_signInFragment_to_signUpFragment, null);
     }
 
     private void onForgotPasswordClick(View view) {
-        navController.navigate(R.id.action_signInFragment_to_forgotPasswordFragment);
+        Navigator.navigate(navController, R.id.action_signInFragment_to_forgotPasswordFragment, null);
     }
 
     private ApiResponseCallback loginCallback = new ApiResponseCallback() {

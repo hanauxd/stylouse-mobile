@@ -22,6 +22,7 @@ import lk.apiit.eea.stylouse.databinding.FragmentShippingBinding;
 import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.models.requests.ShippingRequest;
 import lk.apiit.eea.stylouse.services.CartService;
+import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
 
 public class ShippingFragment extends AuthFragment {
@@ -85,7 +86,7 @@ public class ShippingFragment extends AuthFragment {
         public void onSuccess(Response<?> response) {
             btnOrder.revertAnimation();
             DynamicToast.makeSuccess(activity, "Order placed successfully.").show();
-            parentNavController.navigate(R.id.action_shippingFragment_to_mainFragment);
+            Navigator.navigate(parentNavController, R.id.action_shippingFragment_to_mainFragment, null);
         }
 
         @Override

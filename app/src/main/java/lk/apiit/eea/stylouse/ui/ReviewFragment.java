@@ -24,6 +24,7 @@ import lk.apiit.eea.stylouse.models.Review;
 import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.models.responses.ReviewResponse;
 import lk.apiit.eea.stylouse.services.ReviewService;
+import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
 
 public class ReviewFragment extends HomeBaseFragment {
@@ -61,7 +62,7 @@ public class ReviewFragment extends HomeBaseFragment {
     private void onReviewClick(View view) {
         Bundle bundle = new Bundle();
         bundle.putString("product", new Gson().toJson(product()));
-        parentNavController.navigate(R.id.action_productFragment_to_rateFragment, bundle);
+        Navigator.navigate(parentNavController, R.id.action_productFragment_to_rateFragment, bundle);
     }
 
     private void onErrorChange(String error) {

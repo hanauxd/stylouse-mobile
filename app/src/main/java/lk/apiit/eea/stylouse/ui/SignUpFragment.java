@@ -25,6 +25,7 @@ import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.FragmentSignUpBinding;
 import lk.apiit.eea.stylouse.models.requests.SignUpRequest;
 import lk.apiit.eea.stylouse.services.AuthService;
+import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
 
 public class SignUpFragment extends RootBaseFragment {
@@ -96,7 +97,7 @@ public class SignUpFragment extends RootBaseFragment {
     }
 
     private void onSignInClick(View view) {
-        navController.navigate(R.id.action_signUpFragment_to_signInFragment);
+        Navigator.navigate(navController, R.id.action_signUpFragment_to_signInFragment, null);
     }
 
     private void validateInput() {
@@ -110,7 +111,7 @@ public class SignUpFragment extends RootBaseFragment {
     private ApiResponseCallback registerCallback = new ApiResponseCallback() {
         @Override
         public void onSuccess(Response<?> response) {
-            navController.navigate(R.id.action_signUpFragment_to_signInFragment);
+            Navigator.navigate(navController, R.id.action_signUpFragment_to_signInFragment, null);
         }
 
         @Override
