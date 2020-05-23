@@ -80,7 +80,7 @@ public class OrderDetailFragment extends AuthFragment {
     private void onProductClick(String productJSON) {
         Bundle bundle = new Bundle();
         bundle.putString("product", productJSON);
-        navController.navigate(R.id.action_orderDetailFragment_to_productFragment, bundle);
+        parentNavController.navigate(R.id.action_orderDetailFragment_to_productFragment, bundle);
     }
 
     private List<CartResponse> cartResponses(List<OrderItemResponse> orderItems) {
