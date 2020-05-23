@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
@@ -83,14 +84,15 @@ public class ReviewFragment extends HomeBaseFragment {
     private ApiResponseCallback getReviewsCallback = new ApiResponseCallback() {
         @Override
         public void onSuccess(Response<?> response) {
-            ReviewResponse body = (ReviewResponse) response.body();
-            if (body != null) {
-                initRecyclerView(body.getReviews());
-                binding.setHasUserRated(body.isHasUserRated());
-                binding.setCount(body.getReviews().size());
+            ReviewResponse reviewResponse = (ReviewResponse) response.body();
+            if (reviewResponse != null) {
+                initRecyclerView(reviewResponse.getReviews());
+                binding.setHasUserRated(reviewResponse.isHasUserRated());
+                binding.setCount(reviewResponse.getReviews().size());
             }
             error.setValue(null);
             loading.setValue(false);
+            renderRateAverageFragment(reviewResponse);
         }
 
         @Override
@@ -108,5 +110,13 @@ public class ReviewFragment extends HomeBaseFragment {
     private ProductResponse product() {
         String productJSON = getArguments() != null ? getArguments().getString("product") : null;
         return new Gson().fromJson(productJSON, ProductResponse.class);
+    }
+
+    private void renderRateAverageFragment(ReviewResponse reviewResponse) {
+        Bundle bundle = new Bundle();
+        bundle.putString("review", new Gson().toJson(reviewResponse));
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.rate_average_fragment, RateAverageFragment.class, bundle);
+        transaction.commit();
     }
 }
