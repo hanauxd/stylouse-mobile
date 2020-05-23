@@ -11,6 +11,9 @@
         <variable
             name="error"
             type="String" />
+        <variable
+            name="email"
+            type="String" />
     </data>
 
     <RelativeLayout
@@ -35,14 +38,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Please enter the OTP to varify your account"
+                android:text="Please enter the OTP to verify your account"
                 android:textAlignment="center"
                 android:layout_marginVertical="5dp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="An OTP has been sent to someone@example.com"
+                android:text="@{`An OTP has been sent to `.concat(email)}"
                 android:textAlignment="center"
                 android:layout_marginBottom="25dp"/>
 
