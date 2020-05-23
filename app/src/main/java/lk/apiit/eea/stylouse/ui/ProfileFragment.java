@@ -106,7 +106,7 @@ public class ProfileFragment extends AuthFragment {
     }
 
     private void onOrdersClick(View view) {
-        navController.navigate(R.id.action_navigation_profile_to_ordersFragment);
+        parentNavController.navigate(R.id.ordersFragment);
     }
 
     private void onLogoutClick(View view) {

@@ -117,7 +117,7 @@ public class WishlistFragment extends AuthFragment {
     private void onProductClick(String productJSON) {
         Bundle bundle = new Bundle();
         bundle.putString("product", productJSON);
-        navController.navigate(R.id.action_navigation_wishlist_to_productFragment, bundle);
+        parentNavController.navigate(R.id.action_mainFragment_to_productFragment, bundle);
     }
 
     private void onWishlistClick(String productId) {

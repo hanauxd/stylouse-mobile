@@ -109,6 +109,6 @@ public class OrdersFragment extends AuthFragment {
     private void onOrderClick(String orderJSON) {
         Bundle bundle = new Bundle();
         bundle.putString("order", orderJSON);
-        navController.navigate(R.id.action_ordersFragment_to_orderDetailFragment, bundle);
+        parentNavController.navigate(R.id.action_ordersFragment_to_orderDetailFragment, bundle);
     }
 }
