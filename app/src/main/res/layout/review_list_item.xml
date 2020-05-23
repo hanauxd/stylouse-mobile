@@ -13,9 +13,8 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="15dp">
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{review.user.lastName}"/>
@@ -24,7 +23,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                android:id="@+id/rate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:rating="@{review.rate}"
