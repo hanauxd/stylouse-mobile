@@ -26,6 +26,7 @@ import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.models.responses.WishlistResponse;
 import lk.apiit.eea.stylouse.services.WishlistService;
+import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
 
 public class WishlistFragment extends AuthFragment {
@@ -117,7 +118,7 @@ public class WishlistFragment extends AuthFragment {
     private void onProductClick(String productJSON) {
         Bundle bundle = new Bundle();
         bundle.putString("product", productJSON);
-        parentNavController.navigate(R.id.action_mainFragment_to_productFragment, bundle);
+        Navigator.navigate(parentNavController, R.id.action_mainFragment_to_productFragment, bundle);
     }
 
     private void onWishlistClick(String productId) {
