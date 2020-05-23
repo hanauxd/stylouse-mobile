@@ -27,6 +27,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <FrameLayout
+            android:id="@+id/rate_average_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="15dp"/>
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/btn_review"
             android:layout_width="match_parent"
