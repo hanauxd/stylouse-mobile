@@ -28,6 +28,7 @@ import lk.apiit.eea.stylouse.interfaces.ActivityHandler;
 import lk.apiit.eea.stylouse.models.requests.SignInRequest;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 import lk.apiit.eea.stylouse.services.AuthService;
+import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
 
 public class SignInFragment extends RootBaseFragment {
@@ -94,11 +95,11 @@ public class SignInFragment extends RootBaseFragment {
     }
 
     private void onSignUpClick(View view) {
-        navController.navigate(R.id.action_signInFragment_to_signUpFragment);
+        Navigator.navigate(navController, R.id.action_signInFragment_to_signUpFragment, null);
     }
 
     private void onForgotPasswordClick(View view) {
-        navController.navigate(R.id.action_signInFragment_to_forgotPasswordFragment);
+        Navigator.navigate(navController, R.id.action_signInFragment_to_forgotPasswordFragment, null);
     }
 
     private ApiResponseCallback loginCallback = new ApiResponseCallback() {
@@ -110,7 +111,7 @@ public class SignInFragment extends RootBaseFragment {
                 Date expiresAt = new Date(new Date().getTime() + body.getTokenValidation());
                 body.setExpiresAt(expiresAt);
                 session.setAuthState(body);
-                navController.navigate(R.id.action_signInFragment_to_mainFragment);
+                Navigator.navigate(navController, R.id.action_signInFragment_to_mainFragment, null);
             }
         }
 

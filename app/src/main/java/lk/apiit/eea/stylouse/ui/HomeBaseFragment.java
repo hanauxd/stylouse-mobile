@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import lk.apiit.eea.stylouse.R;
 import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
+import lk.apiit.eea.stylouse.utils.Navigator;
 
 public class HomeBaseFragment extends RootBaseFragment {
     @Nullable
@@ -30,7 +31,7 @@ public class HomeBaseFragment extends RootBaseFragment {
         if (state != null) {
             session.setObserver(getViewLifecycleOwner(), appState -> {
                 if (appState == null) {
-                    parentNavController.navigate(R.id.action_mainFragment_to_signOutFragment);
+                    Navigator.navigate(parentNavController, R.id.action_mainFragment_to_signOutFragment, null);
                 }
             });
         }

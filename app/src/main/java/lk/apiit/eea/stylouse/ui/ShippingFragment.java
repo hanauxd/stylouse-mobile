@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
@@ -24,12 +22,12 @@ import lk.apiit.eea.stylouse.databinding.FragmentShippingBinding;
 import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.models.requests.ShippingRequest;
 import lk.apiit.eea.stylouse.services.CartService;
+import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
 
 public class ShippingFragment extends AuthFragment {
     private FragmentShippingBinding binding;
     private CircularProgressButton btnOrder;
-    private NavController navController;
 
     @Inject
     AuthSession session;
@@ -54,7 +52,6 @@ public class ShippingFragment extends AuthFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
         bindOrderDetailsToView();
         btnOrder.setOnClickListener(this::onOrderClick);
     }
@@ -89,7 +86,7 @@ public class ShippingFragment extends AuthFragment {
         public void onSuccess(Response<?> response) {
             btnOrder.revertAnimation();
             DynamicToast.makeSuccess(activity, "Order placed successfully.").show();
-            navController.navigate(R.id.navigation_home);
+            Navigator.navigate(parentNavController, R.id.action_shippingFragment_to_mainFragment, null);
         }
 
         @Override

@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import lk.apiit.eea.stylouse.R;
 import lk.apiit.eea.stylouse.databinding.FragmentSignOutBinding;
+import lk.apiit.eea.stylouse.utils.Navigator;
 
 public class SignOutFragment extends RootBaseFragment implements Runnable{
     private FragmentSignOutBinding binding;
@@ -30,6 +31,6 @@ public class SignOutFragment extends RootBaseFragment implements Runnable{
 
     @Override
     public void run() {
-        parentNavController.navigate(R.id.action_signOutFragment_to_signInFragment);
+        Navigator.navigate(parentNavController, R.id.action_signOutFragment_to_signInFragment, null);
     }
 }

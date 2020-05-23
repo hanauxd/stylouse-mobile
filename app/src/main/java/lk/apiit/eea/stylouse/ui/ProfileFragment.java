@@ -25,6 +25,7 @@ import lk.apiit.eea.stylouse.interfaces.ActivityHandler;
 import lk.apiit.eea.stylouse.models.requests.SignUpRequest;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 import lk.apiit.eea.stylouse.services.UserService;
+import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
 
 public class ProfileFragment extends AuthFragment {
@@ -88,7 +89,7 @@ public class ProfileFragment extends AuthFragment {
         String authJSON = new Gson().toJson(authState);
         Bundle bundle = new Bundle();
         bundle.putString("authToken", authJSON);
-        navController.navigate(R.id.action_navigation_profile_to_resetPasswordFragment, bundle);
+        Navigator.navigate(navController, R.id.action_navigation_profile_to_resetPasswordFragment, bundle);
     }
 
     private void fetchUser(View view) {
@@ -106,7 +107,7 @@ public class ProfileFragment extends AuthFragment {
     }
 
     private void onOrdersClick(View view) {
-        navController.navigate(R.id.action_navigation_profile_to_ordersFragment);
+        Navigator.navigate(parentNavController, R.id.ordersFragment, null);
     }
 
     private void onLogoutClick(View view) {

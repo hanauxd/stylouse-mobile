@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 
 import com.bumptech.glide.Glide;
@@ -33,6 +34,7 @@ import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.models.responses.WishlistResponse;
 import lk.apiit.eea.stylouse.services.CartService;
 import lk.apiit.eea.stylouse.services.WishlistService;
+import lk.apiit.eea.stylouse.utils.Navigator;
 import lk.apiit.eea.stylouse.utils.UrlBuilder;
 import retrofit2.Response;
 
@@ -72,7 +74,7 @@ public class ProductFragment extends RootBaseFragment {
     private ApiResponseCallback deleteWishlistCallback = new ApiResponseCallback() {
         @Override
         public void onSuccess(Response<?> response) {
-            wishlists = (List<WishlistResponse>)response.body();
+            wishlists = (List<WishlistResponse>) response.body();
             binding.btnWishlist.setImageResource(R.drawable.icon_wishlist);
             binding.btnWishlist.setColorFilter(Color.RED);
             binding.btnWishlist.setClickable(true);
@@ -86,7 +88,7 @@ public class ProductFragment extends RootBaseFragment {
         }
     };
 
-    private  ApiResponseCallback isWishlistCallback = new ApiResponseCallback() {
+    private ApiResponseCallback isWishlistCallback = new ApiResponseCallback() {
         @Override
         public void onSuccess(Response<?> response) {
             bindProductToView();
@@ -141,9 +143,18 @@ public class ProductFragment extends RootBaseFragment {
         loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
         error.observe(getViewLifecycleOwner(), this::onErrorChange);
         binding.btnRetry.setOnClickListener(this::fetchWishlist);
+        renderReviewFragment();
         fetchWishlist(view);
         bindButtonsToClickListener();
         initSizeAdapter();
+    }
+
+    private void renderReviewFragment() {
+        Bundle bundle = new Bundle();
+        bundle.putString("product", new Gson().toJson(product()));
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.review_fragment_layout, ReviewFragment.class, bundle);
+        transaction.commit();
     }
 
     private void fetchWishlist(View view) {
@@ -177,7 +188,7 @@ public class ProductFragment extends RootBaseFragment {
     }
 
     private void onSignInClick(View view) {
-        parentNavController.navigate(R.id.action_productFragment_to_signInFragment);
+        Navigator.navigate(parentNavController, R.id.action_productFragment_to_signInFragment, null);
     }
 
     private void onAddToWishlistClick(View view) {
@@ -221,13 +232,15 @@ public class ProductFragment extends RootBaseFragment {
     }
 
     private void bindProductToView() {
-        String productJSON = getArguments() != null ? getArguments().getString("product") : null;
-        ProductResponse product = new Gson().fromJson(productJSON, ProductResponse.class);
-        binding.setProduct(product);
-
+        binding.setProduct(product());
         Glide.with(binding.getRoot())
-                .load(urlBuilder.fileUrl(product.getProductImages().get(0).getFilename()))
+                .load(urlBuilder.fileUrl(product().getProductImages().get(0).getFilename()))
                 .placeholder(R.drawable.stylouse_placeholder)
                 .into(binding.productImage);
+    }
+
+    private ProductResponse product() {
+        String productJSON = getArguments() != null ? getArguments().getString("product") : null;
+        return new Gson().fromJson(productJSON, ProductResponse.class);
     }
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_nav_graph"
@@ -10,42 +9,19 @@
         android:id="@+id/navigation_home"
         android:name="lk.apiit.eea.stylouse.ui.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home"/>
+        tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_cart"
         android:name="lk.apiit.eea.stylouse.ui.CartFragment"
         android:label="fragment_cart"
-        tools:layout="@layout/fragment_cart">
-        <action
-            android:id="@+id/action_navigation_cart_to_shippingFragment"
-            app:destination="@id/shippingFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
-        <action
-            android:id="@+id/action_navigation_cart_to_productFragment"
-            app:destination="@id/productFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
-    </fragment>
+        tools:layout="@layout/fragment_cart" />
 
     <fragment
         android:id="@+id/navigation_wishlist"
         android:name="lk.apiit.eea.stylouse.ui.WishlistFragment"
         android:label="fragment_wishlist"
-        tools:layout="@layout/fragment_wishlist">
-        <action
-            android:id="@+id/action_navigation_wishlist_to_productFragment"
-            app:destination="@id/productFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
-    </fragment>
+        tools:layout="@layout/fragment_wishlist" />
 
     <fragment
         android:id="@+id/navigation_profile"
@@ -54,66 +30,29 @@
         tools:layout="@layout/fragment_profile">
 
         <action
-            android:id="@+id/action_navigation_profile_to_ordersFragment"
-            app:destination="@id/ordersFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
-        <action
             android:id="@+id/action_navigation_profile_to_resetPasswordFragment"
             app:destination="@id/resetPasswordFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
 
     </fragment>
 
-    <fragment
-        android:id="@+id/ordersFragment"
-        android:name="lk.apiit.eea.stylouse.ui.OrdersFragment"
-        android:label="OrdersFragment"
-        tools:layout="@layout/fragment_orders">
-        <action
-            android:id="@+id/action_ordersFragment_to_orderDetailFragment"
-            app:destination="@id/orderDetailFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
-    </fragment>
-
-    <fragment
-        android:id="@+id/shippingFragment"
-        android:name="lk.apiit.eea.stylouse.ui.ShippingFragment"
-        android:label="ShippingFragment"
-        tools:layout="@layout/fragment_shipping"/>
-
-    <fragment
-        android:id="@+id/orderDetailFragment"
-        android:name="lk.apiit.eea.stylouse.ui.OrderDetailFragment"
-        android:label="OrderDetailFragment"
-        tools:layout="@layout/fragment_order_detail">
-        <action
-            android:id="@+id/action_orderDetailFragment_to_productFragment"
-            app:destination="@id/productFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
-    </fragment>
-
-    <fragment
-        android:id="@+id/productFragment"
-        android:name="lk.apiit.eea.stylouse.ui.ProductFragment"
-        android:label="ProductFragment"
-        tools:layout="@layout/fragment_product"/>
     <fragment
         android:id="@+id/resetPasswordFragment"
         android:name="lk.apiit.eea.stylouse.ui.ResetPasswordFragment"
         android:label="fragment_reset_password"
         tools:layout="@layout/fragment_reset_password" >
+        <action
+            android:id="@+id/action_resetPasswordFragment_to_navigation_profile"
+            app:destination="@id/navigation_profile"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/navigation_profile"/>
     </fragment>
 
 </navigation>

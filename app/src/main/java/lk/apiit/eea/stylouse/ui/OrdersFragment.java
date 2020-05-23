@@ -9,8 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +23,11 @@ import lk.apiit.eea.stylouse.databinding.FragmentOrdersBinding;
 import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.models.responses.OrdersResponse;
 import lk.apiit.eea.stylouse.services.OrderService;
+import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
 
 public class OrdersFragment extends AuthFragment {
     private FragmentOrdersBinding binding;
-    private NavController navController;
     private List<OrdersResponse> orders = new ArrayList<>();
 
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
@@ -58,7 +56,6 @@ public class OrdersFragment extends AuthFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Orders");
-        navController = Navigation.findNavController(view);
         loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
         error.observe(getViewLifecycleOwner(), this::onErrorChange);
         count.observe(getViewLifecycleOwner(), this::onCountChange);
@@ -109,6 +106,6 @@ public class OrdersFragment extends AuthFragment {
     private void onOrderClick(String orderJSON) {
         Bundle bundle = new Bundle();
         bundle.putString("order", orderJSON);
-        navController.navigate(R.id.action_ordersFragment_to_orderDetailFragment, bundle);
+        Navigator.navigate(parentNavController, R.id.action_ordersFragment_to_orderDetailFragment, bundle);
     }
 }

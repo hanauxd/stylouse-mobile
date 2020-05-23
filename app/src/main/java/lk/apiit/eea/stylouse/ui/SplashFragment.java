@@ -20,6 +20,7 @@ import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.interfaces.ActivityHandler;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
+import lk.apiit.eea.stylouse.utils.Navigator;
 
 public class SplashFragment extends RootBaseFragment {
     @Inject
@@ -64,7 +65,7 @@ public class SplashFragment extends RootBaseFragment {
             }
         }
         new Handler().postDelayed(() -> {
-            parentNavController.navigate(R.id.action_splashFragment_to_mainFragment);
+            Navigator.navigate(parentNavController, R.id.action_splashFragment_to_mainFragment, null);
         }, 2000);
     }
 }

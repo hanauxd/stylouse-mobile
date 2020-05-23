@@ -9,8 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
@@ -27,6 +25,7 @@ import lk.apiit.eea.stylouse.databinding.FragmentCartBinding;
 import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.models.responses.CartResponse;
 import lk.apiit.eea.stylouse.services.CartService;
+import lk.apiit.eea.stylouse.utils.Navigator;
 import lk.apiit.eea.stylouse.utils.StringFormatter;
 import retrofit2.Response;
 
@@ -34,9 +33,8 @@ public class CartFragment extends AuthFragment {
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private MutableLiveData<String> error = new MutableLiveData<>(null);
     private MutableLiveData<Integer> count = new MutableLiveData<>(0);
-    private FragmentCartBinding binding;
     private List<CartResponse> carts = new ArrayList<>();
-    private NavController navController;
+    private FragmentCartBinding binding;
 
     @Inject
     AuthSession session;
@@ -78,7 +76,6 @@ public class CartFragment extends AuthFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Cart");
-        navController = Navigation.findNavController(view);
         binding.btnRetry.setOnClickListener(this::fetchCartItems);
 
         if (session.getAuthState() != null) {
@@ -132,7 +129,7 @@ public class CartFragment extends AuthFragment {
     private void onProductClick(String productJSON) {
         Bundle bundle = new Bundle();
         bundle.putString("product", productJSON);
-        navController.navigate(R.id.action_navigation_cart_to_productFragment, bundle);
+        Navigator.navigate(parentNavController, R.id.action_mainFragment_to_productFragment, bundle);
     }
 
     private void onCheckoutClick(View view) {
@@ -140,7 +137,7 @@ public class CartFragment extends AuthFragment {
             Bundle bundle = new Bundle();
             bundle.putString("total", "LKR ".concat(StringFormatter.formatCurrency(cartTotal())));
             bundle.putString("numberOfItems", String.valueOf(carts.size()));
-            navController.navigate(R.id.action_navigation_cart_to_shippingFragment, bundle);
+            Navigator.navigate(parentNavController, R.id.shippingFragment, bundle);
         } else {
             DynamicToast.make(activity, "Add items to cart.").show();
         }

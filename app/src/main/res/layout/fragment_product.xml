@@ -143,6 +143,11 @@
                         android:text="SIGN IN"
                         app:strokeColor="@color/colorRed"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+                    <FrameLayout
+                        android:id="@+id/review_fragment_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

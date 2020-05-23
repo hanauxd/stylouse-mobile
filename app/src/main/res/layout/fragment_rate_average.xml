@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.RateAverageFragment">
+
+    <data>
+
+        <variable
+            name="average"
+            type="String" />
+
+        <variable
+            name="count"
+            type="String" />
+
+        <variable
+            name="one"
+            type="Integer" />
+
+        <variable
+            name="two"
+            type="Integer" />
+
+        <variable
+            name="three"
+            type="Integer" />
+
+        <variable
+            name="four"
+            type="Integer" />
+
+        <variable
+            name="five"
+            type="Integer" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{average}"
+                android:textAlignment="center"
+                android:textSize="40sp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{count.concat(` ratings`)}"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    style="@style/Widget.MaterialRatingBar.RatingBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="rtl"
+                    android:rating="5"
+                    app:mrb_progressBackgroundTint="@color/colorLightGray"
+                    app:mrb_progressTint="@color/colorRed" />
+
+                <androidx.core.widget.ContentLoadingProgressBar
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:progress="@{five}"
+                    android:progressBackgroundTint="@color/colorRed"
+                    android:progressTint="@color/colorRed" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    style="@style/Widget.MaterialRatingBar.RatingBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="rtl"
+                    android:rating="4"
+                    app:mrb_progressBackgroundTint="@color/colorLightGray"
+                    app:mrb_progressTint="@color/colorRed" />
+
+                <androidx.core.widget.ContentLoadingProgressBar
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:progress="@{four}"
+                    android:progressBackgroundTint="@color/colorRed"
+                    android:progressTint="@color/colorRed" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    style="@style/Widget.MaterialRatingBar.RatingBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="rtl"
+                    android:rating="3"
+                    app:mrb_progressBackgroundTint="@color/colorLightGray"
+                    app:mrb_progressTint="@color/colorRed" />
+
+                <androidx.core.widget.ContentLoadingProgressBar
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:progress="@{three}"
+                    android:progressBackgroundTint="@color/colorRed"
+                    android:progressTint="@color/colorRed" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    style="@style/Widget.MaterialRatingBar.RatingBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="rtl"
+                    android:rating="2"
+                    app:mrb_progressBackgroundTint="@color/colorLightGray"
+                    app:mrb_progressTint="@color/colorRed" />
+
+                <androidx.core.widget.ContentLoadingProgressBar
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:progress="@{two}"
+                    android:progressBackgroundTint="@color/colorRed"
+                    android:progressTint="@color/colorRed" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    style="@style/Widget.MaterialRatingBar.RatingBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="rtl"
+                    android:rating="1"
+                    app:mrb_progressBackgroundTint="@color/colorLightGray"
+                    app:mrb_progressTint="@color/colorRed" />
+
+                <androidx.core.widget.ContentLoadingProgressBar
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:progress="@{one}"
+                    android:progressBackgroundTint="@color/colorRed"
+                    android:progressTint="@color/colorRed" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>
