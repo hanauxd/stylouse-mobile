@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,11 +23,11 @@ import lk.apiit.eea.stylouse.databinding.FragmentOrderDetailBinding;
 import lk.apiit.eea.stylouse.models.responses.CartResponse;
 import lk.apiit.eea.stylouse.models.responses.OrderItemResponse;
 import lk.apiit.eea.stylouse.models.responses.OrdersResponse;
+import lk.apiit.eea.stylouse.utils.Navigator;
 import lk.apiit.eea.stylouse.utils.StringFormatter;
 
 public class OrderDetailFragment extends AuthFragment {
     private FragmentOrderDetailBinding binding;
-    private NavController navController;
     private List<CartResponse> carts = new ArrayList<>();
 
     @Override
@@ -49,7 +47,6 @@ public class OrderDetailFragment extends AuthFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
         bindOrderToView();
         initRecyclerView();
     }
@@ -80,7 +77,7 @@ public class OrderDetailFragment extends AuthFragment {
     private void onProductClick(String productJSON) {
         Bundle bundle = new Bundle();
         bundle.putString("product", productJSON);
-        parentNavController.navigate(R.id.action_orderDetailFragment_to_productFragment, bundle);
+        Navigator.navigate(parentNavController, R.id.action_orderDetailFragment_to_productFragment, bundle);
     }
 
     private List<CartResponse> cartResponses(List<OrderItemResponse> orderItems) {
