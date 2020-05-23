@@ -23,6 +23,7 @@ import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.models.requests.ReviewRequest;
 import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.services.ReviewService;
+import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
 
 public class RateFragment extends HomeBaseFragment {
@@ -40,7 +41,7 @@ public class RateFragment extends HomeBaseFragment {
             DynamicToast.makeSuccess(activity,"Review submitted").show();
             Bundle bundle = new Bundle();
             bundle.putString("product", new Gson().toJson(product()));
-            parentNavController.navigate(R.id.action_rateFragment_to_productFragment, bundle);
+            Navigator.navigate(parentNavController, R.id.action_rateFragment_to_productFragment, bundle);
         }
 
         @Override

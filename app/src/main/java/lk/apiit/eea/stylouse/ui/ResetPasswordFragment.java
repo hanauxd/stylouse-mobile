@@ -27,6 +27,7 @@ import lk.apiit.eea.stylouse.interfaces.ActivityHandler;
 import lk.apiit.eea.stylouse.models.requests.SignInRequest;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 import lk.apiit.eea.stylouse.services.AuthService;
+import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
 
 public class ResetPasswordFragment extends RootBaseFragment {
@@ -88,9 +89,9 @@ public class ResetPasswordFragment extends RootBaseFragment {
                 session.setAuthState(body);
 
                 if (navController.getGraph().getId() == R.id.home_nav_graph) {
-                    navController.navigate(R.id.action_resetPasswordFragment_to_navigation_profile);
+                    Navigator.navigate(navController, R.id.action_resetPasswordFragment_to_navigation_profile, null);
                 } else {
-                    navController.navigate(R.id.action_resetPasswordFragment_to_mainFragment);
+                    Navigator.navigate(navController, R.id.action_resetPasswordFragment_to_mainFragment, null);
                 }
             }
         }
