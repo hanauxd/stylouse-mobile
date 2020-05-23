@@ -22,6 +22,7 @@ import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.FragmentForgotPasswordBinding;
 import lk.apiit.eea.stylouse.services.AuthService;
+import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
 
 public class ForgotPasswordFragment extends RootBaseFragment {
@@ -83,7 +84,7 @@ public class ForgotPasswordFragment extends RootBaseFragment {
             loading.setValue(false);
             Bundle bundle = new Bundle();
             bundle.putString("email", binding.email.getText().toString());
-            navController.navigate(R.id.action_forgotPasswordFragment_to_otpFragment, bundle);
+            Navigator.navigate(navController, R.id.action_forgotPasswordFragment_to_otpFragment, bundle);
         }
 
         @Override
