@@ -87,8 +87,11 @@ public class ResetPasswordFragment extends RootBaseFragment {
                 body.setExpiresAt(expiresAt);
                 session.setAuthState(body);
 
-                //TODO: NavController conflict
-                navController.navigate(R.id.action_resetPasswordFragment_to_mainFragment);
+                if (navController.getGraph().getId() == R.id.home_nav_graph) {
+                    navController.navigate(R.id.action_resetPasswordFragment_to_navigation_profile);
+                } else {
+                    navController.navigate(R.id.action_resetPasswordFragment_to_mainFragment);
+                }
             }
         }
 
