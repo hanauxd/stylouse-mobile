@@ -25,6 +25,7 @@ import lk.apiit.eea.stylouse.databinding.FragmentCartBinding;
 import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.models.responses.CartResponse;
 import lk.apiit.eea.stylouse.services.CartService;
+import lk.apiit.eea.stylouse.utils.Navigator;
 import lk.apiit.eea.stylouse.utils.StringFormatter;
 import retrofit2.Response;
 
@@ -32,8 +33,8 @@ public class CartFragment extends AuthFragment {
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private MutableLiveData<String> error = new MutableLiveData<>(null);
     private MutableLiveData<Integer> count = new MutableLiveData<>(0);
-    private FragmentCartBinding binding;
     private List<CartResponse> carts = new ArrayList<>();
+    private FragmentCartBinding binding;
 
     @Inject
     AuthSession session;
@@ -128,7 +129,7 @@ public class CartFragment extends AuthFragment {
     private void onProductClick(String productJSON) {
         Bundle bundle = new Bundle();
         bundle.putString("product", productJSON);
-        parentNavController.navigate(R.id.action_mainFragment_to_productFragment, bundle);
+        Navigator.navigate(parentNavController, R.id.action_mainFragment_to_productFragment, bundle);
     }
 
     private void onCheckoutClick(View view) {
@@ -136,7 +137,7 @@ public class CartFragment extends AuthFragment {
             Bundle bundle = new Bundle();
             bundle.putString("total", "LKR ".concat(StringFormatter.formatCurrency(cartTotal())));
             bundle.putString("numberOfItems", String.valueOf(carts.size()));
-            parentNavController.navigate(R.id.shippingFragment, bundle);
+            Navigator.navigate(parentNavController, R.id.shippingFragment, bundle);
         } else {
             DynamicToast.make(activity, "Add items to cart.").show();
         }
