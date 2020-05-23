@@ -24,6 +24,7 @@ import lk.apiit.eea.stylouse.databinding.FragmentOtpBinding;
 import lk.apiit.eea.stylouse.models.requests.SignInRequest;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 import lk.apiit.eea.stylouse.services.AuthService;
+import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
 
 public class OtpFragment extends RootBaseFragment {
@@ -92,7 +93,7 @@ public class OtpFragment extends RootBaseFragment {
             String authJSON = new Gson().toJson(authToken);
             Bundle bundle = new Bundle();
             bundle.putString("authToken", authJSON);
-            navController.navigate(R.id.action_otpFragment_to_resetPasswordFragment, bundle);
+            Navigator.navigate(navController, R.id.action_otpFragment_to_resetPasswordFragment, bundle);
         }
 
         @Override
