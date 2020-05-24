@@ -9,10 +9,14 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface InquiryAPI {
     @GET("inquiries/user")
     Call<InquiryResponse> getInquiriesByUser(@Header("Authorization") String token);
+
+    @GET("inquiries/product/{id}")
+    Call<Inquiry> getInquiryByUserAndProduct(@Header("Authorization") String token, @Path("id") String id);
 
     @POST("inquiries")
     Call<Inquiry> createInquiry(@Header("Authorization") String token, @Body InquiryRequest request);
