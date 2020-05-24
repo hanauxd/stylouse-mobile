@@ -8,6 +8,9 @@
         <variable
             name="error"
             type="String" />
+        <variable
+            name="loading"
+            type="Boolean" />
     </data>
 
     <LinearLayout
@@ -55,5 +58,12 @@
             android:text="@{error}"
             android:textColor="@color/colorRed"
             android:visibility="@{error != null ? View.VISIBLE : View.GONE}" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/inquiry_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:reverseLayout="false"/>
     </LinearLayout>
 </layout>
