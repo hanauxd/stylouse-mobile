@@ -32,6 +32,7 @@ public class ReviewFragment extends HomeBaseFragment {
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private MutableLiveData<String> error = new MutableLiveData<>(null);
     private FragmentReviewBinding binding;
+    private ReviewResponse reviewResponse;
 
     @Inject
     ReviewService reviewService;
@@ -52,12 +53,21 @@ public class ReviewFragment extends HomeBaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.btnRetry.setOnClickListener(this::fetchReviews);
+        binding.btnRetry.setOnClickListener(this::onRetryClick);
         binding.btnReview.setOnClickListener(this::onReviewClick);
         binding.setIsAuth(session.getAuthState() != null);
         loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
         error.observe(getViewLifecycleOwner(), this::onErrorChange);
-        fetchReviews(view);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fetchReviews();
+    }
+
+    private void onRetryClick(View view) {
+        fetchReviews();
     }
 
     private void onReviewClick(View view) {
@@ -74,7 +84,7 @@ public class ReviewFragment extends HomeBaseFragment {
         binding.setLoading(loading);
     }
 
-    private void fetchReviews(View view) {
+    private void fetchReviews() {
         loading.setValue(true);
         if (error.getValue() != null) error.setValue(null);
         String jwt = session.getAuthState() != null ? session.getAuthState().getJwt() : "";
@@ -84,15 +94,15 @@ public class ReviewFragment extends HomeBaseFragment {
     private ApiResponseCallback getReviewsCallback = new ApiResponseCallback() {
         @Override
         public void onSuccess(Response<?> response) {
-            ReviewResponse reviewResponse = (ReviewResponse) response.body();
+            reviewResponse = (ReviewResponse) response.body();
             if (reviewResponse != null) {
                 initRecyclerView(reviewResponse.getReviews());
                 binding.setHasUserRated(reviewResponse.isHasUserRated());
                 binding.setCount(reviewResponse.getReviews().size());
+                renderRateAverageFragment(reviewResponse);
             }
             error.setValue(null);
             loading.setValue(false);
-            renderRateAverageFragment(reviewResponse);
         }
 
         @Override
