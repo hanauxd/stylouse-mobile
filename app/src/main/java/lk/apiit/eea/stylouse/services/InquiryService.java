@@ -26,6 +26,11 @@ public class InquiryService {
         inquiriesCall.enqueue(new RetroFitCallback<>(callback));
     }
 
+    public void getInquiryByUserAndProduct(ApiResponseCallback callback, String jwt, String productId) {
+        Call<Inquiry> inquiryCall = inquiryAPI.getInquiryByUserAndProduct(StringFormatter.formatToken(jwt), productId);
+        inquiryCall.enqueue(new RetroFitCallback<>(callback));
+    }
+
     public void createInquiry(ApiResponseCallback callback, String jwt, InquiryRequest request) {
         Call<Inquiry> inquiryCall = inquiryAPI.createInquiry(StringFormatter.formatToken(jwt), request);
         inquiryCall.enqueue(new RetroFitCallback<>(callback));
