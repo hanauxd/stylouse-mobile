@@ -8,6 +8,7 @@
         <item name="android:textViewStyle">@style/AppTextView</item>
         <item name="materialButtonStyle">@style/MaterialButtonView</item>
         <item name="editTextStyle">@style/AppEditText</item>
+        <item name="ratingBarStyle">@style/RatingBarAverage</item>
     </style>
 
     <style name="AppTextView" parent="Widget.MaterialComponents.TextView">
@@ -21,5 +22,9 @@
     <style name="AppEditText" parent="Widget.AppCompat.EditText">
         <item name="fontFamily">sans-serif-light</item>
         <item name="android:letterSpacing">0.1</item>
+    </style>
+    <style name="RatingBarAverage">
+        <item name="android:minHeight">10dp</item>
+        <item name="android:maxHeight">10dp</item>
     </style>
 </resources>
