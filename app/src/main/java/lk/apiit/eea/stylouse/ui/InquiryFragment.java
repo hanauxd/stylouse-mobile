@@ -20,6 +20,7 @@ import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.FragmentInquiryBinding;
 import lk.apiit.eea.stylouse.di.AuthSession;
+import lk.apiit.eea.stylouse.models.Inquiry;
 import lk.apiit.eea.stylouse.models.requests.InquiryRequest;
 import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.services.InquiryService;
@@ -29,6 +30,7 @@ import retrofit2.Response;
 public class InquiryFragment extends RootBaseFragment {
     private MutableLiveData<String> error = new MutableLiveData<>(null);
     private FragmentInquiryBinding binding;
+    private Inquiry inquiry;
 
     @Inject
     AuthSession session;
@@ -53,6 +55,7 @@ public class InquiryFragment extends RootBaseFragment {
         super.onViewCreated(view, savedInstanceState);
         error.observe(getViewLifecycleOwner(), this::onErrorChange);
         binding.btnSend.setOnClickListener(this::onSendClick);
+        fetchInquiryByUserAndProduct();
     }
 
     private void onErrorChange(String error) {
@@ -71,24 +74,40 @@ public class InquiryFragment extends RootBaseFragment {
         }
     }
 
-   private ApiResponseCallback createCallback = new ApiResponseCallback() {
-       @Override
-       public void onSuccess(Response<?> response) {
-           DynamicToast.makeSuccess(activity, "Inquiry submitted").show();
-           Bundle bundle = new Bundle();
-           bundle.putString("product", new Gson().toJson(product()));
-           Navigator.navigate(parentNavController, R.id.action_inquiryFragment_to_productFragment, bundle);
-       }
-
-       @Override
-       public void onFailure(String message) {
-           binding.btnSend.revertAnimation();
-           error.setValue(message);
-       }
-   };
-
     private ProductResponse product() {
         String productJSON = getArguments() != null ? getArguments().getString("product") : null;
         return new Gson().fromJson(productJSON, ProductResponse.class);
     }
+
+    private void fetchInquiryByUserAndProduct() {
+        inquiryService.getInquiryByUserAndProduct(inquiryCallback, session.getAuthState().getJwt(), product().getId());
+    }
+
+    private ApiResponseCallback createCallback = new ApiResponseCallback() {
+        @Override
+        public void onSuccess(Response<?> response) {
+            DynamicToast.makeSuccess(activity, "Inquiry submitted").show();
+            Bundle bundle = new Bundle();
+            bundle.putString("product", new Gson().toJson(product()));
+            Navigator.navigate(parentNavController, R.id.action_inquiryFragment_to_productFragment, bundle);
+        }
+
+        @Override
+        public void onFailure(String message) {
+            binding.btnSend.revertAnimation();
+            error.setValue(message);
+        }
+    };
+
+    private ApiResponseCallback inquiryCallback = new ApiResponseCallback() {
+        @Override
+        public void onSuccess(Response<?> response) {
+            inquiry = (Inquiry) response.body();
+        }
+
+        @Override
+        public void onFailure(String message) {
+            error.setValue(message);
+        }
+    };
 }
