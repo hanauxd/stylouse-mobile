@@ -27,7 +27,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(reviews.get(position));
+        holder.bind(reviews.get(position), position == 0);
     }
 
     @Override
@@ -43,8 +43,9 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             this.binding = binding;
         }
 
-        void bind(Review review) {
+        void bind(Review review, Boolean isLastItem) {
             binding.setReview(review);
+            binding.setIsLastItem(isLastItem);
         }
     }
 }
