@@ -7,6 +7,7 @@ import lk.apiit.eea.stylouse.MainActivity;
 import lk.apiit.eea.stylouse.adapters.CartAdapter;
 import lk.apiit.eea.stylouse.adapters.ProductAdapter;
 import lk.apiit.eea.stylouse.ui.CartFragment;
+import lk.apiit.eea.stylouse.ui.CategoryFragment;
 import lk.apiit.eea.stylouse.ui.ForgotPasswordFragment;
 import lk.apiit.eea.stylouse.ui.HomeFragment;
 import lk.apiit.eea.stylouse.ui.InquiryFragment;
@@ -47,6 +48,7 @@ public interface ApplicationComponent {
     void inject(ReviewFragment fragment);
     void inject(RateFragment fragment);
     void inject(InquiryFragment fragment);
+    void inject(CategoryFragment fragment);
 
     void inject(ProductAdapter adapter);
     void inject(CartAdapter adapter);
