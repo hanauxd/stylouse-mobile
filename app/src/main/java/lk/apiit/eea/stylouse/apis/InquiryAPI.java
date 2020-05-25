@@ -1,6 +1,5 @@
 package lk.apiit.eea.stylouse.apis;
 
-import lk.apiit.eea.stylouse.models.Inquiry;
 import lk.apiit.eea.stylouse.models.Reply;
 import lk.apiit.eea.stylouse.models.requests.InquiryRequest;
 import lk.apiit.eea.stylouse.models.responses.InquiryResponse;
@@ -16,10 +15,10 @@ public interface InquiryAPI {
     Call<InquiryResponse> getInquiriesByUser(@Header("Authorization") String token);
 
     @GET("inquiries/product/{id}")
-    Call<Inquiry> getInquiryByUserAndProduct(@Header("Authorization") String token, @Path("id") String id);
+    Call<InquiryResponse> getInquiryByProduct(@Header("Authorization") String token, @Path("id") String id);
 
     @POST("inquiries")
-    Call<Inquiry> createInquiry(@Header("Authorization") String token, @Body InquiryRequest request);
+    Call<InquiryResponse> createInquiry(@Header("Authorization") String token, @Body InquiryRequest request);
 
     @POST("inquiries")
     Call<Reply> createReply(@Header("Authorization") String token, @Body InquiryRequest request);
