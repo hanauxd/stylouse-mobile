@@ -16,6 +16,7 @@ import lk.apiit.eea.stylouse.R;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 import lk.apiit.eea.stylouse.services.AuthService;
 import lk.apiit.eea.stylouse.services.CartService;
+import lk.apiit.eea.stylouse.services.CategoryService;
 import lk.apiit.eea.stylouse.services.InquiryService;
 import lk.apiit.eea.stylouse.services.OrderService;
 import lk.apiit.eea.stylouse.services.ProductService;
@@ -118,6 +119,12 @@ public class ApplicationModule {
     @Singleton
     public UserService provideUserServiceInstance(Retrofit retrofit) {
         return new UserService(retrofit);
+    }
+
+    @Provides
+    @Singleton
+    public CategoryService provideCategoryServiceInstance(Retrofit retrofit) {
+        return new CategoryService(retrofit);
     }
 
     @Provides
