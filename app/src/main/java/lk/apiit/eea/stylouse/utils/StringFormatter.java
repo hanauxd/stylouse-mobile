@@ -10,6 +10,11 @@ public class StringFormatter {
         return dateFormat.format(date);
     }
 
+    public static String formatDateTime(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy, hh:mm a", Locale.getDefault());
+        return dateFormat.format(date);
+    }
+
     public static String formatCurrency(double amount) {
         return String.format(Locale.getDefault(), "%.2f", amount);
     }
