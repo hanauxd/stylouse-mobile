@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <import type="android.view.Gravity"/>
+        <variable
+            name="role"
+            type="String" />
+        <variable
+            name="message"
+            type="String" />
+        <variable
+            name="date"
+            type="String" />
+        <variable
+            name="name"
+            type="String" />
+    </data>
+
+    <LinearLayout
+        android:paddingVertical="5dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="@{role.equalsIgnoreCase(`ROLE_ADMIN`) ? Gravity.START : Gravity.END}">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@{role.equalsIgnoreCase(`ROLE_ADMIN`) ? @drawable/mtrl_background_outlined : @drawable/mtrl_background_filled}"
+            android:orientation="vertical"
+            android:padding="8dp">
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{name}"
+                android:textSize="10sp" />
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@{message}"
+                android:textSize="10sp" />
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{date}"
+                android:textAlignment="textEnd"
+                android:textSize="10sp" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

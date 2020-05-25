@@ -74,13 +74,18 @@
                 android:layout_height="wrap_content">
 
                 <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                    style="@style/Widget.MaterialRatingBar.RatingBar.Small"
+                    style="@style/RatingBarAverage"
+                    android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layoutDirection="rtl"
                     android:rating="5"
-                    app:mrb_progressBackgroundTint="@color/colorLightGray"
-                    app:mrb_progressTint="@color/colorRed" />
+                    app:mrb_progressBackgroundTint="@android:color/transparent"
+                    app:mrb_progressTint="@android:color/darker_gray" />
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent"/>
 
                 <androidx.core.widget.ContentLoadingProgressBar
                     style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -88,8 +93,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:progress="@{five}"
-                    android:progressBackgroundTint="@color/colorRed"
-                    android:progressTint="@color/colorRed" />
+                    android:progressBackgroundTint="@android:color/darker_gray"
+                    android:progressTint="@android:color/darker_gray" />
             </LinearLayout>
 
             <LinearLayout
@@ -97,13 +102,18 @@
                 android:layout_height="wrap_content">
 
                 <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                    style="@style/Widget.MaterialRatingBar.RatingBar.Small"
+                    style="@style/RatingBarAverage"
+                    android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layoutDirection="rtl"
                     android:rating="4"
-                    app:mrb_progressBackgroundTint="@color/colorLightGray"
-                    app:mrb_progressTint="@color/colorRed" />
+                    app:mrb_progressBackgroundTint="@android:color/transparent"
+                    app:mrb_progressTint="@android:color/darker_gray" />
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent"/>
 
                 <androidx.core.widget.ContentLoadingProgressBar
                     style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -111,8 +121,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:progress="@{four}"
-                    android:progressBackgroundTint="@color/colorRed"
-                    android:progressTint="@color/colorRed" />
+                    android:progressBackgroundTint="@android:color/darker_gray"
+                    android:progressTint="@android:color/darker_gray" />
             </LinearLayout>
 
             <LinearLayout
@@ -120,13 +130,18 @@
                 android:layout_height="wrap_content">
 
                 <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                    style="@style/Widget.MaterialRatingBar.RatingBar.Small"
+                    style="@style/RatingBarAverage"
+                    android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layoutDirection="rtl"
                     android:rating="3"
-                    app:mrb_progressBackgroundTint="@color/colorLightGray"
-                    app:mrb_progressTint="@color/colorRed" />
+                    app:mrb_progressBackgroundTint="@android:color/transparent"
+                    app:mrb_progressTint="@android:color/darker_gray" />
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent"/>
 
                 <androidx.core.widget.ContentLoadingProgressBar
                     style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -134,8 +149,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:progress="@{three}"
-                    android:progressBackgroundTint="@color/colorRed"
-                    android:progressTint="@color/colorRed" />
+                    android:progressBackgroundTint="@android:color/darker_gray"
+                    android:progressTint="@android:color/darker_gray" />
             </LinearLayout>
 
             <LinearLayout
@@ -143,13 +158,18 @@
                 android:layout_height="wrap_content">
 
                 <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                    style="@style/Widget.MaterialRatingBar.RatingBar.Small"
+                    style="@style/RatingBarAverage"
+                    android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layoutDirection="rtl"
                     android:rating="2"
-                    app:mrb_progressBackgroundTint="@color/colorLightGray"
-                    app:mrb_progressTint="@color/colorRed" />
+                    app:mrb_progressBackgroundTint="@android:color/transparent"
+                    app:mrb_progressTint="@android:color/darker_gray" />
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent"/>
 
                 <androidx.core.widget.ContentLoadingProgressBar
                     style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -157,8 +177,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:progress="@{two}"
-                    android:progressBackgroundTint="@color/colorRed"
-                    android:progressTint="@color/colorRed" />
+                    android:progressBackgroundTint="@android:color/darker_gray"
+                    android:progressTint="@android:color/darker_gray" />
             </LinearLayout>
 
             <LinearLayout
@@ -166,13 +186,18 @@
                 android:layout_height="wrap_content">
 
                 <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                    style="@style/Widget.MaterialRatingBar.RatingBar.Small"
+                    style="@style/RatingBarAverage"
+                    android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layoutDirection="rtl"
                     android:rating="1"
-                    app:mrb_progressBackgroundTint="@color/colorLightGray"
-                    app:mrb_progressTint="@color/colorRed" />
+                    app:mrb_progressBackgroundTint="@android:color/transparent"
+                    app:mrb_progressTint="@android:color/darker_gray" />
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent"/>
 
                 <androidx.core.widget.ContentLoadingProgressBar
                     style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -180,8 +205,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:progress="@{one}"
-                    android:progressBackgroundTint="@color/colorRed"
-                    android:progressTint="@color/colorRed" />
+                    android:progressBackgroundTint="@android:color/darker_gray"
+                    android:progressTint="@android:color/darker_gray" />
             </LinearLayout>
 
         </LinearLayout>

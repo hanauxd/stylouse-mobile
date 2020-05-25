@@ -12,8 +12,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import lk.apiit.eea.stylouse.R;
@@ -21,7 +19,6 @@ import lk.apiit.eea.stylouse.adapters.ReviewAdapter;
 import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.FragmentReviewBinding;
-import lk.apiit.eea.stylouse.models.Review;
 import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.models.responses.ReviewResponse;
 import lk.apiit.eea.stylouse.services.ReviewService;
@@ -32,6 +29,7 @@ public class ReviewFragment extends HomeBaseFragment {
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private MutableLiveData<String> error = new MutableLiveData<>(null);
     private FragmentReviewBinding binding;
+    private ReviewResponse reviewResponse;
 
     @Inject
     ReviewService reviewService;
@@ -52,18 +50,34 @@ public class ReviewFragment extends HomeBaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.btnRetry.setOnClickListener(this::fetchReviews);
+        binding.btnRetry.setOnClickListener(this::onRetryClick);
         binding.btnReview.setOnClickListener(this::onReviewClick);
+        binding.btnInquiry.setOnClickListener(this::onInquiryClick);
         binding.setIsAuth(session.getAuthState() != null);
         loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
         error.observe(getViewLifecycleOwner(), this::onErrorChange);
-        fetchReviews(view);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fetchReviews();
+    }
+
+    private void onRetryClick(View view) {
+        fetchReviews();
     }
 
     private void onReviewClick(View view) {
         Bundle bundle = new Bundle();
         bundle.putString("product", new Gson().toJson(product()));
         Navigator.navigate(parentNavController, R.id.action_productFragment_to_rateFragment, bundle);
+    }
+
+    private void onInquiryClick(View view) {
+        Bundle bundle = new Bundle();
+        bundle.putString("product", new Gson().toJson(product()));
+        Navigator.navigate(parentNavController, R.id.action_productFragment_to_inquiryFragment, bundle);
     }
 
     private void onErrorChange(String error) {
@@ -74,7 +88,7 @@ public class ReviewFragment extends HomeBaseFragment {
         binding.setLoading(loading);
     }
 
-    private void fetchReviews(View view) {
+    private void fetchReviews() {
         loading.setValue(true);
         if (error.getValue() != null) error.setValue(null);
         String jwt = session.getAuthState() != null ? session.getAuthState().getJwt() : "";
@@ -84,15 +98,13 @@ public class ReviewFragment extends HomeBaseFragment {
     private ApiResponseCallback getReviewsCallback = new ApiResponseCallback() {
         @Override
         public void onSuccess(Response<?> response) {
-            ReviewResponse reviewResponse = (ReviewResponse) response.body();
+            reviewResponse = (ReviewResponse) response.body();
             if (reviewResponse != null) {
-                initRecyclerView(reviewResponse.getReviews());
-                binding.setHasUserRated(reviewResponse.isHasUserRated());
-                binding.setCount(reviewResponse.getReviews().size());
+                bindValuesToView();
+                renderRateAverageFragment();
             }
             error.setValue(null);
             loading.setValue(false);
-            renderRateAverageFragment(reviewResponse);
         }
 
         @Override
@@ -102,21 +114,23 @@ public class ReviewFragment extends HomeBaseFragment {
         }
     };
 
-    private void initRecyclerView(List<Review> reviews) {
-        ReviewAdapter adapter = new ReviewAdapter(reviews);
+    private void bindValuesToView() {
+        binding.setHasUserRated(reviewResponse.isHasUserRated());
+        binding.setCount(reviewResponse.getReviews().size());
+        ReviewAdapter adapter = new ReviewAdapter(reviewResponse.getReviews());
         binding.reviewList.setAdapter(adapter);
     }
 
-    private ProductResponse product() {
-        String productJSON = getArguments() != null ? getArguments().getString("product") : null;
-        return new Gson().fromJson(productJSON, ProductResponse.class);
-    }
-
-    private void renderRateAverageFragment(ReviewResponse reviewResponse) {
+    private void renderRateAverageFragment() {
         Bundle bundle = new Bundle();
         bundle.putString("review", new Gson().toJson(reviewResponse));
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.rate_average_fragment, RateAverageFragment.class, bundle);
         transaction.commit();
+    }
+
+    private ProductResponse product() {
+        String productJSON = getArguments() != null ? getArguments().getString("product") : null;
+        return new Gson().fromJson(productJSON, ProductResponse.class);
     }
 }

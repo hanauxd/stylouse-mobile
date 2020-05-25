@@ -26,8 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:rating="@{review.rate}"
-                app:mrb_progressTint="@color/colorRed"
-                app:mrb_secondaryProgressTint="@color/colorRed"
+                app:mrb_progressTint="@color/colorWarning"
                 style="@style/Widget.MaterialRatingBar.RatingBar.Small"/>
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="0dp"

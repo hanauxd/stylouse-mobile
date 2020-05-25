@@ -3,20 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.ReviewFragment">
+
     <data>
+
         <import type="android.view.View" />
+
         <variable
             name="error"
             type="String" />
+
         <variable
             name="loading"
             type="Boolean" />
+
         <variable
             name="isAuth"
             type="Boolean" />
+
         <variable
             name="hasUserRated"
             type="Boolean" />
+
         <variable
             name="count"
             type="Integer" />
@@ -31,23 +38,36 @@
             android:id="@+id/rate_average_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="15dp"/>
+            android:layout_marginVertical="15dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/btn_review"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Write a Review"
+                android:visibility="@{isAuth &amp;&amp; !hasUserRated ? View.VISIBLE : View.GONE}" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/btn_inquiry"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textAlignment="textEnd"
+                android:text="Have a question?"
+                android:visibility="@{isAuth ? View.VISIBLE : View.GONE}"/>
+        </LinearLayout>
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/btn_review"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="10dp"
-            android:text=" Write a Review"
-            android:visibility="@{isAuth &amp;&amp; !hasUserRated ? View.VISIBLE : View.GONE}"
-            app:drawableLeftCompat="@drawable/icon_review" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
-            android:textSize="18sp"
-            android:text="@{count > 0 ? `Reviews and Ratings` : `Be the first to Review and Rate this product`}" />
+            android:text="@{count > 0 ? `Reviews &amp; Ratings` : `Be the first to review this product`}"
+            android:textSize="18sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/review_list"
@@ -61,13 +81,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="@{loading ? View.VISIBLE : View.GONE}">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:orientation="vertical">
+
                 <include layout="@layout/review_list_item_placeholder" />
+
                 <include layout="@layout/review_list_item_placeholder" />
+
                 <include layout="@layout/review_list_item_placeholder" />
             </LinearLayout>
         </com.facebook.shimmer.ShimmerFrameLayout>
@@ -78,10 +102,12 @@
             android:gravity="center"
             android:orientation="vertical"
             android:visibility="@{!loading &amp;&amp; error != null ? View.VISIBLE : View.GONE}">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{error}" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_retry"
                 android:layout_width="wrap_content"

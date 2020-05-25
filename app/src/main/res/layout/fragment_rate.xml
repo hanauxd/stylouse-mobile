@@ -34,8 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:stepSize="1"
-                app:mrb_progressTint="@color/colorRed"
-                app:mrb_secondaryProgressTint="@color/colorRed"
+                app:mrb_progressTint="@color/colorWarning"
                 style="@style/Widget.MaterialRatingBar.RatingBar"/>
 
             <com.google.android.material.textview.MaterialTextView
