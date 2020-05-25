@@ -5,7 +5,6 @@ import javax.inject.Inject;
 import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.apis.InquiryAPI;
 import lk.apiit.eea.stylouse.apis.RetroFitCallback;
-import lk.apiit.eea.stylouse.models.Inquiry;
 import lk.apiit.eea.stylouse.models.Reply;
 import lk.apiit.eea.stylouse.models.requests.InquiryRequest;
 import lk.apiit.eea.stylouse.models.responses.InquiryResponse;
@@ -26,13 +25,13 @@ public class InquiryService {
         inquiriesCall.enqueue(new RetroFitCallback<>(callback));
     }
 
-    public void getInquiryByUserAndProduct(ApiResponseCallback callback, String jwt, String productId) {
-        Call<Inquiry> inquiryCall = inquiryAPI.getInquiryByUserAndProduct(StringFormatter.formatToken(jwt), productId);
+    public void getInquiryByProduct(ApiResponseCallback callback, String jwt, String productId) {
+        Call<InquiryResponse> inquiryCall = inquiryAPI.getInquiryByProduct(StringFormatter.formatToken(jwt), productId);
         inquiryCall.enqueue(new RetroFitCallback<>(callback));
     }
 
     public void createInquiry(ApiResponseCallback callback, String jwt, InquiryRequest request) {
-        Call<Inquiry> inquiryCall = inquiryAPI.createInquiry(StringFormatter.formatToken(jwt), request);
+        Call<InquiryResponse> inquiryCall = inquiryAPI.createInquiry(StringFormatter.formatToken(jwt), request);
         inquiryCall.enqueue(new RetroFitCallback<>(callback));
     }
 
