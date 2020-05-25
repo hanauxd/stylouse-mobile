@@ -35,6 +35,7 @@ import retrofit2.Response;
 
 public class InquiryFragment extends RootBaseFragment {
     private MutableLiveData<InquiryResponse> inquiryData = new MutableLiveData<>(null);
+    private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private FragmentInquiryBinding binding;
     private InquiryResponse inquiryResponse;
 
@@ -60,6 +61,7 @@ public class InquiryFragment extends RootBaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         inquiryData.observe(getViewLifecycleOwner(), this::onInquiryChange);
+        loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
         binding.btnSend.setOnClickListener(this::onSendClick);
         binding.btnSend.setColorFilter(Color.WHITE);
         fetchInquiryByProduct();
@@ -75,6 +77,10 @@ public class InquiryFragment extends RootBaseFragment {
             InquiryAdapter adapter = new InquiryAdapter(replies);
             binding.inquiryList.setAdapter(adapter);
         }
+    }
+
+    private void onLoadingChange(Boolean loading) {
+        binding.setLoading(loading);
     }
 
     private void onSendClick(View view) {
@@ -93,6 +99,7 @@ public class InquiryFragment extends RootBaseFragment {
     }
 
     private void fetchInquiryByProduct() {
+        loading.setValue(true);
         inquiryService.getInquiryByProduct(inquiryCallback, session.getAuthState().getJwt(), product().getId());
     }
 
@@ -115,10 +122,12 @@ public class InquiryFragment extends RootBaseFragment {
         public void onSuccess(Response<?> response) {
             inquiryResponse = (InquiryResponse) response.body();
             inquiryData.setValue(inquiryResponse);
+            loading.setValue(false);
         }
 
         @Override
         public void onFailure(String message) {
+            loading.setValue(false);
             DynamicToast.makeError(activity, message).show();
         }
     };
