@@ -3,67 +3,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.InquiryFragment">
-    <data>
-        <import type="android.view.View"/>
-        <variable
-            name="error"
-            type="String" />
-        <variable
-            name="loading"
-            type="Boolean" />
-    </data>
 
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="15dp">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/inquiry_list"
+            android:layout_above="@id/input"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:reverseLayout="false"
+            app:stackFromEnd="true"/>
+
         <LinearLayout
+            android:id="@+id/input"
+            android:layout_alignParentBottom="true"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inquiry"
+                android:hint="Message"
+                android:padding="10dp"
+                android:background="@drawable/mtrl_background_outlined"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:hint="Inquiry"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/inquiry"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="match_parent"/>
 
             <View
                 android:layout_width="10dp"
                 android:layout_height="match_parent"/>
 
-            <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btn_send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Send"
-                android:textColor="@color/colorWhite"
-                android:outlineSpotShadowColor="@android:color/transparent"
-                android:background="@drawable/loading_button_background"
-                app:spinning_bar_color="@color/colorWhite"/>
+                android:layout_gravity="bottom|end"
+                app:fabSize="mini"
+                android:backgroundTint="@color/colorRed"
+                app:srcCompat="@drawable/icon_send"/>
         </LinearLayout>
+    </RelativeLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{error}"
-            android:textColor="@color/colorRed"
-            android:visibility="@{error != null ? View.VISIBLE : View.GONE}" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/inquiry_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:reverseLayout="false"/>
-    </LinearLayout>
 </layout>
