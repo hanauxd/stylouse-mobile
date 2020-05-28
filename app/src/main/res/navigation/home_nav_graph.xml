@@ -55,4 +55,10 @@
             app:popUpTo="@id/navigation_profile"/>
     </fragment>
 
+    <fragment
+        android:id="@+id/navigation_orders"
+        android:name="lk.apiit.eea.stylouse.ui.OrdersFragment"
+        android:label="OrdersFragment"
+        tools:layout="@layout/fragment_orders"/>
+
 </navigation>
