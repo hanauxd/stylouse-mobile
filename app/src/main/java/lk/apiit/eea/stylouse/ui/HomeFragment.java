@@ -56,7 +56,7 @@ public class HomeFragment extends HomeBaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
-        ActionBar appBar = ((AppCompatActivity)activity).getSupportActionBar();
+        ActionBar appBar = ((AppCompatActivity) activity).getSupportActionBar();
         if (appBar != null && !appBar.isShowing()) {
             appBar.show();
         }
@@ -99,6 +99,8 @@ public class HomeFragment extends HomeBaseFragment {
         super.onCreateOptionsMenu(menu, inflater);
         if (state == null) {
             activity.getMenuInflater().inflate(R.menu.profile_items_unauth, menu);
+        } else if (state.getUserRole().equals("ROLE_ADMIN")) {
+            activity.getMenuInflater().inflate(R.menu.admin_items, menu);
         }
     }
 
@@ -106,6 +108,8 @@ public class HomeFragment extends HomeBaseFragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_sign_in) {
             Navigator.navigate(parentNavController, R.id.signInFragment, null);
+        } else if (item.getItemId() == R.id.action_add_product) {
+            Navigator.navigate(parentNavController, R.id.action_adminFragment_to_addProductFragment, null);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -118,6 +122,10 @@ public class HomeFragment extends HomeBaseFragment {
     private void onProductClick(String productJSON) {
         Bundle bundle = new Bundle();
         bundle.putString("product", productJSON);
-        Navigator.navigate(parentNavController, R.id.action_mainFragment_to_productFragment, bundle);
+        if (state == null || state.getUserRole().equals("ROLE_USER")) {
+            Navigator.navigate(parentNavController, R.id.action_mainFragment_to_productFragment, bundle);
+        } else {
+            Navigator.navigate(parentNavController, R.id.action_adminFragment_to_editProductFragment, bundle);
+        }
     }
 }
