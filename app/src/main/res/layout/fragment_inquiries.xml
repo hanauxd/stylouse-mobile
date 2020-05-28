@@ -7,7 +7,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        <com.google.android.material.textview.MaterialTextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Inquiries Fragment"
+            android:textSize="30sp"/>
     </LinearLayout>
 
 </layout>
