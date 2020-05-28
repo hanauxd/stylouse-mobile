@@ -44,10 +44,4 @@ public class MainFragment extends RootBaseFragment {
         NavController navController = Navigation.findNavController(activity, R.id.home_nav_host);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
-    }
 }

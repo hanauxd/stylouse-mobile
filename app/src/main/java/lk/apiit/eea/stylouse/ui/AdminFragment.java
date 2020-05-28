@@ -42,10 +42,4 @@ public class AdminFragment extends RootBaseFragment {
         NavController navController = Navigation.findNavController(activity, R.id.admin_nav_host);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        bottomNavigationView.setSelectedItemId(R.id.admin_navigation_home);
-    }
 }
