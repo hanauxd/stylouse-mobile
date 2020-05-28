@@ -32,8 +32,8 @@ public class SplashFragment extends RootBaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((StylouseApp)activity.getApplication()).getAppComponent().inject(this);
-        ActionBar appBar = ((AppCompatActivity)activity).getSupportActionBar();
+        ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
+        ActionBar appBar = ((AppCompatActivity) activity).getSupportActionBar();
         if (appBar != null) {
             appBar.hide();
         }
@@ -59,13 +59,17 @@ public class SplashFragment extends RootBaseFragment {
             long difference = expiration.getTime() - current.getTime();
 
             if (difference > 5000) {
-                ((ActivityHandler)activity).create(difference);
+                ((ActivityHandler) activity).create(difference);
             } else {
                 session.setAuthState(null);
             }
         }
         new Handler().postDelayed(() -> {
-            Navigator.navigate(parentNavController, R.id.action_splashFragment_to_mainFragment, null);
+            if (state != null && state.getUserRole().equals("ROLE_ADMIN")) {
+                Navigator.navigate(parentNavController, R.id.action_splashFragment_to_adminFragment, null);
+            } else {
+                Navigator.navigate(parentNavController, R.id.action_splashFragment_to_mainFragment, null);
+            }
         }, 2000);
     }
 }
