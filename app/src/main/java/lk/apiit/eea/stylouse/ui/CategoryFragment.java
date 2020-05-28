@@ -23,7 +23,7 @@ import lk.apiit.eea.stylouse.models.Category;
 import lk.apiit.eea.stylouse.services.CategoryService;
 import retrofit2.Response;
 
-public class CategoryFragment extends RootBaseFragment {
+public class CategoryFragment extends AuthFragment {
     private MutableLiveData<String> error = new MutableLiveData<>(null);
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private FragmentCategoryBinding binding;
