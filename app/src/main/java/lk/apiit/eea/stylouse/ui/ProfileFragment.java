@@ -76,7 +76,6 @@ public class ProfileFragment extends AuthFragment {
 
         if (session.getAuthState() != null) {
             binding.btnLogout.setOnClickListener(this::onLogoutClick);
-            binding.btnOrders.setOnClickListener(this::onOrdersClick);
             binding.btnChangePassword.setOnClickListener(this::onChangePasswordClick);
             loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
             error.observe(getViewLifecycleOwner(), this::onErrorChange);
@@ -104,10 +103,6 @@ public class ProfileFragment extends AuthFragment {
 
     private void onLoadingChange(Boolean aBoolean) {
         binding.setLoading(aBoolean);
-    }
-
-    private void onOrdersClick(View view) {
-        Navigator.navigate(parentNavController, R.id.ordersFragment, null);
     }
 
     private void onLogoutClick(View view) {
