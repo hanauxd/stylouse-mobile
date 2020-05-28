@@ -13,7 +13,7 @@
             android:id="@+id/admin_nav_host"
             android:name="androidx.navigation.fragment.NavHostFragment"
             app:defaultNavHost="true"
-            app:navGraph="@navigation/admin_nav_host"
+            app:navGraph="@navigation/admin_nav_graph"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"/>
