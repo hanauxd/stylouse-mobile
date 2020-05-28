@@ -50,10 +50,12 @@ public class CategoryFragment extends RootBaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        error.observe(getViewLifecycleOwner(), this::onErrorChange);
-        loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
-        binding.btnAddCategory.setOnClickListener(this::onAddClick);
-        fetchCategories();
+        if (session.getAuthState() != null) {
+            error.observe(getViewLifecycleOwner(), this::onErrorChange);
+            loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
+            binding.btnAddCategory.setOnClickListener(this::onAddClick);
+            fetchCategories();
+        }
     }
 
     private void onLoadingChange(Boolean loading) {
@@ -85,6 +87,7 @@ public class CategoryFragment extends RootBaseFragment {
             if (response.body() != null) {
                 categories = (List<Category>) response.body();
                 loading.setValue(false);
+                binding.category.setText("");
                 CategoryAdapter adapter = new CategoryAdapter(categories);
                 binding.categoryList.setAdapter(adapter);
             }
