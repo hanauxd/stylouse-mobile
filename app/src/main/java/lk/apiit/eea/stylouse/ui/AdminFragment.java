@@ -16,11 +16,10 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import lk.apiit.eea.stylouse.R;
-import lk.apiit.eea.stylouse.databinding.FragmentMainBinding;
+import lk.apiit.eea.stylouse.databinding.FragmentAdminBinding;
 
-public class MainFragment extends RootBaseFragment {
-
-    private FragmentMainBinding binding;
+public class AdminFragment extends RootBaseFragment {
+    private FragmentAdminBinding binding;
     private BottomNavigationView bottomNavigationView;
 
     @Override
@@ -32,16 +31,15 @@ public class MainFragment extends RootBaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentMainBinding.inflate(inflater, container, false);
+        binding = FragmentAdminBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        bottomNavigationView = binding.navigation;
-        NavController navController = Navigation.findNavController(activity, R.id.home_nav_host);
+        bottomNavigationView = binding.adminNavigation;
+        NavController navController = Navigation.findNavController(activity, R.id.admin_nav_host);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
 }

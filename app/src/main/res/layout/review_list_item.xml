@@ -3,10 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <import type="android.view.View"/>
         <import type="lk.apiit.eea.stylouse.utils.StringFormatter"/>
         <variable
             name="review"
             type="lk.apiit.eea.stylouse.models.Review" />
+        <variable
+            name="isLastItem"
+            type="Boolean" />
     </data>
 
     <LinearLayout
@@ -14,32 +18,52 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp">
-        <com.google.android.material.textview.MaterialTextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{review.user.lastName}"/>
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                android:layout_width="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:rating="@{review.rate}"
-                app:mrb_progressTint="@color/colorWarning"
-                style="@style/Widget.MaterialRatingBar.RatingBar.Small"/>
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{review.user.lastName}"/>
+
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:rating="@{review.rate}"
+                    app:mrb_progressTint="@color/colorWarning"
+                    style="@style/Widget.MaterialRatingBar.RatingBar.Small"/>
+
+            </LinearLayout>
+
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:textAlignment="textEnd"
+                android:textSize="12sp"
                 android:text="@{StringFormatter.formatDate(review.date)}"/>
+
         </LinearLayout>
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:justificationMode="inter_word"
             android:text="@{review.message}"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:layout_marginTop="10dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/colorLightGray"
+            android:layout_marginTop="10dp"
+            android:visibility="@{isLastItem ? View.GONE : View.VISIBLE}"/>
     </LinearLayout>
 </layout>

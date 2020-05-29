@@ -31,6 +31,6 @@ public class SignOutFragment extends RootBaseFragment implements Runnable{
 
     @Override
     public void run() {
-        Navigator.navigate(parentNavController, R.id.action_signOutFragment_to_signInFragment, null);
+        Navigator.navigate(parentNavController, R.id.action_signOutFragment_to_mainFragment, null);
     }
 }

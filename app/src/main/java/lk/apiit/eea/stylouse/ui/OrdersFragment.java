@@ -56,11 +56,14 @@ public class OrdersFragment extends AuthFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Orders");
-        loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
-        error.observe(getViewLifecycleOwner(), this::onErrorChange);
-        count.observe(getViewLifecycleOwner(), this::onCountChange);
-        binding.btnRetry.setOnClickListener(this::fetchOrderItems);
-        fetchOrderItems(view);
+
+        if (session.getAuthState() != null) {
+            loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
+            error.observe(getViewLifecycleOwner(), this::onErrorChange);
+            count.observe(getViewLifecycleOwner(), this::onCountChange);
+            binding.btnRetry.setOnClickListener(this::fetchOrderItems);
+            fetchOrderItems(view);
+        }
     }
 
     private void onCountChange(Integer count) {
@@ -106,6 +109,6 @@ public class OrdersFragment extends AuthFragment {
     private void onOrderClick(String orderJSON) {
         Bundle bundle = new Bundle();
         bundle.putString("order", orderJSON);
-        Navigator.navigate(parentNavController, R.id.action_ordersFragment_to_orderDetailFragment, bundle);
+        Navigator.navigate(parentNavController, R.id.action_mainFragment_to_orderDetailFragment, bundle);
     }
 }

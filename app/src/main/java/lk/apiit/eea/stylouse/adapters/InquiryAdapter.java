@@ -46,9 +46,9 @@ public class InquiryAdapter extends RecyclerView.Adapter<InquiryAdapter.ViewHold
         }
 
         void bind(Reply reply) {
+            binding.setDate(StringFormatter.formatDateTime(reply.getDate()));
             binding.setRole(reply.getUser().getRole());
             binding.setMessage(reply.getMessage());
-            binding.setDate(StringFormatter.formatDate(reply.getDate()));
             binding.setName(reply.getUser().getLastName());
         }
     }

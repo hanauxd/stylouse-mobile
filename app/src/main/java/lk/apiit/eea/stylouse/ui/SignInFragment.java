@@ -107,11 +107,15 @@ public class SignInFragment extends RootBaseFragment {
         public void onSuccess(Response<?> response) {
             SignInResponse body = (SignInResponse) response.body();
             if (body != null) {
-                ((ActivityHandler)activity).create(body.getTokenValidation());
+                ((ActivityHandler) activity).create(body.getTokenValidation());
                 Date expiresAt = new Date(new Date().getTime() + body.getTokenValidation());
                 body.setExpiresAt(expiresAt);
                 session.setAuthState(body);
-                Navigator.navigate(navController, R.id.action_signInFragment_to_mainFragment, null);
+                if (body.getUserRole().equals("ROLE_ADMIN")) {
+                    Navigator.navigate(navController, R.id.action_signInFragment_to_adminFragment, null);
+                } else {
+                    Navigator.navigate(navController, R.id.action_signInFragment_to_mainFragment, null);
+                }
             }
         }
 

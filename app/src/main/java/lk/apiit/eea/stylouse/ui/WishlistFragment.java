@@ -9,8 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +32,6 @@ public class WishlistFragment extends AuthFragment {
     private MutableLiveData<String> error = new MutableLiveData<>(null);
     private MutableLiveData<Integer> count = new MutableLiveData<>(0);
     private FragmentWishlistBinding binding;
-    private NavController navController;
     private ProductAdapter adapter;
     private List<WishlistResponse> wishlists;
     private List<ProductResponse> products = new ArrayList<>();;
@@ -82,12 +79,13 @@ public class WishlistFragment extends AuthFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Wishlist");
-        navController = Navigation.findNavController(view);
-        binding.btnRetry.setOnClickListener(this::fetchWishlistItems);
-        loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
-        error.observe(getViewLifecycleOwner(), this::onErrorChange);
-        count.observe(getViewLifecycleOwner(), this::onCountChange);
-        fetchWishlistItems(view);
+        if (session.getAuthState() != null) {
+            binding.btnRetry.setOnClickListener(this::fetchWishlistItems);
+            loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
+            error.observe(getViewLifecycleOwner(), this::onErrorChange);
+            count.observe(getViewLifecycleOwner(), this::onCountChange);
+            fetchWishlistItems(view);
+        }
     }
 
     private void onErrorChange(String error) {

@@ -16,8 +16,11 @@
 
     <string name="home">Home</string>
     <string name="cart">Cart</string>
+    <string name="orders">Orders</string>
     <string name="wishlist">Wishlist</string>
     <string name="profile">Profile</string>
+    <string name="categories">Categories</string>
+    <string name="inquiries">Inquiries</string>
 
     <string name="order_information">Order Information</string>
     <string name="number_of_items">Number of Items</string>
