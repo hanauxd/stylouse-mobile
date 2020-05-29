@@ -15,5 +15,5 @@ public class Reply {
     private SignUpRequest user;
     private Date date;
     private String message;
-    private boolean isRead;
+    private boolean read;
 }
