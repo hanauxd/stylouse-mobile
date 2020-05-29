@@ -43,7 +43,7 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/root_nav_graph"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -89,7 +89,7 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@layout/fragment_order_detail"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -122,7 +122,6 @@
         android:name="lk.apiit.eea.stylouse.ui.SignOutFragment"
         android:label="SignOutFragment"
         tools:layout="@layout/fragment_sign_out">
-
         <action
             android:id="@+id/action_signOutFragment_to_mainFragment"
             app:destination="@id/mainFragment"
@@ -130,8 +129,8 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
-            app:popUpToInclusive="true"
-            app:popUpTo="@id/root_nav_graph"/>
+            app:popUpTo="@id/root_nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -214,7 +213,7 @@
         android:id="@+id/resetPasswordFragment"
         android:name="lk.apiit.eea.stylouse.ui.ResetPasswordFragment"
         android:label="fragment_reset_password"
-        tools:layout="@layout/fragment_reset_password" >
+        tools:layout="@layout/fragment_reset_password">
         <action
             android:id="@+id/action_resetPasswordFragment_to_mainFragment"
             app:destination="@id/mainFragment"
@@ -238,8 +237,8 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
-            app:popUpToInclusive="true"
-            app:popUpTo="@id/productFragment"/>
+            app:popUpTo="@id/productFragment"
+            app:popUpToInclusive="true" />
 
     </fragment>
 
@@ -254,7 +253,7 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -277,7 +276,7 @@
         android:id="@+id/inquiryFragment"
         android:name="lk.apiit.eea.stylouse.ui.InquiryFragment"
         android:label="fragment_inquiry"
-        tools:layout="@layout/fragment_inquiry" >
+        tools:layout="@layout/fragment_inquiry">
         <action
             android:id="@+id/action_inquiryFragment_to_productFragment"
             app:destination="@id/productFragment"
@@ -286,13 +285,14 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/productFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
+
     <fragment
         android:id="@+id/adminFragment"
         android:name="lk.apiit.eea.stylouse.ui.AdminFragment"
         android:label="fragment_admin"
-        tools:layout="@layout/fragment_admin" >
+        tools:layout="@layout/fragment_admin">
         <action
             android:id="@+id/action_adminFragment_to_signOutFragment"
             app:destination="@id/signOutFragment"
@@ -306,23 +306,45 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_adminFragment_to_addProductFragment"
             app:destination="@id/addProductFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_adminFragment_to_replyFragment"
+            app:destination="@id/replyFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_adminFragment_to_resetPasswordFragment"
+            app:destination="@id/resetPasswordFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+
     <fragment
         android:id="@+id/editProductFragment"
         android:name="lk.apiit.eea.stylouse.ui.EditProductFragment"
         android:label="fragment_edit_product"
         tools:layout="@layout/fragment_edit_product" />
+
     <fragment
         android:id="@+id/addProductFragment"
         android:name="lk.apiit.eea.stylouse.ui.AddProductFragment"
         android:label="fragment_add_product"
         tools:layout="@layout/fragment_add_product" />
+
+    <fragment
+        android:id="@+id/replyFragment"
+        android:name="lk.apiit.eea.stylouse.ui.ReplyFragment"
+        android:label="fragment_reply"
+        tools:layout="@layout/fragment_inquiry" />
 </navigation>

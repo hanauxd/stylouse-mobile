@@ -1,6 +1,8 @@
 package lk.apiit.eea.stylouse.apis;
 
-import lk.apiit.eea.stylouse.models.Reply;
+import java.util.List;
+
+import lk.apiit.eea.stylouse.models.Inquiry;
 import lk.apiit.eea.stylouse.models.requests.InquiryRequest;
 import lk.apiit.eea.stylouse.models.responses.InquiryResponse;
 import retrofit2.Call;
@@ -20,6 +22,12 @@ public interface InquiryAPI {
     @POST("inquiries")
     Call<InquiryResponse> createInquiry(@Header("Authorization") String token, @Body InquiryRequest request);
 
-    @POST("inquiries")
-    Call<Reply> createReply(@Header("Authorization") String token, @Body InquiryRequest request);
+    @POST("replies")
+    Call<Inquiry> createReply(@Header("Authorization") String token, @Body InquiryRequest request);
+
+    @GET("inquiries/all")
+    Call<InquiryResponse> getAllInquiries(@Header("Authorization") String token);
+
+    @POST("replies/read")
+    Call<InquiryResponse> markAsRead(@Header("Authorization") String token, @Body List<String> replyIds);
 }

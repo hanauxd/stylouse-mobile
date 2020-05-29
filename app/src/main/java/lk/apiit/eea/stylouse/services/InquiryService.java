@@ -1,11 +1,13 @@
 package lk.apiit.eea.stylouse.services;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.apis.InquiryAPI;
 import lk.apiit.eea.stylouse.apis.RetroFitCallback;
-import lk.apiit.eea.stylouse.models.Reply;
+import lk.apiit.eea.stylouse.models.Inquiry;
 import lk.apiit.eea.stylouse.models.requests.InquiryRequest;
 import lk.apiit.eea.stylouse.models.responses.InquiryResponse;
 import lk.apiit.eea.stylouse.utils.StringFormatter;
@@ -20,11 +22,6 @@ public class InquiryService {
         this.inquiryAPI = retrofit.create(InquiryAPI.class);
     }
 
-    public void getInquiriesByUser(ApiResponseCallback callback, String jwt) {
-        Call<InquiryResponse> inquiriesCall = inquiryAPI.getInquiriesByUser(StringFormatter.formatToken(jwt));
-        inquiriesCall.enqueue(new RetroFitCallback<>(callback));
-    }
-
     public void getInquiryByProduct(ApiResponseCallback callback, String jwt, String productId) {
         Call<InquiryResponse> inquiryCall = inquiryAPI.getInquiryByProduct(StringFormatter.formatToken(jwt), productId);
         inquiryCall.enqueue(new RetroFitCallback<>(callback));
@@ -36,7 +33,17 @@ public class InquiryService {
     }
 
     public void createReply(ApiResponseCallback callback, String jwt, InquiryRequest request) {
-        Call<Reply> replyCall = inquiryAPI.createReply(StringFormatter.formatToken(jwt), request);
+        Call<Inquiry> replyCall = inquiryAPI.createReply(StringFormatter.formatToken(jwt), request);
         replyCall.enqueue(new RetroFitCallback<>(callback));
+    }
+
+    public void getAllInquiries(ApiResponseCallback callback, String jwt) {
+        Call<InquiryResponse> inquiriesCall = inquiryAPI.getAllInquiries(StringFormatter.formatToken(jwt));
+        inquiriesCall.enqueue(new RetroFitCallback<>(callback));
+    }
+
+    public void markAsRead(ApiResponseCallback callback, String jwt, List<String> replyIds) {
+        Call<InquiryResponse> readCall = inquiryAPI.markAsRead(StringFormatter.formatToken(jwt), replyIds);
+        readCall.enqueue(new RetroFitCallback<>(callback));
     }
 }
