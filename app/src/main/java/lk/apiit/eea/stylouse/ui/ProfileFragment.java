@@ -88,7 +88,11 @@ public class ProfileFragment extends AuthFragment {
         String authJSON = new Gson().toJson(authState);
         Bundle bundle = new Bundle();
         bundle.putString("authToken", authJSON);
-        Navigator.navigate(navController, R.id.action_navigation_profile_to_resetPasswordFragment, bundle);
+        if (authState.getUserRole().equals("ROLE_ADMIN")) {
+            Navigator.navigate(parentNavController, R.id.action_adminFragment_to_resetPasswordFragment, bundle);
+        } else {
+            Navigator.navigate(navController, R.id.action_navigation_profile_to_resetPasswordFragment, bundle);
+        }
     }
 
     private void fetchUser(View view) {
@@ -106,7 +110,7 @@ public class ProfileFragment extends AuthFragment {
     }
 
     private void onLogoutClick(View view) {
-        ((ActivityHandler)activity).destroy();
+        ((ActivityHandler) activity).destroy();
         session.setAuthState(null);
     }
 }

@@ -17,6 +17,7 @@ import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -51,7 +52,7 @@ public class InquiryFragment extends RootBaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentInquiryBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -103,6 +104,29 @@ public class InquiryFragment extends RootBaseFragment {
         inquiryService.getInquiryByProduct(inquiryCallback, session.getAuthState().getJwt(), product().getId());
     }
 
+    private void markAsRead() {
+        List<Inquiry> userInquiries = inquiryResponse.getInquiries().stream().filter(
+                inquiry -> inquiry.getUser().getEmail().equals(session.getAuthState().getUserId())
+        ).collect(
+                Collectors.toList()
+        );
+
+        if (userInquiries.size() > 0) {
+            List<Reply> replies = userInquiries.get(0).getReplies().stream().filter(
+                    reply -> !reply.isRead() && !reply.getUser().getId().equals(session.getAuthState().getUserId())
+            ).collect(
+                    Collectors.toList()
+            );
+
+            List<String> replyIds = new ArrayList<>();
+            replies.forEach(reply -> {
+                replyIds.add(reply.getId());
+            });
+
+            inquiryService.markAsRead(readCallback, session.getAuthState().getJwt(), replyIds);
+        }
+    }
+
     private ApiResponseCallback createCallback = new ApiResponseCallback() {
         @Override
         public void onSuccess(Response<?> response) {
@@ -117,12 +141,25 @@ public class InquiryFragment extends RootBaseFragment {
         }
     };
 
+    private ApiResponseCallback readCallback = new ApiResponseCallback() {
+        @Override
+        public void onSuccess(Response<?> response) {
+            //Do nothing
+        }
+
+        @Override
+        public void onFailure(String message) {
+            DynamicToast.makeError(activity, message).show();
+        }
+    };
+
     private ApiResponseCallback inquiryCallback = new ApiResponseCallback() {
         @Override
         public void onSuccess(Response<?> response) {
             inquiryResponse = (InquiryResponse) response.body();
             inquiryData.setValue(inquiryResponse);
             loading.setValue(false);
+            markAsRead();
         }
 
         @Override

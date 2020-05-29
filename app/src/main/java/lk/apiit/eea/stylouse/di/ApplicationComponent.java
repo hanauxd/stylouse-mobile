@@ -5,11 +5,14 @@ import javax.inject.Singleton;
 import dagger.Component;
 import lk.apiit.eea.stylouse.MainActivity;
 import lk.apiit.eea.stylouse.adapters.CartAdapter;
+import lk.apiit.eea.stylouse.adapters.InboxAdapter;
 import lk.apiit.eea.stylouse.adapters.ProductAdapter;
 import lk.apiit.eea.stylouse.ui.CartFragment;
 import lk.apiit.eea.stylouse.ui.CategoryFragment;
 import lk.apiit.eea.stylouse.ui.ForgotPasswordFragment;
 import lk.apiit.eea.stylouse.ui.HomeFragment;
+import lk.apiit.eea.stylouse.ui.InboxFragment;
+import lk.apiit.eea.stylouse.ui.InquiriesFragment;
 import lk.apiit.eea.stylouse.ui.InquiryFragment;
 import lk.apiit.eea.stylouse.ui.OrderDetailFragment;
 import lk.apiit.eea.stylouse.ui.OrdersFragment;
@@ -17,6 +20,7 @@ import lk.apiit.eea.stylouse.ui.OtpFragment;
 import lk.apiit.eea.stylouse.ui.ProductFragment;
 import lk.apiit.eea.stylouse.ui.ProfileFragment;
 import lk.apiit.eea.stylouse.ui.RateFragment;
+import lk.apiit.eea.stylouse.ui.ReplyFragment;
 import lk.apiit.eea.stylouse.ui.ResetPasswordFragment;
 import lk.apiit.eea.stylouse.ui.ReviewFragment;
 import lk.apiit.eea.stylouse.ui.ShippingFragment;
@@ -49,7 +53,11 @@ public interface ApplicationComponent {
     void inject(RateFragment fragment);
     void inject(InquiryFragment fragment);
     void inject(CategoryFragment fragment);
+    void inject(InquiriesFragment fragment);
+    void inject(ReplyFragment fragment);
+    void inject(InboxFragment fragment);
 
     void inject(ProductAdapter adapter);
     void inject(CartAdapter adapter);
+    void inject(InboxAdapter adapter);
 }

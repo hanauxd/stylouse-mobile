@@ -41,24 +41,6 @@ public class CartFragment extends AuthFragment {
     @Inject
     CartService cartService;
 
-    private ApiResponseCallback cartCallback = new ApiResponseCallback() {
-        @Override
-        public void onSuccess(Response<?> response) {
-            carts = (List<CartResponse>)response.body();
-            bindCartToView();
-            initRecyclerView();
-            loading.setValue(false);
-            count.setValue(carts.size());
-        }
-
-        @Override
-        public void onFailure(String message) {
-            loading.setValue(false);
-            error.setValue(message);
-            count.setValue(0);
-        }
-    };
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +48,7 @@ public class CartFragment extends AuthFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentCartBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -76,9 +58,8 @@ public class CartFragment extends AuthFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Cart");
-        binding.btnRetry.setOnClickListener(this::fetchCartItems);
-
         if (session.getAuthState() != null) {
+            binding.btnRetry.setOnClickListener(this::fetchCartItems);
             loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
             error.observe(getViewLifecycleOwner(), this::onErrorChange);
             count.observe(getViewLifecycleOwner(), this::onCountChange);
@@ -148,4 +129,22 @@ public class CartFragment extends AuthFragment {
         for (CartResponse cart : carts) total += cart.getTotalPrice();
         return total;
     }
+
+    private ApiResponseCallback cartCallback = new ApiResponseCallback() {
+        @Override
+        public void onSuccess(Response<?> response) {
+            carts = (List<CartResponse>) response.body();
+            bindCartToView();
+            initRecyclerView();
+            loading.setValue(false);
+            count.setValue(carts.size());
+        }
+
+        @Override
+        public void onFailure(String message) {
+            loading.setValue(false);
+            error.setValue(message);
+            count.setValue(0);
+        }
+    };
 }
