@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 
 import com.bumptech.glide.Glide;
@@ -56,6 +57,7 @@ public class EditProductFragment extends RootBaseFragment {
         super.onViewCreated(view, savedInstanceState);
         bindButtonsToClickListener();
         bindProductToView();
+        renderReviewFragment();
     }
 
     private void onUpdateClick(View view) {
@@ -112,6 +114,14 @@ public class EditProductFragment extends RootBaseFragment {
     private ProductResponse product() {
         String productJSON = getArguments() != null ? getArguments().getString("product") : null;
         return new Gson().fromJson(productJSON, ProductResponse.class);
+    }
+
+    private void renderReviewFragment() {
+        Bundle bundle = new Bundle();
+        bundle.putString("product", new Gson().toJson(product()));
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.review_layout, ReviewFragment.class, bundle);
+        transaction.commit();
     }
 
     private ApiResponseCallback updateCallback = new ApiResponseCallback() {
