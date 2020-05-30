@@ -6,11 +6,11 @@
         android:title="@string/home"/>
     <item
         android:id="@+id/admin_navigation_categories"
-        android:icon="@drawable/icon_cart"
+        android:icon="@drawable/icon_category"
         android:title="@string/categories"/>
     <item
         android:id="@+id/admin_navigation_inquiries"
-        android:icon="@drawable/icon_orders"
+        android:icon="@drawable/icon_inquiry"
         android:title="@string/inquiries"/>
     <item
         android:id="@+id/admin_navigation_profile"
