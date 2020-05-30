@@ -3,31 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.ReviewFragment">
-
     <data>
-
         <import type="android.view.View" />
-
         <variable
             name="error"
             type="String" />
-
         <variable
             name="loading"
             type="Boolean" />
-
         <variable
             name="isAuth"
             type="Boolean" />
-
         <variable
             name="hasUserRated"
             type="Boolean" />
-
         <variable
             name="count"
             type="Integer" />
-
         <variable
             name="userRole"
             type="String" />
@@ -114,11 +106,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:orientation="vertical">
-
                 <include layout="@layout/review_list_item_placeholder" />
-
                 <include layout="@layout/review_list_item_placeholder" />
-
                 <include layout="@layout/review_list_item_placeholder" />
             </LinearLayout>
         </com.facebook.shimmer.ShimmerFrameLayout>
