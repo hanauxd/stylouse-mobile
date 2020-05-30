@@ -18,4 +18,12 @@ public class ProductResponse {
     private String description;
     private List<ProductCategoryResponse> productCategories = new ArrayList<>();
     private List<ProductImageResponse> productImages = new ArrayList<>();
+
+    public ProductResponse(String id, String name, int quantity, double price, String description) {
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+        this.price = price;
+        this.description = description;
+    }
 }
