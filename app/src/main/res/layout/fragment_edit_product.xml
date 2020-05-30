@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.EditProductFragment">
     <data>
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
         <variable
             name="product"
             type="lk.apiit.eea.stylouse.models.responses.ProductResponse" />
@@ -19,74 +19,84 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:padding="15dp">
+
             <ImageView
                 android:id="@+id/product_image"
-                android:contentDescription="@string/app_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"/>
+                android:layout_marginBottom="5dp"
+                android:contentDescription="@string/app_name" />
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Title"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:hint="Title">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/product_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:enabled="@{editing ? true : false}"
                     android:inputType="text"
-                    android:text="@{product.name}"/>
+                    android:text="@{product.name}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:orientation="horizontal">
+
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:hint="Price"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                    android:layout_weight="1"
+                    android:hint="Price">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/product_price"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:enabled="@{editing ? true : false}"
                         android:inputType="number"
-                        android:text="@{String.valueOf(product.price)}"/>
+                        android:text="@{String.valueOf(product.price)}" />
                 </com.google.android.material.textfield.TextInputLayout>
+
                 <View
                     android:layout_width="5dp"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
+
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:hint="Quantity"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                    android:layout_weight="1"
+                    android:hint="Quantity">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/product_quantity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:enabled="@{editing ? true : false}"
                         android:inputType="number"
-                        android:text="@{String.valueOf(product.quantity)}"/>
+                        android:text="@{String.valueOf(product.quantity)}" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Description"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:hint="Description">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/product_description"
                     android:layout_width="match_parent"
@@ -94,35 +104,44 @@
                     android:enabled="@{editing ? true : false}"
                     android:inputType="text"
                     android:lines="4"
-                    android:text="@{product.description}"/>
+                    android:text="@{product.description}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="15dp">
-                <com.google.android.material.button.MaterialButton
+                android:layout_marginVertical="10dp"
+                android:orientation="vertical">
+
+                <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
                     android:id="@+id/btn_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/loading_button_outline_background"
+                    android:outlineSpotShadowColor="@android:color/transparent"
                     android:text="Edit"
+                    android:textColor="@color/colorRed"
                     android:visibility="@{editing || loading ? View.GONE : View.VISIBLE}"
-                    app:strokeColor="@color/colorRed"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                    app:spinning_bar_color="@color/colorWhite" />
 
                 <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
                     android:id="@+id/btn_update"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:background="@drawable/loading_button_background"
+                    android:outlineSpotShadowColor="@android:color/transparent"
                     android:text="Update"
                     android:textColor="@color/colorWhite"
-                    android:outlineSpotShadowColor="@android:color/transparent"
-                    android:background="@drawable/loading_button_background"
                     android:visibility="@{editing || loading ? View.VISIBLE : View.GONE}"
-                    app:spinning_bar_color="@color/colorWhite"/>
+                    app:spinning_bar_color="@color/colorWhite" />
             </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/review_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 </layout>
