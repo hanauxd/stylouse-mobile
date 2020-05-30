@@ -7,6 +7,7 @@ import lk.apiit.eea.stylouse.MainActivity;
 import lk.apiit.eea.stylouse.adapters.CartAdapter;
 import lk.apiit.eea.stylouse.adapters.InboxAdapter;
 import lk.apiit.eea.stylouse.adapters.ProductAdapter;
+import lk.apiit.eea.stylouse.adapters.ReviewAdapter;
 import lk.apiit.eea.stylouse.ui.CartFragment;
 import lk.apiit.eea.stylouse.ui.CategoryFragment;
 import lk.apiit.eea.stylouse.ui.EditProductFragment;
@@ -58,6 +59,7 @@ public interface ApplicationComponent {
     void inject(ReplyFragment fragment);
     void inject(InboxFragment fragment);
     void inject(EditProductFragment fragment);
+    void inject(ReviewAdapter adapter);
 
     void inject(ProductAdapter adapter);
     void inject(CartAdapter adapter);
