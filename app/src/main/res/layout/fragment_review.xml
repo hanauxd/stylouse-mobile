@@ -3,30 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.ReviewFragment">
-
     <data>
-
         <import type="android.view.View" />
-
         <variable
             name="error"
             type="String" />
-
         <variable
             name="loading"
             type="Boolean" />
-
         <variable
             name="isAuth"
             type="Boolean" />
-
         <variable
             name="hasUserRated"
             type="Boolean" />
-
         <variable
             name="count"
             type="Integer" />
+        <variable
+            name="userRole"
+            type="String" />
     </data>
 
     <LinearLayout
@@ -44,7 +40,8 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="@{!isAuth || userRole.equals(`ROLE_ADMIN`) ? View.GONE : View.VISIBLE}">
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/btn_review"
                 android:layout_width="0dp"
@@ -53,7 +50,7 @@
                 android:text="Write a Review"
                 android:textSize="12sp"
                 android:padding="10dp"
-                android:visibility="@{isAuth &amp;&amp; !hasUserRated ? View.VISIBLE : View.GONE}" />
+                android:visibility="@{!hasUserRated ? View.VISIBLE : View.GONE}" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/btn_inquiry"
@@ -63,8 +60,7 @@
                 android:textAlignment="textEnd"
                 android:text="Have a Question?"
                 android:textSize="12sp"
-                android:padding="10dp"
-                android:visibility="@{isAuth ? View.VISIBLE : View.GONE}"/>
+                android:padding="10dp"/>
         </LinearLayout>
 
         <com.google.android.material.textview.MaterialTextView
@@ -110,11 +106,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:orientation="vertical">
-
                 <include layout="@layout/review_list_item_placeholder" />
-
                 <include layout="@layout/review_list_item_placeholder" />
-
                 <include layout="@layout/review_list_item_placeholder" />
             </LinearLayout>
         </com.facebook.shimmer.ShimmerFrameLayout>
