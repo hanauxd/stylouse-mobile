@@ -138,6 +138,7 @@ public class ReviewFragment extends HomeBaseFragment {
     }
 
     private void removeReview(String reviewJSON) {
+        loading.setValue(true);
         Review review = new Gson().fromJson(reviewJSON, Review.class);
         reviewService.deleteReview(deleteCallback, review.getId(), session.getAuthState().getJwt());
     }
@@ -165,10 +166,12 @@ public class ReviewFragment extends HomeBaseFragment {
         public void onSuccess(Response<?> response) {
             ReviewResponse reviewResponse = (ReviewResponse) response.body();
             reviewData.setValue(reviewResponse);
+            loading.setValue(false);
         }
 
         @Override
         public void onFailure(String message) {
+            loading.setValue(false);
             DynamicToast.makeError(activity, message).show();
         }
     };
