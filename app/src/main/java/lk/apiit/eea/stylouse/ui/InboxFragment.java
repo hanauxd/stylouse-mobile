@@ -54,6 +54,12 @@ public class InboxFragment extends RootBaseFragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        loading.setValue(true);
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
