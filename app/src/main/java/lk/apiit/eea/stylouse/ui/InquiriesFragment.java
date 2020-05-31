@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -47,6 +48,7 @@ public class InquiriesFragment extends RootBaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Inquiries");
         if (session.getAuthState() != null) {
             ViewPager2 viewPager = binding.viewPager;
             viewPager.setAdapter(new InquiriesPagerAdapter(this));

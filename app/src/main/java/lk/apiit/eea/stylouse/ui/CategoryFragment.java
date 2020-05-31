@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
@@ -50,6 +51,7 @@ public class CategoryFragment extends AuthFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Categories");
         if (session.getAuthState() != null) {
             error.observe(getViewLifecycleOwner(), this::onErrorChange);
             loading.observe(getViewLifecycleOwner(), this::onLoadingChange);

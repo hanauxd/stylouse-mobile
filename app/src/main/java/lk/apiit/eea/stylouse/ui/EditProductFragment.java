@@ -55,6 +55,7 @@ public class EditProductFragment extends RootBaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Edit Product");
         bindButtonsToClickListener();
         bindProductToView();
         renderReviewFragment();
