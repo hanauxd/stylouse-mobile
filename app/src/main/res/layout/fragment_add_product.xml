@@ -4,6 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.AddProductFragment">
 
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="fileCount"
+            type="Integer" />
+    </data>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -95,30 +102,35 @@
                     android:lines="1"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_choose_file"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Image"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-                <com.google.android.material.textfield.TextInputEditText
+                android:text="Choose File"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/file_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Change to file upload file..."
-                    android:enabled="false"
-                    android:lines="1"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:visibility="@{fileCount > 0 ? View.VISIBLE : View.GONE}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            </LinearLayout>
 
-            <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
-                android:id="@+id/btn_choose_file"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="5dp"
-                android:layout_gravity="center"
-                android:background="@drawable/loading_button_background"
-                android:outlineSpotShadowColor="@android:color/transparent"
-                android:text="Choose File"
-                android:textColor="@color/colorWhite"
-                app:spinning_bar_color="@color/colorWhite" />
+                android:layout_height="wrap_content">
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Choose a file to upload"
+                    android:textAlignment="center"
+                    android:paddingVertical="10dp"
+                    android:visibility="@{fileCount > 0 ? View.GONE : View.VISIBLE}"/>
+            </LinearLayout>
 
             <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
                 android:id="@+id/btn_save"
@@ -131,13 +143,6 @@
                 android:text="Save"
                 android:textColor="@color/colorWhite"
                 app:spinning_bar_color="@color/colorWhite" />
-
-            <ImageView
-                android:id="@+id/uploaded_image"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@color/colorLightGray"/>
 
         </LinearLayout>
     </ScrollView>
