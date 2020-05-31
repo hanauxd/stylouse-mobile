@@ -17,7 +17,6 @@
             android:hint="Title">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/product_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -38,10 +37,8 @@
                 android:hint="Price">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/product_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
                     android:text=" " />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -57,10 +54,8 @@
                 android:hint="Quantity">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/product_quantity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
                     android:text=" " />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -72,7 +67,6 @@
             android:hint="Description">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/product_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lines="3"
@@ -97,7 +91,6 @@
                 android:background="@drawable/mtrl_background_outlined">
 
                 <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/spinner"
                     style="@style/Widget.AppCompat.Spinner.DropDown"
                     android:layout_width="match_parent"
                     android:layout_height="50dp" />
