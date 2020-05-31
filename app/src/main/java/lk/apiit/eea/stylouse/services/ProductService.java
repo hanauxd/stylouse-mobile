@@ -37,7 +37,7 @@ public class ProductService {
         updateCall.enqueue(new RetroFitCallback<>(callback));
     }
 
-    public void createProduct(ApiResponseCallback callback, String jwt, ProductRequest product, MultipartBody.Part file) {
+    public void createProduct(ApiResponseCallback callback, String jwt, ProductRequest product, List<MultipartBody.Part> file) {
         Call<ProductResponse> createCall = productAPI.createProduct(StringFormatter.formatToken(jwt), product, file);
         createCall.enqueue(new RetroFitCallback<>(callback));
     }

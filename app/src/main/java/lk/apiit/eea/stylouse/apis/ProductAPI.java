@@ -26,5 +26,5 @@ public interface ProductAPI {
 
     @Multipart
     @POST("products")
-    Call<ProductResponse> createProduct(@Header("Authorization") String token, @Part("product") ProductRequest product, @Part MultipartBody.Part file);
+    Call<ProductResponse> createProduct(@Header("Authorization") String token, @Part("product") ProductRequest product, @Part List<MultipartBody.Part> file);
 }
