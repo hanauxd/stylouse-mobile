@@ -3,14 +3,11 @@ package lk.apiit.eea.stylouse.ui;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,13 +17,14 @@ import androidx.core.app.ActivityCompat;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import lk.apiit.eea.stylouse.adapters.FileAdapter;
 import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.FragmentAddProductBinding;
@@ -46,8 +44,7 @@ public class AddProductFragment extends RootBaseFragment {
     public static final int PICK_IMAGE_REQUEST = 1;
 
     private FragmentAddProductBinding binding;
-    private File chosenFile;
-    private Uri returnUri;
+    private FileAdapter adapter;
 
     @Inject
     ProductService productService;
@@ -72,7 +69,13 @@ public class AddProductFragment extends RootBaseFragment {
         super.onViewCreated(view, savedInstanceState);
         binding.btnChooseFile.setOnClickListener(this::onChooseFileClick);
         binding.btnSave.setOnClickListener(this::onSaveClick);
+        adapter = new FileAdapter(this::setFileCount);
+        binding.fileList.setAdapter(adapter);
         addPermissionActivityCompat();
+    }
+
+    private void setFileCount(int count) {
+        binding.setFileCount(count);
     }
 
     private void onChooseFileClick(View view) {
@@ -83,17 +86,17 @@ public class AddProductFragment extends RootBaseFragment {
     }
 
     private void onSaveClick(View view) {
-        if (chosenFile == null) {
-            Toast.makeText(activity, "Choose a file before upload.", Toast.LENGTH_SHORT)
+        if (adapter.getItemCount() < 1) {
+            DynamicToast.makeWarning(activity, "Choose a file before upload.", Toast.LENGTH_SHORT)
                     .show();
             return;
         }
+        List<File> selectedFiles = adapter.getFiles();
 
-        MultipartBody.Part file = MultipartBody.Part.createFormData(
-                "file",
-                chosenFile.getName(),
-                RequestBody.create(MediaType.parse("image/*"), chosenFile)
-        );
+        List<MultipartBody.Part> files = selectedFiles.stream().map(
+                file -> MultipartBody.Part.createFormData(
+                        "file", file.getName(), RequestBody.create(MediaType.parse("image/*"), file)
+                )).collect(Collectors.toList());
 
         String name = binding.productName.getText().toString();
         String description = binding.productDescription.getText().toString();
@@ -103,23 +106,14 @@ public class AddProductFragment extends RootBaseFragment {
 
         ProductRequest product = new ProductRequest(name, quantity, price, description, categories);
 
-        productService.createProduct(createCallback, session.getAuthState().getJwt(), product, file);
+        productService.createProduct(createCallback, session.getAuthState().getJwt(), product, files);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            returnUri = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), returnUri);
-                ImageView uploadedImage = binding.uploadedImage;
-                uploadedImage.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+            addFileToAdapter(data.getData());
             super.onActivityResult(requestCode, resultCode, data);
-            getFilePath();
         }
     }
 
@@ -130,10 +124,16 @@ public class AddProductFragment extends RootBaseFragment {
         }
     }
 
-    private void getFilePath() {
-        String filePath = DocumentHelper.getPath(activity, returnUri);
-        if (filePath == null || filePath.isEmpty()) return;
-        chosenFile = new File(filePath);
+    private void addFileToAdapter(Uri uri) {
+        String filePath = DocumentHelper.getPath(activity, uri);
+        if (filePath == null || filePath.isEmpty()) {
+            DynamicToast.makeWarning(activity, "File does not exist").show();
+            return;
+        }
+        File file = new File(filePath);
+        if (file.exists()) {
+            adapter.addFile(file);
+        }
     }
 
     private ApiResponseCallback createCallback = new ApiResponseCallback() {
