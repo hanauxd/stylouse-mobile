@@ -8,16 +8,31 @@
     </data>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp"
+        android:background="@drawable/cart_item_background"
+        android:orientation="horizontal"
         android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/file_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:maxHeight="50dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="false"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_launcher_background"/>
+
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="@{filename}"
-            android:padding="15dp"/>
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:padding="10dp"
+            android:text="@{filename}" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_remove"
             style="@style/Widget.MaterialComponents.Button.TextButton"
