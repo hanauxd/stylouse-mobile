@@ -28,7 +28,6 @@ public class CategoryFragment extends AuthFragment {
     private MutableLiveData<String> error = new MutableLiveData<>(null);
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private FragmentCategoryBinding binding;
-    private List<Category> categories;
 
     @Inject
     CategoryService categoryService;
@@ -42,10 +41,10 @@ public class CategoryFragment extends AuthFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentCategoryBinding.inflate(inflater, container, false);
-        return  binding.getRoot();
+        return binding.getRoot();
     }
 
     @Override
@@ -87,7 +86,7 @@ public class CategoryFragment extends AuthFragment {
         @Override
         public void onSuccess(Response<?> response) {
             if (response.body() != null) {
-                categories = (List<Category>) response.body();
+                List<Category> categories = (List<Category>) response.body();
                 loading.setValue(false);
                 binding.category.setText("");
                 CategoryAdapter adapter = new CategoryAdapter(categories);

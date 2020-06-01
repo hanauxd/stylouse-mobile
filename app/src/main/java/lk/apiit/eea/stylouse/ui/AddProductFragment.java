@@ -43,11 +43,11 @@ import okhttp3.MultipartBody.Part;
 import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
+import static lk.apiit.eea.stylouse.utils.Constants.PICK_IMAGE_REQUEST;
 import static okhttp3.MultipartBody.Part.createFormData;
 import static okhttp3.RequestBody.create;
 
 public class AddProductFragment extends RootBaseFragment {
-    public static final int PICK_IMAGE_REQUEST = 1;
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(true);
     private MutableLiveData<String> error = new MutableLiveData<>(null);
     private ArrayList<String> categoryList = new ArrayList<>(Collections.singletonList(""));

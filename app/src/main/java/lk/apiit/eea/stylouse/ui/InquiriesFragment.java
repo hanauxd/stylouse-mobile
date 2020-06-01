@@ -52,7 +52,9 @@ public class InquiriesFragment extends RootBaseFragment {
         if (session.getAuthState() != null) {
             ViewPager2 viewPager = binding.viewPager;
             viewPager.setAdapter(new InquiriesPagerAdapter(this));
-            new TabLayoutMediator(binding.tabLayout, viewPager, ((tab, position) -> {tab.setText(tabs.get(position));})).attach();
+            new TabLayoutMediator(binding.tabLayout,
+                    viewPager,
+                    (tab, position) -> tab.setText(tabs.get(position))).attach();
         }
     }
 }
