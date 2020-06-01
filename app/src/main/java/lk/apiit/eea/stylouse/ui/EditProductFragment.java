@@ -92,6 +92,12 @@ public class EditProductFragment extends RootBaseFragment {
         loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
         binding.btnEdit.setOnClickListener(this::onEditClick);
         binding.btnUpdate.setOnClickListener(this::onUpdateClick);
+        binding.btnCancel.setOnClickListener(this::onCancelClick);
+    }
+
+    private void onCancelClick(View view) {
+        binding.setProduct(product());
+        editing.setValue(false);
     }
 
     private void onLoadingChange(Boolean loading) {
