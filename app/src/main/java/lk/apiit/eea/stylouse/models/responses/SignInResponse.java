@@ -21,4 +21,9 @@ public class SignInResponse {
     @SerializedName("userRole")
     private final String userRole;
     private Date expiresAt;
+
+    public void setExpireDate() {
+        Date expiresAt = new Date(new Date().getTime() + this.tokenValidation);
+        setExpiresAt(expiresAt);
+    }
 }
