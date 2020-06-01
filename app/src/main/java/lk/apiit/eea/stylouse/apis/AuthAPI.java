@@ -5,7 +5,6 @@ import java.util.Map;
 import lk.apiit.eea.stylouse.models.requests.SignInRequest;
 import lk.apiit.eea.stylouse.models.requests.SignUpRequest;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -18,7 +17,7 @@ public interface AuthAPI {
     Call<SignInResponse> login(@Body SignInRequest signInRequest);
 
     @POST("register")
-    Call<ResponseBody> register(@Body SignUpRequest signUpRequest);
+    Call<SignInResponse> register(@Body SignUpRequest signUpRequest);
 
     @FormUrlEncoded
     @POST("/reset-password-request")
