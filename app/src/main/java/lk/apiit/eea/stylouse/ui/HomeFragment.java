@@ -27,6 +27,7 @@ import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.services.ProductService;
 import retrofit2.Response;
 
+import static lk.apiit.eea.stylouse.databinding.FragmentHomeBinding.inflate;
 import static lk.apiit.eea.stylouse.utils.Constants.ROLE_ADMIN;
 import static lk.apiit.eea.stylouse.utils.Constants.ROLE_USER;
 import static lk.apiit.eea.stylouse.utils.Navigator.navigate;
@@ -54,7 +55,7 @@ public class HomeFragment extends HomeBaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -103,7 +104,9 @@ public class HomeFragment extends HomeBaseFragment {
     }
 
     private void initRecyclerView() {
-        ProductAdapter productAdapter = new ProductAdapter(products, this::onProductClick, null);
+        ProductAdapter productAdapter = new ProductAdapter(products,
+                this::onProductClick,
+                null);
         binding.productList.setAdapter(productAdapter);
     }
 
