@@ -10,10 +10,10 @@ import lk.apiit.eea.stylouse.apis.RetroFitCallback;
 import lk.apiit.eea.stylouse.models.requests.SignInRequest;
 import lk.apiit.eea.stylouse.models.requests.SignUpRequest;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
-import lk.apiit.eea.stylouse.utils.StringFormatter;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
+
+import static lk.apiit.eea.stylouse.utils.StringFormatter.formatToken;
 
 public class AuthService {
     private AuthAPI authAPI;
@@ -29,7 +29,7 @@ public class AuthService {
     }
 
     public void register(SignUpRequest signUpRequest, ApiResponseCallback callback) {
-        Call<ResponseBody> authCall = authAPI.register(signUpRequest);
+        Call<SignInResponse> authCall = authAPI.register(signUpRequest);
         authCall.enqueue(new RetroFitCallback<>(callback));
     }
 
@@ -44,7 +44,7 @@ public class AuthService {
     }
 
     public void resetPassword(SignInRequest resetPasswordRequest, String jwt, ApiResponseCallback callback) {
-        Call<SignInResponse> resetPasswordCall = authAPI.resetPassword(StringFormatter.formatToken(jwt), resetPasswordRequest);
+        Call<SignInResponse> resetPasswordCall = authAPI.resetPassword(formatToken(jwt), resetPasswordRequest);
         resetPasswordCall.enqueue(new RetroFitCallback<>(callback));
     }
 }
