@@ -1,7 +1,6 @@
 package lk.apiit.eea.stylouse.ui;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
 import javax.inject.Inject;
 
@@ -27,6 +24,14 @@ import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.services.ProductService;
 import lk.apiit.eea.stylouse.utils.UrlBuilder;
 import retrofit2.Response;
+
+import static android.text.TextUtils.isEmpty;
+import static com.bumptech.glide.Glide.with;
+import static com.pranavpandey.android.dynamic.toasts.DynamicToast.makeError;
+import static com.pranavpandey.android.dynamic.toasts.DynamicToast.makeWarning;
+import static java.lang.Double.parseDouble;
+import static java.lang.Integer.parseInt;
+import static lk.apiit.eea.stylouse.databinding.FragmentEditProductBinding.inflate;
 
 public class EditProductFragment extends RootBaseFragment {
     private MutableLiveData<Boolean> editing = new MutableLiveData<>(false);
@@ -49,7 +54,7 @@ public class EditProductFragment extends RootBaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentEditProductBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -67,7 +72,9 @@ public class EditProductFragment extends RootBaseFragment {
             editing.setValue(false);
             loading.setValue(true);
             binding.btnUpdate.startAnimation();
-            productService.updateProduct(updateCallback, session.getAuthState().getJwt(), validatedProduct());
+            productService.updateProduct(updateCallback,
+                    session.getAuthState().getJwt(),
+                    validatedProduct());
         }
     }
 
@@ -81,7 +88,7 @@ public class EditProductFragment extends RootBaseFragment {
 
     private void bindProductToView() {
         binding.setProduct(product());
-        Glide.with(binding.getRoot())
+        with(binding.getRoot())
                 .load(urlBuilder.fileUrl(product().getProductImages().get(0).getFilename()))
                 .placeholder(R.drawable.stylouse_placeholder)
                 .into(binding.productImage);
@@ -92,6 +99,12 @@ public class EditProductFragment extends RootBaseFragment {
         loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
         binding.btnEdit.setOnClickListener(this::onEditClick);
         binding.btnUpdate.setOnClickListener(this::onUpdateClick);
+        binding.btnCancel.setOnClickListener(this::onCancelClick);
+    }
+
+    private void onCancelClick(View view) {
+        binding.setProduct(product());
+        editing.setValue(false);
     }
 
     private void onLoadingChange(Boolean loading) {
@@ -104,13 +117,13 @@ public class EditProductFragment extends RootBaseFragment {
         String quantity = binding.productQuantity.getText().toString();
         String description = binding.productDescription.getText().toString();
 
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(price) ||
-                TextUtils.isEmpty(quantity) || TextUtils.isEmpty(description)) {
-            DynamicToast.makeWarning(activity, "Fields cannot be empty").show();
+        if (isEmpty(name) || isEmpty(price) ||
+                isEmpty(quantity) || isEmpty(description)) {
+            makeWarning(activity, "Fields cannot be empty").show();
             return null;
         }
 
-        return new ProductResponse(product().getId(), name, Integer.parseInt(quantity), Double.parseDouble(price), description);
+        return new ProductResponse(product().getId(), name, parseInt(quantity), parseDouble(price), description);
     }
 
     private ProductResponse product() {
@@ -138,7 +151,7 @@ public class EditProductFragment extends RootBaseFragment {
             binding.btnUpdate.revertAnimation();
             editing.setValue(true);
             loading.setValue(false);
-            DynamicToast.makeError(activity, message).show();
+            makeError(activity, message).show();
         }
     };
 }

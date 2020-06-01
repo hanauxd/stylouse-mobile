@@ -14,10 +14,12 @@ import retrofit2.http.Path;
 
 public interface WishlistAPI {
     @POST("wishlist")
-    Call<List<WishlistResponse>> addWishlist(@Header("Authorization") String token, @Body HashMap<String, String> wishlistRequest);
+    Call<List<WishlistResponse>> addWishlist(@Header("Authorization") String token,
+                                             @Body HashMap<String, String> wishlistRequest);
 
     @DELETE("wishlist/{id}")
-    Call<List<WishlistResponse>> deleteWishlist(@Header("Authorization") String token, @Path("id") String id);
+    Call<List<WishlistResponse>> deleteWishlist(@Header("Authorization") String token,
+                                                @Path("id") String id);
 
     @GET("wishlist")
     Call<List<WishlistResponse>> getWishlist(@Header("Authorization") String token);

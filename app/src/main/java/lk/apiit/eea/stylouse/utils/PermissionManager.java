@@ -1,17 +1,20 @@
 package lk.apiit.eea.stylouse.utils;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.pm.PackageManager;
 
-import androidx.core.app.ActivityCompat;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.Manifest.permission_group.STORAGE;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static androidx.core.app.ActivityCompat.requestPermissions;
+import static androidx.core.content.ContextCompat.checkSelfPermission;
 
 public class PermissionManager {
 
-    public void requestReadWriteExternalStoragePermission(Activity activity) {
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission_group.STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            String[] list = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-            ActivityCompat.requestPermissions(activity, list, 1);
+    public void requestExternalStoragePermission(Activity activity) {
+        if (checkSelfPermission(activity, STORAGE) != PERMISSION_GRANTED) {
+            String[] list = {READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE};
+            requestPermissions(activity, list, 1);
         }
     }
 }

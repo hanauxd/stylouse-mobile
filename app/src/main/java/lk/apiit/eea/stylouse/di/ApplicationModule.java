@@ -28,6 +28,8 @@ import lk.apiit.eea.stylouse.utils.UrlBuilder;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static retrofit2.converter.gson.GsonConverterFactory.create;
+
 @Module
 public class ApplicationModule {
     private Application application;
@@ -48,7 +50,7 @@ public class ApplicationModule {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd HH:mm:ss")
                 .create();
-        GsonConverterFactory factory = GsonConverterFactory.create(gson);
+        GsonConverterFactory factory = create(gson);
         return new Retrofit
                 .Builder()
                 .baseUrl(context.getResources().getString(R.string.baseURL))

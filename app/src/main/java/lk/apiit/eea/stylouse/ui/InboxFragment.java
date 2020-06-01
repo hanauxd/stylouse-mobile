@@ -9,8 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
-import com.pranavpandey.android.dynamic.toasts.DynamicToast;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +26,8 @@ import lk.apiit.eea.stylouse.models.responses.InquiryResponse;
 import lk.apiit.eea.stylouse.services.InquiryService;
 import retrofit2.Response;
 
+import static com.pranavpandey.android.dynamic.toasts.DynamicToast.makeError;
+import static lk.apiit.eea.stylouse.databinding.FragmentInboxBinding.inflate;
 import static lk.apiit.eea.stylouse.utils.Constants.TYPE_UNREAD;
 import static lk.apiit.eea.stylouse.utils.Navigator.navigate;
 
@@ -70,7 +70,7 @@ public class InboxFragment extends RootBaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentInboxBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -115,7 +115,7 @@ public class InboxFragment extends RootBaseFragment {
         @Override
         public void onFailure(String message) {
             error.setValue(message);
-            DynamicToast.makeError(activity, message).show();
+            makeError(activity, message).show();
             loading.setValue(false);
         }
     };

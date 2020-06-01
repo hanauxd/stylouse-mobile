@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
@@ -70,14 +68,8 @@ public class OrderDetailFragment extends AuthFragment {
     }
 
     private void initRecyclerView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(activity,
-                RecyclerView.VERTICAL,
-                false);
-        CartAdapter adapter = new CartAdapter(carts,
-                null,
-                this::onProductClick);
+        CartAdapter adapter = new CartAdapter(carts, null, this::onProductClick);
         binding.orderItemList.setAdapter(adapter);
-        binding.orderItemList.setLayoutManager(layoutManager);
     }
 
     private void onProductClick(String productJSON) {

@@ -2,22 +2,18 @@ package lk.apiit.eea.stylouse.ui;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
-import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -33,6 +29,13 @@ import lk.apiit.eea.stylouse.models.responses.InquiryResponse;
 import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.services.InquiryService;
 import retrofit2.Response;
+
+import static android.text.TextUtils.isEmpty;
+import static android.widget.Toast.LENGTH_SHORT;
+import static android.widget.Toast.makeText;
+import static com.pranavpandey.android.dynamic.toasts.DynamicToast.makeError;
+import static java.util.stream.Collectors.toList;
+import static lk.apiit.eea.stylouse.databinding.FragmentInquiryBinding.inflate;
 
 public class InquiryFragment extends RootBaseFragment {
     private MutableLiveData<InquiryResponse> inquiryData = new MutableLiveData<>(null);
@@ -54,7 +57,7 @@ public class InquiryFragment extends RootBaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentInquiryBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -72,9 +75,7 @@ public class InquiryFragment extends RootBaseFragment {
         if (response != null) {
             List<Inquiry> inquiries = response.getInquiries();
             List<Reply> replies = new ArrayList<>();
-            inquiries.forEach(inquiry -> {
-                replies.addAll(inquiry.getReplies());
-            });
+            inquiries.forEach(inquiry -> replies.addAll(inquiry.getReplies()));
             InquiryAdapter adapter = new InquiryAdapter(replies);
             binding.inquiryList.setAdapter(adapter);
         }
@@ -86,8 +87,8 @@ public class InquiryFragment extends RootBaseFragment {
 
     private void onSendClick(View view) {
         String inquiryText = binding.inquiry.getText().toString();
-        if (TextUtils.isEmpty(inquiryText)) {
-            Toast.makeText(activity, "Message is required", Toast.LENGTH_SHORT).show();
+        if (isEmpty(inquiryText)) {
+            makeText(activity, "Message is required", LENGTH_SHORT).show();
         } else {
             InquiryRequest inquiry = new InquiryRequest(product().getId(), inquiryText);
             inquiryService.createInquiry(createCallback, session.getAuthState().getJwt(), inquiry);
@@ -105,18 +106,19 @@ public class InquiryFragment extends RootBaseFragment {
     }
 
     private void markAsRead() {
-        List<Inquiry> userInquiries = inquiryResponse.getInquiries().stream().filter(
-                inquiry -> inquiry.getUser().getEmail().equals(session.getAuthState().getUserId())
-        ).collect(
-                Collectors.toList()
-        );
+        List<Inquiry> userInquiries = inquiryResponse
+                .getInquiries()
+                .stream()
+                .filter(inquiry -> inquiry.getUser().getEmail().equals(session.getAuthState().getUserId()))
+                .collect(toList());
 
         if (userInquiries.size() > 0) {
-            List<Reply> replies = userInquiries.get(0).getReplies().stream().filter(
-                    reply -> !reply.isRead() && !reply.getUser().getId().equals(session.getAuthState().getUserId())
-            ).collect(
-                    Collectors.toList()
-            );
+            List<Reply> replies = userInquiries
+                    .get(0)
+                    .getReplies()
+                    .stream()
+                    .filter(reply -> !reply.isRead() && !reply.getUser().getId().equals(session.getAuthState().getUserId()))
+                    .collect(toList());
 
             List<String> replyIds = new ArrayList<>();
             replies.forEach(reply -> {
@@ -137,7 +139,7 @@ public class InquiryFragment extends RootBaseFragment {
 
         @Override
         public void onFailure(String message) {
-            DynamicToast.makeError(activity, message).show();
+            makeError(activity, message).show();
         }
     };
 
@@ -149,7 +151,7 @@ public class InquiryFragment extends RootBaseFragment {
 
         @Override
         public void onFailure(String message) {
-            DynamicToast.makeError(activity, message).show();
+            makeError(activity, message).show();
         }
     };
 
@@ -165,7 +167,7 @@ public class InquiryFragment extends RootBaseFragment {
         @Override
         public void onFailure(String message) {
             loading.setValue(false);
-            DynamicToast.makeError(activity, message).show();
+            makeError(activity, message).show();
         }
     };
 }

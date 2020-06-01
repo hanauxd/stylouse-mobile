@@ -4,9 +4,10 @@ import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.apis.RetroFitCallback;
 import lk.apiit.eea.stylouse.apis.UserAPI;
 import lk.apiit.eea.stylouse.models.requests.SignUpRequest;
-import lk.apiit.eea.stylouse.utils.StringFormatter;
 import retrofit2.Call;
 import retrofit2.Retrofit;
+
+import static lk.apiit.eea.stylouse.utils.StringFormatter.formatToken;
 
 public class UserService {
     private UserAPI userAPI;
@@ -16,7 +17,7 @@ public class UserService {
     }
 
     public void getUser(ApiResponseCallback callback, String jwt) {
-        Call<SignUpRequest> userCall = userAPI.getUser(StringFormatter.formatToken(jwt));
+        Call<SignUpRequest> userCall = userAPI.getUser(formatToken(jwt));
         userCall.enqueue(new RetroFitCallback<>(callback));
     }
 }

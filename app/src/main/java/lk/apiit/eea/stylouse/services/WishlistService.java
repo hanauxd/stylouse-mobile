@@ -9,9 +9,10 @@ import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.apis.RetroFitCallback;
 import lk.apiit.eea.stylouse.apis.WishlistAPI;
 import lk.apiit.eea.stylouse.models.responses.WishlistResponse;
-import lk.apiit.eea.stylouse.utils.StringFormatter;
 import retrofit2.Call;
 import retrofit2.Retrofit;
+
+import static lk.apiit.eea.stylouse.utils.StringFormatter.formatToken;
 
 public class WishlistService {
     private WishlistAPI wishlistAPI;
@@ -22,17 +23,17 @@ public class WishlistService {
     }
 
     public void addWishlist(HashMap<String, String> wishlistRequest, ApiResponseCallback callback, String jwt) {
-        Call<List<WishlistResponse>> wishlistCall = wishlistAPI.addWishlist(StringFormatter.formatToken(jwt), wishlistRequest);
+        Call<List<WishlistResponse>> wishlistCall = wishlistAPI.addWishlist(formatToken(jwt), wishlistRequest);
         wishlistCall.enqueue(new RetroFitCallback<>(callback));
     }
 
     public void deleteWishlist(String id, ApiResponseCallback callback, String jwt) {
-        Call<List<WishlistResponse>> wishlistCall = wishlistAPI.deleteWishlist(StringFormatter.formatToken(jwt), id);
+        Call<List<WishlistResponse>> wishlistCall = wishlistAPI.deleteWishlist(formatToken(jwt), id);
         wishlistCall.enqueue(new RetroFitCallback<>(callback));
     }
 
     public void getWishlist(ApiResponseCallback callback, String jwt) {
-        Call<List<WishlistResponse>> wishlistCall = wishlistAPI.getWishlist(StringFormatter.formatToken(jwt));
+        Call<List<WishlistResponse>> wishlistCall = wishlistAPI.getWishlist(formatToken(jwt));
         wishlistCall.enqueue(new RetroFitCallback<>(callback));
     }
 }

@@ -10,8 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 
-import com.pranavpandey.android.dynamic.toasts.DynamicToast;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,9 +23,13 @@ import lk.apiit.eea.stylouse.databinding.FragmentCartBinding;
 import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.models.responses.CartResponse;
 import lk.apiit.eea.stylouse.services.CartService;
-import lk.apiit.eea.stylouse.utils.Navigator;
-import lk.apiit.eea.stylouse.utils.StringFormatter;
 import retrofit2.Response;
+
+import static com.pranavpandey.android.dynamic.toasts.DynamicToast.make;
+import static java.lang.String.valueOf;
+import static lk.apiit.eea.stylouse.databinding.FragmentCartBinding.inflate;
+import static lk.apiit.eea.stylouse.utils.Navigator.navigate;
+import static lk.apiit.eea.stylouse.utils.StringFormatter.formatCurrency;
 
 public class CartFragment extends AuthFragment {
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
@@ -50,7 +52,7 @@ public class CartFragment extends AuthFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentCartBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -89,7 +91,7 @@ public class CartFragment extends AuthFragment {
 
     private void bindCartToView() {
         binding.setCount(carts.size());
-        binding.setTotal(StringFormatter.formatCurrency(cartTotal()));
+        binding.setTotal(formatCurrency(cartTotal()));
         binding.btnCheckout.setOnClickListener(this::onCheckoutClick);
     }
 
@@ -110,17 +112,17 @@ public class CartFragment extends AuthFragment {
     private void onProductClick(String productJSON) {
         Bundle bundle = new Bundle();
         bundle.putString("product", productJSON);
-        Navigator.navigate(parentNavController, R.id.action_mainFragment_to_productFragment, bundle);
+        navigate(parentNavController, R.id.action_mainFragment_to_productFragment, bundle);
     }
 
     private void onCheckoutClick(View view) {
         if (carts.size() > 0) {
             Bundle bundle = new Bundle();
-            bundle.putString("total", "LKR ".concat(StringFormatter.formatCurrency(cartTotal())));
-            bundle.putString("numberOfItems", String.valueOf(carts.size()));
-            Navigator.navigate(parentNavController, R.id.shippingFragment, bundle);
+            bundle.putString("total", "LKR ".concat(formatCurrency(cartTotal())));
+            bundle.putString("numberOfItems", valueOf(carts.size()));
+            navigate(parentNavController, R.id.shippingFragment, bundle);
         } else {
-            DynamicToast.make(activity, "Add items to cart.").show();
+            make(activity, "Add items to cart.").show();
         }
     }
 

@@ -1,13 +1,11 @@
 package lk.apiit.eea.stylouse.adapters;
 
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -19,15 +17,21 @@ import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.CartListItemBinding;
 import lk.apiit.eea.stylouse.interfaces.AdapterItemClickListener;
 import lk.apiit.eea.stylouse.models.responses.CartResponse;
-import lk.apiit.eea.stylouse.utils.StringFormatter;
 import lk.apiit.eea.stylouse.utils.UrlBuilder;
 
+import static android.view.LayoutInflater.from;
+import static android.view.View.GONE;
+import static com.bumptech.glide.Glide.with;
+import static lk.apiit.eea.stylouse.databinding.CartListItemBinding.inflate;
+import static lk.apiit.eea.stylouse.utils.StringFormatter.formatCurrency;
+
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
-    @Inject
-    UrlBuilder urlBuilder;
     private List<CartResponse> carts;
     private AdapterItemClickListener deleteClickListener;
     private AdapterItemClickListener productClickListener;
+
+    @Inject
+    UrlBuilder urlBuilder;
 
     public CartAdapter(
             List<CartResponse> carts,
@@ -41,9 +45,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        CartListItemBinding binding = CartListItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        CartListItemBinding binding = inflate(from(parent.getContext()), parent, false);
         if (deleteClickListener == null) {
-            binding.btnRemove.setVisibility(View.GONE);
+            binding.btnRemove.setVisibility(GONE);
         }
         ((StylouseApp)binding.getRoot().getContext().getApplicationContext()).getAppComponent().inject(this);
         return new ViewHolder(binding, deleteClickListener, productClickListener);
@@ -78,7 +82,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         void bind(CartResponse cart) {
             this.cart = cart;
             binding.setCart(cart);
-            binding.setTotal(StringFormatter.formatCurrency(cart.getTotalPrice()));
+            binding.setTotal(formatCurrency(cart.getTotalPrice()));
             binding.product.setOnClickListener(this::onProductClick);
             if (deleteClickListener != null) {
                 binding.btnRemove.setOnClickListener(this::onDeleteClick);
@@ -98,7 +102,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         }
 
         private void bindImageToView() {
-            Glide.with(binding.getRoot())
+            with(binding.getRoot())
                     .load(urlBuilder.fileUrl(cart.getProduct().getProductImages().get(0).getFilename()))
                     .placeholder(R.drawable.stylouse_placeholder)
                     .into(binding.productImage);

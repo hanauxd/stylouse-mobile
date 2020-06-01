@@ -1,7 +1,6 @@
 package lk.apiit.eea.stylouse.ui;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,9 @@ import lk.apiit.eea.stylouse.models.Category;
 import lk.apiit.eea.stylouse.services.CategoryService;
 import retrofit2.Response;
 
+import static android.text.TextUtils.isEmpty;
+import static lk.apiit.eea.stylouse.databinding.FragmentCategoryBinding.inflate;
+
 public class CategoryFragment extends AuthFragment {
     private MutableLiveData<String> error = new MutableLiveData<>(null);
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
@@ -43,7 +45,7 @@ public class CategoryFragment extends AuthFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentCategoryBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -69,7 +71,7 @@ public class CategoryFragment extends AuthFragment {
 
     private void onAddClick(View view) {
         String categoryText = binding.category.getText().toString();
-        if (TextUtils.isEmpty(categoryText)) {
+        if (isEmpty(categoryText)) {
             error.setValue("Category is required");
         } else {
             Category category = new Category(categoryText);

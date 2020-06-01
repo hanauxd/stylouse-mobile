@@ -23,6 +23,8 @@ import lk.apiit.eea.stylouse.databinding.FragmentInquiriesBinding;
 import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.services.InquiryService;
 
+import static lk.apiit.eea.stylouse.databinding.FragmentInquiriesBinding.inflate;
+
 public class InquiriesFragment extends RootBaseFragment {
     private FragmentInquiriesBinding binding;
     private List<String> tabs = Arrays.asList("Inbox", "Unread");
@@ -41,7 +43,7 @@ public class InquiriesFragment extends RootBaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-      binding = FragmentInquiriesBinding.inflate(inflater, container, false);
+      binding = inflate(inflater, container, false);
       return binding.getRoot();
     }
 

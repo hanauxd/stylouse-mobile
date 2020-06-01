@@ -12,11 +12,14 @@ import retrofit2.http.Path;
 
 public interface ReviewAPI {
     @GET("reviews/product/{productId}")
-    Call<ReviewResponse> getReviews(@Path("productId") String productId, @Header("Authorization") String token);
+    Call<ReviewResponse> getReviews(@Path("productId") String productId,
+                                    @Header("Authorization") String token);
 
     @POST("reviews")
-    Call<ReviewResponse> createReview(@Body ReviewRequest request, @Header("Authorization") String token);
+    Call<ReviewResponse> createReview(@Body ReviewRequest request,
+                                      @Header("Authorization") String token);
 
     @DELETE("reviews/{id}")
-    Call<ReviewResponse> deleteReview(@Path("id") String id, @Header("Authorization") String token);
+    Call<ReviewResponse> deleteReview(@Path("id") String id,
+                                      @Header("Authorization") String token);
 }

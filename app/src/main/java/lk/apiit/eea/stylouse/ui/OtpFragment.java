@@ -1,7 +1,6 @@
 package lk.apiit.eea.stylouse.ui;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,7 @@ import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 import lk.apiit.eea.stylouse.services.AuthService;
 import retrofit2.Response;
 
+import static android.text.TextUtils.isEmpty;
 import static androidx.navigation.Navigation.findNavController;
 import static com.pranavpandey.android.dynamic.toasts.DynamicToast.makeSuccess;
 import static lk.apiit.eea.stylouse.databinding.FragmentOtpBinding.inflate;
@@ -72,7 +72,7 @@ public class OtpFragment extends RootBaseFragment {
 
     private void onValidateClick(View view) {
         String OTP = binding.otp.getText().toString();
-        if (TextUtils.isEmpty(OTP)) {
+        if (isEmpty(OTP)) {
             error.setValue("OTP is required");
         } else {
             binding.btnValidateOtp.startAnimation();
