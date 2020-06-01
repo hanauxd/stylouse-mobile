@@ -17,10 +17,14 @@ import javax.inject.Inject;
 
 import lk.apiit.eea.stylouse.R;
 import lk.apiit.eea.stylouse.application.StylouseApp;
+import lk.apiit.eea.stylouse.databinding.FragmentSplashBinding;
 import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.interfaces.ActivityHandler;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
-import lk.apiit.eea.stylouse.utils.Navigator;
+
+import static lk.apiit.eea.stylouse.databinding.FragmentSplashBinding.inflate;
+import static lk.apiit.eea.stylouse.utils.Constants.ROLE_ADMIN;
+import static lk.apiit.eea.stylouse.utils.Navigator.navigate;
 
 public class SplashFragment extends RootBaseFragment {
     @Inject
@@ -40,9 +44,10 @@ public class SplashFragment extends RootBaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_splash, container, false);
+        FragmentSplashBinding binding = inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -65,10 +70,10 @@ public class SplashFragment extends RootBaseFragment {
             }
         }
         new Handler().postDelayed(() -> {
-            if (state != null && state.getUserRole().equals("ROLE_ADMIN")) {
-                Navigator.navigate(parentNavController, R.id.action_splashFragment_to_adminFragment, null);
+            if (state != null && state.getUserRole().equals(ROLE_ADMIN)) {
+                navigate(parentNavController, R.id.action_splashFragment_to_adminFragment, null);
             } else {
-                Navigator.navigate(parentNavController, R.id.action_splashFragment_to_mainFragment, null);
+                navigate(parentNavController, R.id.action_splashFragment_to_mainFragment, null);
             }
         }, 2000);
     }

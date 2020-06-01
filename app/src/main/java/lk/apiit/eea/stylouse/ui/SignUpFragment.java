@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
@@ -25,8 +24,12 @@ import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.FragmentSignUpBinding;
 import lk.apiit.eea.stylouse.models.requests.SignUpRequest;
 import lk.apiit.eea.stylouse.services.AuthService;
-import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
+
+import static androidx.navigation.Navigation.findNavController;
+import static lk.apiit.eea.stylouse.databinding.FragmentSignUpBinding.inflate;
+import static lk.apiit.eea.stylouse.utils.Constants.ROLE_USER;
+import static lk.apiit.eea.stylouse.utils.Navigator.navigate;
 
 public class SignUpFragment extends RootBaseFragment {
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
@@ -55,16 +58,16 @@ public class SignUpFragment extends RootBaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentSignUpBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
+        navController = findNavController(view);
         loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
         error.observe(getViewLifecycleOwner(), this::onErrorChange);
         binding.btnSignIn.setOnClickListener(this::onSignInClick);
@@ -82,7 +85,6 @@ public class SignUpFragment extends RootBaseFragment {
 
     private void onSignUpClick(View view) {
         if (validation.validate()) {
-            String role = getString(R.string.role_user);
             String firstName = binding.firstName.getText().toString();
             String lastName = binding.lastName.getText().toString();
             String phone = binding.phone.getText().toString();
@@ -91,13 +93,13 @@ public class SignUpFragment extends RootBaseFragment {
 
             if (error.getValue() != null) error.setValue(null);
             loading.setValue(true);
-            SignUpRequest signUpRequest = new SignUpRequest(role, firstName, lastName, phone, email, password);
+            SignUpRequest signUpRequest = new SignUpRequest(ROLE_USER, firstName, lastName, phone, email, password);
             authService.register(signUpRequest, registerCallback);
         }
     }
 
     private void onSignInClick(View view) {
-        Navigator.navigate(navController, R.id.action_signUpFragment_to_signInFragment, null);
+        navigate(navController, R.id.action_signUpFragment_to_signInFragment, null);
     }
 
     private void validateInput() {
@@ -111,7 +113,7 @@ public class SignUpFragment extends RootBaseFragment {
     private ApiResponseCallback registerCallback = new ApiResponseCallback() {
         @Override
         public void onSuccess(Response<?> response) {
-            Navigator.navigate(navController, R.id.action_signUpFragment_to_signInFragment, null);
+            navigate(navController, R.id.action_signUpFragment_to_signInFragment, null);
         }
 
         @Override
