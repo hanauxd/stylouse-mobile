@@ -1,18 +1,20 @@
 package lk.apiit.eea.stylouse.ui;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
 
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
@@ -29,27 +31,38 @@ import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.FragmentAddProductBinding;
 import lk.apiit.eea.stylouse.di.AuthSession;
+import lk.apiit.eea.stylouse.models.Category;
 import lk.apiit.eea.stylouse.models.requests.ProductRequest;
 import lk.apiit.eea.stylouse.models.responses.ProductResponse;
+import lk.apiit.eea.stylouse.services.CategoryService;
 import lk.apiit.eea.stylouse.services.ProductService;
 import lk.apiit.eea.stylouse.utils.DocumentHelper;
+import lk.apiit.eea.stylouse.utils.PermissionManager;
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
+import okhttp3.MultipartBody.Part;
 import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
+import static okhttp3.MultipartBody.Part.createFormData;
+import static okhttp3.RequestBody.create;
 
 public class AddProductFragment extends RootBaseFragment {
     public static final int PICK_IMAGE_REQUEST = 1;
-
+    private MutableLiveData<Boolean> loading = new MutableLiveData<>(true);
+    private MutableLiveData<String> error = new MutableLiveData<>(null);
+    private ArrayList<String> categoryList = new ArrayList<>(Collections.singletonList(""));
     private FragmentAddProductBinding binding;
+    private String selectedCategory = "";
     private FileAdapter adapter;
 
     @Inject
+    AuthSession session;
+    @Inject
     ProductService productService;
     @Inject
-    AuthSession session;
+    CategoryService categoryService;
+    @Inject
+    PermissionManager permissionManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,11 +80,32 @@ public class AddProductFragment extends RootBaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Add Product");
+        permissionManager.requestReadWriteExternalStoragePermission(activity);
+        bindToView();
+        fetchCategories();
+    }
+
+    private void fetchCategories() {
+        error.setValue(null);
+        categoryService.getCategories(categoryFetchCallback, session.getAuthState().getJwt());
+    }
+
+    private void bindToView() {
+        loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
+        error.observe(getViewLifecycleOwner(), this::onErrorChange);
         binding.btnChooseFile.setOnClickListener(this::onChooseFileClick);
         binding.btnSave.setOnClickListener(this::onSaveClick);
-        adapter = new FileAdapter(this::setFileCount);
+        adapter = new FileAdapter(this::setFileCount, activity);
         binding.fileList.setAdapter(adapter);
-        addPermissionActivityCompat();
+    }
+
+    private void onErrorChange(String error) {
+        binding.setError(error);
+    }
+
+    private void onLoadingChange(Boolean loading) {
+        binding.setLoading(loading);
     }
 
     private void setFileCount(int count) {
@@ -91,22 +125,40 @@ public class AddProductFragment extends RootBaseFragment {
                     .show();
             return;
         }
-        List<File> selectedFiles = adapter.getFiles();
 
-        List<MultipartBody.Part> files = selectedFiles.stream().map(
-                file -> MultipartBody.Part.createFormData(
-                        "file", file.getName(), RequestBody.create(MediaType.parse("image/*"), file)
-                )).collect(Collectors.toList());
+        if (product() != null) {
+            binding.btnSave.startAnimation();
+            productService.createProduct(createProductCallback,
+                    session.getAuthState().getJwt(),
+                    product(),
+                    imageFiles());
+        }
+    }
 
+    private List<Part> imageFiles() {
+        return adapter
+                .getFiles()
+                .stream()
+                .map(file -> createFormData("file",
+                        file.getName(),
+                        create(MediaType.parse("image/*"), file)))
+                .collect(Collectors.toList());
+    }
+
+    private ProductRequest product() {
         String name = binding.productName.getText().toString();
         String description = binding.productDescription.getText().toString();
-        double price = Double.parseDouble(binding.productPrice.getText().toString());
-        int quantity = Integer.parseInt(binding.productQuantity.getText().toString());
-        List<String> categories = new ArrayList<>(Collections.singletonList("Top"));
+        String price = binding.productPrice.getText().toString();
+        String quantity = binding.productQuantity.getText().toString();
 
-        ProductRequest product = new ProductRequest(name, quantity, price, description, categories);
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(description) || TextUtils.isEmpty(price)
+                || TextUtils.isEmpty(quantity) || TextUtils.isEmpty(selectedCategory)) {
+            DynamicToast.makeWarning(activity, "Fields cannot be empty").show();
+            return null;
+        }
 
-        productService.createProduct(createCallback, session.getAuthState().getJwt(), product, files);
+        List<String> categories = new ArrayList<>(Collections.singletonList(selectedCategory));
+        return new ProductRequest(name, Integer.parseInt(quantity), Double.parseDouble(price), description, categories);
     }
 
     @Override
@@ -117,35 +169,81 @@ public class AddProductFragment extends RootBaseFragment {
         }
     }
 
-    private void addPermissionActivityCompat() {
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission_group.STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            String[] list = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-            ActivityCompat.requestPermissions(activity, list, 1);
-        }
-    }
-
     private void addFileToAdapter(Uri uri) {
         String filePath = DocumentHelper.getPath(activity, uri);
         if (filePath == null || filePath.isEmpty()) {
             DynamicToast.makeWarning(activity, "File does not exist").show();
             return;
         }
+
         File file = new File(filePath);
         if (file.exists()) {
             adapter.addFile(file);
         }
     }
 
-    private ApiResponseCallback createCallback = new ApiResponseCallback() {
+    private void resetInputFields() {
+        binding.productName.setText("");
+        binding.productQuantity.setText("");
+        binding.productPrice.setText("");
+        binding.productDescription.setText("");
+        adapter.clearFiles();
+    }
+
+    private ApiResponseCallback createProductCallback = new ApiResponseCallback() {
         @Override
         public void onSuccess(Response<?> response) {
-            ProductResponse productResponse = (ProductResponse) response.body();
-            System.out.println("[ON SUCCESS] " + productResponse);
+            ProductResponse product = (ProductResponse) response.body();
+            if (product != null) {
+                DynamicToast.makeSuccess(activity, String.format("Product %s added successfully", product.getName())).show();
+            }
+            resetInputFields();
+            binding.btnSave.revertAnimation();
         }
 
         @Override
         public void onFailure(String message) {
+            binding.btnSave.revertAnimation();
             DynamicToast.makeError(activity, message).show();
+        }
+    };
+
+    private ApiResponseCallback categoryFetchCallback = new ApiResponseCallback() {
+        @Override
+        public void onSuccess(Response<?> response) {
+            List<Category> categories = (List<Category>) response.body();
+            if (categories != null) {
+                categories.forEach(category -> {
+                    categoryList.add(category.getCategory());
+                });
+                setAdapterToSpinner();
+            }
+            loading.setValue(false);
+        }
+
+        private void setAdapterToSpinner() {
+            binding.spinner.setOnItemSelectedListener(categorySelectedCallback);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_item, categoryList);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            binding.spinner.setAdapter(adapter);
+        }
+
+        @Override
+        public void onFailure(String message) {
+            loading.setValue(false);
+            error.setValue(message);
+        }
+    };
+
+    private AdapterView.OnItemSelectedListener categorySelectedCallback = new AdapterView.OnItemSelectedListener() {
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            selectedCategory = categoryList.get(position);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
         }
     };
 }
