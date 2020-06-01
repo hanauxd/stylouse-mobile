@@ -22,7 +22,10 @@ import lk.apiit.eea.stylouse.R;
 import lk.apiit.eea.stylouse.apis.ApiResponseCallback;
 import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.FragmentSignUpBinding;
+import lk.apiit.eea.stylouse.di.AuthSession;
+import lk.apiit.eea.stylouse.interfaces.ActivityHandler;
 import lk.apiit.eea.stylouse.models.requests.SignUpRequest;
+import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 import lk.apiit.eea.stylouse.services.AuthService;
 import retrofit2.Response;
 
@@ -40,6 +43,8 @@ public class SignUpFragment extends RootBaseFragment {
 
     @Inject
     AuthService authService;
+    @Inject
+    AuthSession session;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -113,7 +118,12 @@ public class SignUpFragment extends RootBaseFragment {
     private ApiResponseCallback registerCallback = new ApiResponseCallback() {
         @Override
         public void onSuccess(Response<?> response) {
-            navigate(navController, R.id.action_signUpFragment_to_signInFragment, null);
+            SignInResponse authToken = (SignInResponse) response.body();
+            if (authToken != null) {
+                ((ActivityHandler) activity).create(authToken.getTokenValidation());
+                session.save(authToken);
+                navigate(navController, R.id.action_signUpFragment_to_mainFragment, null);
+            }
         }
 
         @Override
