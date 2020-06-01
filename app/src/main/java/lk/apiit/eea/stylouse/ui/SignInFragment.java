@@ -14,8 +14,6 @@ import androidx.navigation.NavController;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 
-import java.util.Date;
-
 import javax.inject.Inject;
 
 import lk.apiit.eea.stylouse.R;
@@ -108,13 +106,11 @@ public class SignInFragment extends RootBaseFragment {
     private ApiResponseCallback loginCallback = new ApiResponseCallback() {
         @Override
         public void onSuccess(Response<?> response) {
-            SignInResponse body = (SignInResponse) response.body();
-            if (body != null) {
-                ((ActivityHandler) activity).create(body.getTokenValidation());
-                Date expiresAt = new Date(new Date().getTime() + body.getTokenValidation());
-                body.setExpiresAt(expiresAt);
-                session.setAuthState(body);
-                if (body.getUserRole().equals(ROLE_ADMIN)) {
+            SignInResponse authToken = (SignInResponse) response.body();
+            if (authToken != null) {
+                ((ActivityHandler) activity).create(authToken.getTokenValidation());
+                session.save(authToken);
+                if (authToken.getUserRole().equals(ROLE_ADMIN)) {
                     navigate(navController, R.id.action_signInFragment_to_adminFragment, null);
                 } else {
                     navigate(navController, R.id.action_signInFragment_to_mainFragment, null);

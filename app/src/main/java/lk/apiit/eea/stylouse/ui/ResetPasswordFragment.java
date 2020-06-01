@@ -12,8 +12,6 @@ import androidx.navigation.NavController;
 
 import com.google.gson.Gson;
 
-import java.util.Date;
-
 import javax.inject.Inject;
 
 import lk.apiit.eea.stylouse.R;
@@ -83,13 +81,10 @@ public class ResetPasswordFragment extends RootBaseFragment {
     private ApiResponseCallback resetPasswordCallback = new ApiResponseCallback() {
         @Override
         public void onSuccess(Response<?> response) {
-            SignInResponse body = (SignInResponse) response.body();
-            if (body != null) {
-                ((ActivityHandler) activity).create(body.getTokenValidation());
-                Date expiresAt = new Date(new Date().getTime() + body.getTokenValidation());
-                body.setExpiresAt(expiresAt);
-                session.setAuthState(body);
-
+            SignInResponse authToken = (SignInResponse) response.body();
+            if (authToken != null) {
+                ((ActivityHandler) activity).create(authToken.getTokenValidation());
+                session.save(authToken);
                 if (navController.getGraph().getId() == R.id.home_nav_graph) {
                     navigate(navController, R.id.action_resetPasswordFragment_to_navigation_profile, null);
                 } else {
