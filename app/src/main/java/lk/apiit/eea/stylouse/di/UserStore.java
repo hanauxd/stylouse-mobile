@@ -9,10 +9,10 @@ import javax.inject.Inject;
 
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 
-public class UserStore {
+import static lk.apiit.eea.stylouse.utils.Constants.USER_FILE;
+import static lk.apiit.eea.stylouse.utils.Constants.USER_INFO;
 
-    private String USER_FILE = "USER_FILE";
-    private String USER_INFO = "USER_INFO";
+public class UserStore {
     private Context context;
 
     @Inject
