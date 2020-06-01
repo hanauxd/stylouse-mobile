@@ -1,6 +1,5 @@
 package lk.apiit.eea.stylouse.adapters;
 
-import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -14,7 +13,11 @@ import lk.apiit.eea.stylouse.databinding.OrderListItemBinding;
 import lk.apiit.eea.stylouse.interfaces.AdapterItemClickListener;
 import lk.apiit.eea.stylouse.models.responses.OrderItemResponse;
 import lk.apiit.eea.stylouse.models.responses.OrdersResponse;
-import lk.apiit.eea.stylouse.utils.StringFormatter;
+
+import static android.view.LayoutInflater.from;
+import static lk.apiit.eea.stylouse.databinding.OrderListItemBinding.inflate;
+import static lk.apiit.eea.stylouse.utils.StringFormatter.formatCurrency;
+import static lk.apiit.eea.stylouse.utils.StringFormatter.formatDate;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
     private List<OrdersResponse> orders;
@@ -28,7 +31,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        OrderListItemBinding binding = OrderListItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        OrderListItemBinding binding = inflate(from(parent.getContext()), parent, false);
         return new ViewHolder(binding, clickListener);
     }
 
@@ -53,8 +56,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         }
 
         void bind(OrdersResponse order) {
-            binding.setDate(StringFormatter.formatDate(order.getDate()));
-            binding.setTotal(StringFormatter.formatCurrency(total(order)));
+            binding.setDate(formatDate(order.getDate()));
+            binding.setTotal(formatCurrency(total(order)));
             binding.orderItem.setOnClickListener(v -> clickListener.onItemClick(new Gson().toJson(order)));
         }
 

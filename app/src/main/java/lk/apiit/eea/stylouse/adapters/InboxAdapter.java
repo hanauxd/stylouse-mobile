@@ -1,12 +1,10 @@
 package lk.apiit.eea.stylouse.adapters;
 
-import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 
@@ -20,6 +18,10 @@ import lk.apiit.eea.stylouse.databinding.InboxListItemBinding;
 import lk.apiit.eea.stylouse.interfaces.AdapterItemClickListener;
 import lk.apiit.eea.stylouse.models.Inquiry;
 import lk.apiit.eea.stylouse.utils.UrlBuilder;
+
+import static android.view.LayoutInflater.from;
+import static com.bumptech.glide.Glide.with;
+import static lk.apiit.eea.stylouse.databinding.InboxListItemBinding.inflate;
 
 public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> {
     private List<Inquiry> inquiries;
@@ -36,7 +38,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        InboxListItemBinding binding = InboxListItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        InboxListItemBinding binding = inflate(from(parent.getContext()), parent, false);
         ((StylouseApp)binding.getRoot().getContext().getApplicationContext()).getAppComponent().inject(this);
         return new ViewHolder(binding, listener, urlBuilder);
     }
@@ -56,7 +58,9 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         private AdapterItemClickListener itemClickListener;
         private UrlBuilder urlBuilder;
 
-        public ViewHolder(@NonNull InboxListItemBinding binding, AdapterItemClickListener itemClickListener, UrlBuilder urlBuilder) {
+        public ViewHolder(@NonNull InboxListItemBinding binding,
+                          AdapterItemClickListener itemClickListener,
+                          UrlBuilder urlBuilder) {
             super(binding.getRoot());
             this.binding = binding;
             this.itemClickListener = itemClickListener;
@@ -64,7 +68,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         }
 
         void bind(Inquiry inquiry) {
-            Glide.with(binding.getRoot())
+            with(binding.getRoot())
                     .load(urlBuilder.fileUrl(inquiry.getProduct().getProductImages().get(0).getFilename()))
                     .apply(RequestOptions.circleCropTransform())
                     .placeholder(R.drawable.stylouse_placeholder)

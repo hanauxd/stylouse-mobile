@@ -1,6 +1,5 @@
 package lk.apiit.eea.stylouse.adapters;
 
-import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -10,6 +9,9 @@ import java.util.List;
 
 import lk.apiit.eea.stylouse.databinding.CategoryListItemBinding;
 import lk.apiit.eea.stylouse.models.Category;
+
+import static android.view.LayoutInflater.from;
+import static lk.apiit.eea.stylouse.databinding.CategoryListItemBinding.inflate;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
     private List<Category> categories;
@@ -21,9 +23,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        CategoryListItemBinding binding = CategoryListItemBinding.inflate(
-                LayoutInflater.from(parent.getContext()), parent, false
-        );
+        CategoryListItemBinding binding = inflate(from(parent.getContext()), parent, false);
         return new ViewHolder(binding);
     }
 
