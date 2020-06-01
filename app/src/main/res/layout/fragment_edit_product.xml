@@ -125,17 +125,41 @@
                     android:visibility="@{editing || loading ? View.GONE : View.VISIBLE}"
                     app:spinning_bar_color="@color/colorWhite" />
 
-                <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
-                    android:id="@+id/btn_update"
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@drawable/loading_button_background"
-                    android:outlineSpotShadowColor="@android:color/transparent"
-                    android:text="Update"
-                    android:textColor="@color/colorWhite"
-                    android:visibility="@{editing || loading ? View.VISIBLE : View.GONE}"
-                    app:spinning_bar_color="@color/colorWhite" />
+                    android:visibility="@{editing || loading ? View.VISIBLE : View.GONE}">
+
+                    <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                        android:id="@+id/btn_cancel"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/loading_button_outline_background"
+                        android:text="Cancel"
+                        android:textColor="@color/colorRed" />
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent">
+                        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                            android:id="@+id/btn_update"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:background="@drawable/loading_button_background"
+                            android:outlineSpotShadowColor="@android:color/transparent"
+                            android:text="Update"
+                            android:textColor="@color/colorWhite"
+                            app:spinning_bar_color="@color/colorWhite" />
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
 
             <FrameLayout
