@@ -25,8 +25,11 @@ import lk.apiit.eea.stylouse.models.Review;
 import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.models.responses.ReviewResponse;
 import lk.apiit.eea.stylouse.services.ReviewService;
-import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
+
+import static lk.apiit.eea.stylouse.databinding.FragmentReviewBinding.inflate;
+import static lk.apiit.eea.stylouse.utils.Constants.ROLE_ADMIN;
+import static lk.apiit.eea.stylouse.utils.Navigator.navigate;
 
 public class ReviewFragment extends HomeBaseFragment {
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
@@ -46,7 +49,7 @@ public class ReviewFragment extends HomeBaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentReviewBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -86,13 +89,13 @@ public class ReviewFragment extends HomeBaseFragment {
     private void onReviewClick(View view) {
         Bundle bundle = new Bundle();
         bundle.putString("product", new Gson().toJson(product()));
-        Navigator.navigate(parentNavController, R.id.action_productFragment_to_rateFragment, bundle);
+        navigate(parentNavController, R.id.action_productFragment_to_rateFragment, bundle);
     }
 
     private void onInquiryClick(View view) {
         Bundle bundle = new Bundle();
         bundle.putString("product", new Gson().toJson(product()));
-        Navigator.navigate(parentNavController, R.id.action_productFragment_to_inquiryFragment, bundle);
+        navigate(parentNavController, R.id.action_productFragment_to_inquiryFragment, bundle);
     }
 
     private void onErrorChange(String error) {
@@ -132,7 +135,7 @@ public class ReviewFragment extends HomeBaseFragment {
 
     private AdapterItemClickListener removeClickListener() {
         return (session.getAuthState() != null)
-                && session.getAuthState().getUserRole().equals("ROLE_ADMIN")
+                && session.getAuthState().getUserRole().equals(ROLE_ADMIN)
                 ? this::removeReview
                 : null;
     }

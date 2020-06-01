@@ -10,10 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.google.gson.Gson;
-import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
 import javax.inject.Inject;
 
@@ -24,8 +22,12 @@ import lk.apiit.eea.stylouse.databinding.FragmentOtpBinding;
 import lk.apiit.eea.stylouse.models.requests.SignInRequest;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 import lk.apiit.eea.stylouse.services.AuthService;
-import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
+
+import static androidx.navigation.Navigation.findNavController;
+import static com.pranavpandey.android.dynamic.toasts.DynamicToast.makeSuccess;
+import static lk.apiit.eea.stylouse.databinding.FragmentOtpBinding.inflate;
+import static lk.apiit.eea.stylouse.utils.Navigator.navigate;
 
 public class OtpFragment extends RootBaseFragment {
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
@@ -43,16 +45,16 @@ public class OtpFragment extends RootBaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentOtpBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
+        navController = findNavController(view);
         loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
         error.observe(getViewLifecycleOwner(), this::onErrorChange);
         binding.setEmail(email());
@@ -93,7 +95,7 @@ public class OtpFragment extends RootBaseFragment {
             String authJSON = new Gson().toJson(authToken);
             Bundle bundle = new Bundle();
             bundle.putString("authToken", authJSON);
-            Navigator.navigate(navController, R.id.action_otpFragment_to_resetPasswordFragment, bundle);
+            navigate(navController, R.id.action_otpFragment_to_resetPasswordFragment, bundle);
         }
 
         @Override
@@ -109,7 +111,7 @@ public class OtpFragment extends RootBaseFragment {
         public void onSuccess(Response<?> response) {
             binding.btnResendOtp.revertAnimation();
             binding.btnValidateOtp.setEnabled(true);
-            DynamicToast.makeSuccess(activity, "A new OTP has been sent to your email.").show();
+            makeSuccess(activity, "A new OTP has been sent to your email.").show();
         }
 
         @Override

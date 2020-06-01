@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
@@ -27,7 +28,6 @@ public class CategoryFragment extends AuthFragment {
     private MutableLiveData<String> error = new MutableLiveData<>(null);
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private FragmentCategoryBinding binding;
-    private List<Category> categories;
 
     @Inject
     CategoryService categoryService;
@@ -41,15 +41,16 @@ public class CategoryFragment extends AuthFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentCategoryBinding.inflate(inflater, container, false);
-        return  binding.getRoot();
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Categories");
         if (session.getAuthState() != null) {
             error.observe(getViewLifecycleOwner(), this::onErrorChange);
             loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
@@ -85,7 +86,7 @@ public class CategoryFragment extends AuthFragment {
         @Override
         public void onSuccess(Response<?> response) {
             if (response.body() != null) {
-                categories = (List<Category>) response.body();
+                List<Category> categories = (List<Category>) response.body();
                 loading.setValue(false);
                 binding.category.setText("");
                 CategoryAdapter adapter = new CategoryAdapter(categories);

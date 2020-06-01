@@ -26,8 +26,10 @@ import lk.apiit.eea.stylouse.models.Inquiry;
 import lk.apiit.eea.stylouse.models.Reply;
 import lk.apiit.eea.stylouse.models.responses.InquiryResponse;
 import lk.apiit.eea.stylouse.services.InquiryService;
-import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
+
+import static lk.apiit.eea.stylouse.utils.Constants.TYPE_UNREAD;
+import static lk.apiit.eea.stylouse.utils.Navigator.navigate;
 
 public class InboxFragment extends RootBaseFragment {
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(true);
@@ -51,6 +53,12 @@ public class InboxFragment extends RootBaseFragment {
         if (session.getAuthState() != null) {
             fetchInquiries();
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        loading.setValue(true);
     }
 
     @Override
@@ -84,7 +92,7 @@ public class InboxFragment extends RootBaseFragment {
     private void onInboxItemClick(String inquiryJSON) {
         Bundle bundle = new Bundle();
         bundle.putString("inquiry", inquiryJSON);
-        Navigator.navigate(parentNavController, R.id.action_adminFragment_to_replyFragment, bundle);
+        navigate(parentNavController, R.id.action_adminFragment_to_replyFragment, bundle);
     }
 
     private void fetchInquiries() {
@@ -118,7 +126,7 @@ public class InboxFragment extends RootBaseFragment {
     }
 
     private List<Inquiry> getInquiriesList() {
-        if ("TYPE_UNREAD".equals(this.type)) {
+        if (TYPE_UNREAD.equals(this.type)) {
             return getUnreadInquiries();
         }
         return this.inquiries;

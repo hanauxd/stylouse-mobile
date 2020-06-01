@@ -25,8 +25,11 @@ import lk.apiit.eea.stylouse.application.StylouseApp;
 import lk.apiit.eea.stylouse.databinding.FragmentHomeBinding;
 import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.services.ProductService;
-import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
+
+import static lk.apiit.eea.stylouse.utils.Constants.ROLE_ADMIN;
+import static lk.apiit.eea.stylouse.utils.Constants.ROLE_USER;
+import static lk.apiit.eea.stylouse.utils.Navigator.navigate;
 
 public class HomeFragment extends HomeBaseFragment {
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
@@ -36,21 +39,6 @@ public class HomeFragment extends HomeBaseFragment {
 
     @Inject
     ProductService productService;
-
-    private ApiResponseCallback productsCallback = new ApiResponseCallback() {
-        @Override
-        public void onSuccess(Response<?> response) {
-            products = (List<ProductResponse>) response.body();
-            initRecyclerView();
-            loading.setValue(false);
-        }
-
-        @Override
-        public void onFailure(String message) {
-            loading.setValue(false);
-            error.setValue(message);
-        }
-    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +52,7 @@ public class HomeFragment extends HomeBaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -90,8 +78,8 @@ public class HomeFragment extends HomeBaseFragment {
         binding.setError(error);
     }
 
-    private void onLoadingChange(Boolean aBoolean) {
-        binding.setLoading(aBoolean);
+    private void onLoadingChange(Boolean loading) {
+        binding.setLoading(loading);
     }
 
     @Override
@@ -99,7 +87,7 @@ public class HomeFragment extends HomeBaseFragment {
         super.onCreateOptionsMenu(menu, inflater);
         if (state == null) {
             activity.getMenuInflater().inflate(R.menu.profile_items_unauth, menu);
-        } else if (state.getUserRole().equals("ROLE_ADMIN")) {
+        } else if (state.getUserRole().equals(ROLE_ADMIN)) {
             activity.getMenuInflater().inflate(R.menu.admin_items, menu);
         }
     }
@@ -107,9 +95,9 @@ public class HomeFragment extends HomeBaseFragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_sign_in) {
-            Navigator.navigate(parentNavController, R.id.signInFragment, null);
+            navigate(parentNavController, R.id.signInFragment, null);
         } else if (item.getItemId() == R.id.action_add_product) {
-            Navigator.navigate(parentNavController, R.id.action_adminFragment_to_addProductFragment, null);
+            navigate(parentNavController, R.id.action_adminFragment_to_addProductFragment, null);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -122,10 +110,25 @@ public class HomeFragment extends HomeBaseFragment {
     private void onProductClick(String productJSON) {
         Bundle bundle = new Bundle();
         bundle.putString("product", productJSON);
-        if (state == null || state.getUserRole().equals("ROLE_USER")) {
-            Navigator.navigate(parentNavController, R.id.action_mainFragment_to_productFragment, bundle);
+        if (state == null || state.getUserRole().equals(ROLE_USER)) {
+            navigate(parentNavController, R.id.action_mainFragment_to_productFragment, bundle);
         } else {
-            Navigator.navigate(parentNavController, R.id.action_adminFragment_to_editProductFragment, bundle);
+            navigate(parentNavController, R.id.action_adminFragment_to_editProductFragment, bundle);
         }
     }
+
+    private ApiResponseCallback productsCallback = new ApiResponseCallback() {
+        @Override
+        public void onSuccess(Response<?> response) {
+            products = (List<ProductResponse>) response.body();
+            initRecyclerView();
+            loading.setValue(false);
+        }
+
+        @Override
+        public void onFailure(String message) {
+            loading.setValue(false);
+            error.setValue(message);
+        }
+    };
 }

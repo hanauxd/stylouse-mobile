@@ -1,7 +1,6 @@
 package lk.apiit.eea.stylouse.ui;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.google.gson.Gson;
 
@@ -27,8 +25,12 @@ import lk.apiit.eea.stylouse.interfaces.ActivityHandler;
 import lk.apiit.eea.stylouse.models.requests.SignInRequest;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 import lk.apiit.eea.stylouse.services.AuthService;
-import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
+
+import static android.text.TextUtils.isEmpty;
+import static androidx.navigation.Navigation.findNavController;
+import static lk.apiit.eea.stylouse.databinding.FragmentResetPasswordBinding.inflate;
+import static lk.apiit.eea.stylouse.utils.Navigator.navigate;
 
 public class ResetPasswordFragment extends RootBaseFragment {
     private MutableLiveData<String> error = new MutableLiveData<>(null);
@@ -47,16 +49,16 @@ public class ResetPasswordFragment extends RootBaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentResetPasswordBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
+        navController = findNavController(view);
         error.observe(getViewLifecycleOwner(), this::onErrorChange);
         binding.btnResetPassword.setOnClickListener(this::onResetPasswordClick);
     }
@@ -67,7 +69,7 @@ public class ResetPasswordFragment extends RootBaseFragment {
 
     private void onResetPasswordClick(View view) {
         String password = binding.password.getText().toString();
-        if (TextUtils.isEmpty(password)) {
+        if (isEmpty(password)) {
             error.setValue("Password is required");
         } else {
             if (error != null) error.setValue(null);
@@ -89,9 +91,9 @@ public class ResetPasswordFragment extends RootBaseFragment {
                 session.setAuthState(body);
 
                 if (navController.getGraph().getId() == R.id.home_nav_graph) {
-                    Navigator.navigate(navController, R.id.action_resetPasswordFragment_to_navigation_profile, null);
+                    navigate(navController, R.id.action_resetPasswordFragment_to_navigation_profile, null);
                 } else {
-                    Navigator.navigate(navController, R.id.action_resetPasswordFragment_to_mainFragment, null);
+                    navigate(navController, R.id.action_resetPasswordFragment_to_mainFragment, null);
                 }
             }
         }

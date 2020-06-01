@@ -23,16 +23,17 @@ import lk.apiit.eea.stylouse.databinding.FragmentOrdersBinding;
 import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.models.responses.OrdersResponse;
 import lk.apiit.eea.stylouse.services.OrderService;
-import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
 
-public class OrdersFragment extends AuthFragment {
-    private FragmentOrdersBinding binding;
-    private List<OrdersResponse> orders = new ArrayList<>();
+import static lk.apiit.eea.stylouse.databinding.FragmentOrdersBinding.inflate;
+import static lk.apiit.eea.stylouse.utils.Navigator.navigate;
 
+public class OrdersFragment extends AuthFragment {
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private MutableLiveData<String> error = new MutableLiveData<>(null);
     private MutableLiveData<Integer> count = new MutableLiveData<>(0);
+    private FragmentOrdersBinding binding;
+    private List<OrdersResponse> orders = new ArrayList<>();
 
     @Inject
     OrderService orderService;
@@ -46,9 +47,9 @@ public class OrdersFragment extends AuthFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentOrdersBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -56,7 +57,6 @@ public class OrdersFragment extends AuthFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Orders");
-
         if (session.getAuthState() != null) {
             loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
             error.observe(getViewLifecycleOwner(), this::onErrorChange);
@@ -109,6 +109,6 @@ public class OrdersFragment extends AuthFragment {
     private void onOrderClick(String orderJSON) {
         Bundle bundle = new Bundle();
         bundle.putString("order", orderJSON);
-        Navigator.navigate(parentNavController, R.id.action_mainFragment_to_orderDetailFragment, bundle);
+        navigate(parentNavController, R.id.action_mainFragment_to_orderDetailFragment, bundle);
     }
 }

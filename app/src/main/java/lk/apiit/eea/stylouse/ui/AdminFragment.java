@@ -20,7 +20,6 @@ import lk.apiit.eea.stylouse.databinding.FragmentAdminBinding;
 
 public class AdminFragment extends RootBaseFragment {
     private FragmentAdminBinding binding;
-    private BottomNavigationView bottomNavigationView;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -29,7 +28,7 @@ public class AdminFragment extends RootBaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentAdminBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -38,7 +37,7 @@ public class AdminFragment extends RootBaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        bottomNavigationView = binding.adminNavigation;
+        BottomNavigationView bottomNavigationView = binding.adminNavigation;
         NavController navController = Navigation.findNavController(activity, R.id.admin_nav_host);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }

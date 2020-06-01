@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
@@ -28,8 +27,12 @@ import lk.apiit.eea.stylouse.interfaces.ActivityHandler;
 import lk.apiit.eea.stylouse.models.requests.SignInRequest;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 import lk.apiit.eea.stylouse.services.AuthService;
-import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
+
+import static androidx.navigation.Navigation.findNavController;
+import static lk.apiit.eea.stylouse.databinding.FragmentSignInBinding.inflate;
+import static lk.apiit.eea.stylouse.utils.Constants.ROLE_ADMIN;
+import static lk.apiit.eea.stylouse.utils.Navigator.navigate;
 
 public class SignInFragment extends RootBaseFragment {
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
@@ -53,16 +56,16 @@ public class SignInFragment extends RootBaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentSignInBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
+        navController = findNavController(view);
         loading.observe(getViewLifecycleOwner(), this::onLoadingChange);
         error.observe(getViewLifecycleOwner(), this::onErrorChange);
 
@@ -95,11 +98,11 @@ public class SignInFragment extends RootBaseFragment {
     }
 
     private void onSignUpClick(View view) {
-        Navigator.navigate(navController, R.id.action_signInFragment_to_signUpFragment, null);
+        navigate(navController, R.id.action_signInFragment_to_signUpFragment, null);
     }
 
     private void onForgotPasswordClick(View view) {
-        Navigator.navigate(navController, R.id.action_signInFragment_to_forgotPasswordFragment, null);
+        navigate(navController, R.id.action_signInFragment_to_forgotPasswordFragment, null);
     }
 
     private ApiResponseCallback loginCallback = new ApiResponseCallback() {
@@ -111,10 +114,10 @@ public class SignInFragment extends RootBaseFragment {
                 Date expiresAt = new Date(new Date().getTime() + body.getTokenValidation());
                 body.setExpiresAt(expiresAt);
                 session.setAuthState(body);
-                if (body.getUserRole().equals("ROLE_ADMIN")) {
-                    Navigator.navigate(navController, R.id.action_signInFragment_to_adminFragment, null);
+                if (body.getUserRole().equals(ROLE_ADMIN)) {
+                    navigate(navController, R.id.action_signInFragment_to_adminFragment, null);
                 } else {
-                    Navigator.navigate(navController, R.id.action_signInFragment_to_mainFragment, null);
+                    navigate(navController, R.id.action_signInFragment_to_mainFragment, null);
                 }
             }
         }

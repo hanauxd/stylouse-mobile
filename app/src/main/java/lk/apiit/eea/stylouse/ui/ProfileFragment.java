@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.google.gson.Gson;
 
@@ -25,8 +24,12 @@ import lk.apiit.eea.stylouse.interfaces.ActivityHandler;
 import lk.apiit.eea.stylouse.models.requests.SignUpRequest;
 import lk.apiit.eea.stylouse.models.responses.SignInResponse;
 import lk.apiit.eea.stylouse.services.UserService;
-import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
+
+import static androidx.navigation.Navigation.findNavController;
+import static lk.apiit.eea.stylouse.databinding.FragmentProfileBinding.inflate;
+import static lk.apiit.eea.stylouse.utils.Constants.ROLE_ADMIN;
+import static lk.apiit.eea.stylouse.utils.Navigator.navigate;
 
 public class ProfileFragment extends AuthFragment {
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
@@ -39,21 +42,6 @@ public class ProfileFragment extends AuthFragment {
     @Inject
     UserService userService;
 
-    private ApiResponseCallback userCallback = new ApiResponseCallback() {
-        @Override
-        public void onSuccess(Response<?> response) {
-            SignUpRequest user = (SignUpRequest) response.body();
-            binding.setUser(user);
-            loading.setValue(false);
-        }
-
-        @Override
-        public void onFailure(String message) {
-            loading.setValue(false);
-            error.setValue(message);
-        }
-    };
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +49,9 @@ public class ProfileFragment extends AuthFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentProfileBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -71,7 +59,7 @@ public class ProfileFragment extends AuthFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Profile");
-        navController = Navigation.findNavController(view);
+        navController = findNavController(view);
         binding.btnRetry.setOnClickListener(this::fetchUser);
 
         if (session.getAuthState() != null) {
@@ -88,10 +76,10 @@ public class ProfileFragment extends AuthFragment {
         String authJSON = new Gson().toJson(authState);
         Bundle bundle = new Bundle();
         bundle.putString("authToken", authJSON);
-        if (authState.getUserRole().equals("ROLE_ADMIN")) {
-            Navigator.navigate(parentNavController, R.id.action_adminFragment_to_resetPasswordFragment, bundle);
+        if (authState.getUserRole().equals(ROLE_ADMIN)) {
+            navigate(parentNavController, R.id.action_adminFragment_to_resetPasswordFragment, bundle);
         } else {
-            Navigator.navigate(navController, R.id.action_navigation_profile_to_resetPasswordFragment, bundle);
+            navigate(navController, R.id.action_navigation_profile_to_resetPasswordFragment, bundle);
         }
     }
 
@@ -113,4 +101,19 @@ public class ProfileFragment extends AuthFragment {
         ((ActivityHandler) activity).destroy();
         session.setAuthState(null);
     }
+
+    private ApiResponseCallback userCallback = new ApiResponseCallback() {
+        @Override
+        public void onSuccess(Response<?> response) {
+            SignUpRequest user = (SignUpRequest) response.body();
+            binding.setUser(user);
+            loading.setValue(false);
+        }
+
+        @Override
+        public void onFailure(String message) {
+            loading.setValue(false);
+            error.setValue(message);
+        }
+    };
 }

@@ -23,6 +23,7 @@ import lk.apiit.eea.stylouse.services.ProductService;
 import lk.apiit.eea.stylouse.services.ReviewService;
 import lk.apiit.eea.stylouse.services.UserService;
 import lk.apiit.eea.stylouse.services.WishlistService;
+import lk.apiit.eea.stylouse.utils.PermissionManager;
 import lk.apiit.eea.stylouse.utils.UrlBuilder;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -131,5 +132,11 @@ public class ApplicationModule {
     @Singleton
     public UrlBuilder provideUrlBuilderInstance(Context context) {
         return new UrlBuilder(context);
+    }
+
+    @Provides
+    @Singleton
+    public PermissionManager providePermissionManagerInstance() {
+        return new PermissionManager();
     }
 }
