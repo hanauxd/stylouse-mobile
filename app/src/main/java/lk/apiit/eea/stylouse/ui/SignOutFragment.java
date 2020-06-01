@@ -11,15 +11,16 @@ import androidx.annotation.Nullable;
 
 import lk.apiit.eea.stylouse.R;
 import lk.apiit.eea.stylouse.databinding.FragmentSignOutBinding;
-import lk.apiit.eea.stylouse.utils.Navigator;
+
+import static lk.apiit.eea.stylouse.databinding.FragmentSignOutBinding.inflate;
+import static lk.apiit.eea.stylouse.utils.Navigator.navigate;
 
 public class SignOutFragment extends RootBaseFragment implements Runnable{
-    private FragmentSignOutBinding binding;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentSignOutBinding.inflate(inflater, container, false);
+        FragmentSignOutBinding binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -31,6 +32,6 @@ public class SignOutFragment extends RootBaseFragment implements Runnable{
 
     @Override
     public void run() {
-        Navigator.navigate(parentNavController, R.id.action_signOutFragment_to_mainFragment, null);
+        navigate(parentNavController, R.id.action_signOutFragment_to_mainFragment, null);
     }
 }

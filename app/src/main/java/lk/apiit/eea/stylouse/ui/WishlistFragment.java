@@ -24,15 +24,16 @@ import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.models.responses.WishlistResponse;
 import lk.apiit.eea.stylouse.services.WishlistService;
-import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
+
+import static lk.apiit.eea.stylouse.databinding.FragmentWishlistBinding.inflate;
+import static lk.apiit.eea.stylouse.utils.Navigator.navigate;
 
 public class WishlistFragment extends AuthFragment {
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private MutableLiveData<String> error = new MutableLiveData<>(null);
     private MutableLiveData<Integer> count = new MutableLiveData<>(0);
     private FragmentWishlistBinding binding;
-    private ProductAdapter adapter;
     private List<WishlistResponse> wishlists;
     private List<ProductResponse> products = new ArrayList<>();;
 
@@ -41,27 +42,6 @@ public class WishlistFragment extends AuthFragment {
     @Inject
     AuthSession session;
 
-    private ApiResponseCallback wishlistCallback = new ApiResponseCallback() {
-        @Override
-        public void onSuccess(Response<?> response) {
-            wishlists = (List<WishlistResponse>) response.body();
-            products.clear();
-             for (WishlistResponse wishlist : wishlists) {
-                 products.add(wishlist.getProduct());
-             }
-             initProductAdapter();
-             count.setValue(wishlists.size());
-             loading.setValue(false);
-        }
-
-        @Override
-        public void onFailure(String message) {
-            loading.setValue(false);
-            error.setValue(message);
-            count.setValue(0);
-        }
-    };
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,9 +49,9 @@ public class WishlistFragment extends AuthFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentWishlistBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -108,7 +88,7 @@ public class WishlistFragment extends AuthFragment {
 
     private void initProductAdapter() {
         if (products != null) {
-            adapter = new ProductAdapter(products, this::onProductClick, this::onWishlistClick);
+            ProductAdapter adapter = new ProductAdapter(products, this::onProductClick, this::onWishlistClick);
             binding.wishlistList.setAdapter(adapter);
         }
     }
@@ -116,7 +96,7 @@ public class WishlistFragment extends AuthFragment {
     private void onProductClick(String productJSON) {
         Bundle bundle = new Bundle();
         bundle.putString("product", productJSON);
-        Navigator.navigate(parentNavController, R.id.action_mainFragment_to_productFragment, bundle);
+        navigate(parentNavController, R.id.action_mainFragment_to_productFragment, bundle);
     }
 
     private void onWishlistClick(String productId) {
@@ -131,4 +111,25 @@ public class WishlistFragment extends AuthFragment {
             }
         }
     }
+
+    private ApiResponseCallback wishlistCallback = new ApiResponseCallback() {
+        @Override
+        public void onSuccess(Response<?> response) {
+            wishlists = (List<WishlistResponse>) response.body();
+            products.clear();
+            for (WishlistResponse wishlist : wishlists) {
+                products.add(wishlist.getProduct());
+            }
+            initProductAdapter();
+            count.setValue(wishlists.size());
+            loading.setValue(false);
+        }
+
+        @Override
+        public void onFailure(String message) {
+            loading.setValue(false);
+            error.setValue(message);
+            count.setValue(0);
+        }
+    };
 }

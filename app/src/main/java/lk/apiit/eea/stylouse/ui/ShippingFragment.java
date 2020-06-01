@@ -1,7 +1,6 @@
 package lk.apiit.eea.stylouse.ui;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +8,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
 import javax.inject.Inject;
 
@@ -22,8 +19,12 @@ import lk.apiit.eea.stylouse.databinding.FragmentShippingBinding;
 import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.models.requests.ShippingRequest;
 import lk.apiit.eea.stylouse.services.CartService;
-import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
+
+import static android.text.TextUtils.isEmpty;
+import static com.pranavpandey.android.dynamic.toasts.DynamicToast.makeSuccess;
+import static lk.apiit.eea.stylouse.databinding.FragmentShippingBinding.inflate;
+import static lk.apiit.eea.stylouse.utils.Navigator.navigate;
 
 public class ShippingFragment extends AuthFragment {
     private FragmentShippingBinding binding;
@@ -38,13 +39,12 @@ public class ShippingFragment extends AuthFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((StylouseApp) activity.getApplication()).getAppComponent().inject(this);
-        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Shipping");
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentShippingBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         btnOrder = binding.btnOrder;
         return binding.getRoot();
     }
@@ -52,6 +52,7 @@ public class ShippingFragment extends AuthFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((AppCompatActivity) this.activity).getSupportActionBar().setTitle("Shipping");
         bindOrderDetailsToView();
         btnOrder.setOnClickListener(this::onOrderClick);
     }
@@ -71,7 +72,7 @@ public class ShippingFragment extends AuthFragment {
         String city = binding.city.getText().toString();
         String postalCode = binding.postalCode.getText().toString();
 
-        if (TextUtils.isEmpty(address) || TextUtils.isEmpty(city) || TextUtils.isEmpty(postalCode)) {
+        if (isEmpty(address) || isEmpty(city) || isEmpty(postalCode)) {
             binding.errorMessage.setText(R.string.error_field);
             binding.errorMessage.setVisibility(View.VISIBLE);
         } else {
@@ -85,8 +86,8 @@ public class ShippingFragment extends AuthFragment {
         @Override
         public void onSuccess(Response<?> response) {
             btnOrder.revertAnimation();
-            DynamicToast.makeSuccess(activity, "Order placed successfully.").show();
-            Navigator.navigate(parentNavController, R.id.action_shippingFragment_to_mainFragment, null);
+            makeSuccess(activity, "Order placed successfully.").show();
+            navigate(parentNavController, R.id.action_shippingFragment_to_mainFragment, null);
         }
 
         @Override
