@@ -16,13 +16,15 @@ import java.util.Map;
 import lk.apiit.eea.stylouse.databinding.FragmentRateAverageBinding;
 import lk.apiit.eea.stylouse.models.responses.ReviewResponse;
 
+import static lk.apiit.eea.stylouse.databinding.FragmentRateAverageBinding.inflate;
+
 public class RateAverageFragment extends RootBaseFragment {
     private FragmentRateAverageBinding binding;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentRateAverageBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 

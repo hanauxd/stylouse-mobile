@@ -2,7 +2,6 @@ package lk.apiit.eea.stylouse.ui;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,9 +30,17 @@ import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.models.responses.WishlistResponse;
 import lk.apiit.eea.stylouse.services.CartService;
 import lk.apiit.eea.stylouse.services.WishlistService;
-import lk.apiit.eea.stylouse.utils.Navigator;
 import lk.apiit.eea.stylouse.utils.UrlBuilder;
 import retrofit2.Response;
+
+import static android.text.TextUtils.isEmpty;
+import static com.bumptech.glide.Glide.with;
+import static com.pranavpandey.android.dynamic.toasts.DynamicToast.makeError;
+import static com.pranavpandey.android.dynamic.toasts.DynamicToast.makeSuccess;
+import static com.pranavpandey.android.dynamic.toasts.DynamicToast.makeWarning;
+import static java.util.Arrays.asList;
+import static lk.apiit.eea.stylouse.databinding.FragmentProductBinding.inflate;
+import static lk.apiit.eea.stylouse.utils.Navigator.navigate;
 
 public class ProductFragment extends RootBaseFragment {
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
@@ -54,75 +58,6 @@ public class ProductFragment extends RootBaseFragment {
     @Inject
     UrlBuilder urlBuilder;
 
-    private ApiResponseCallback addWishlistCallback = new ApiResponseCallback() {
-        @Override
-        public void onSuccess(Response<?> response) {
-            wishlists = (List<WishlistResponse>) response.body();
-            binding.btnWishlist.setImageResource(R.drawable.icon_favorite);
-            binding.btnWishlist.setColorFilter(Color.RED);
-            binding.btnWishlist.setClickable(true);
-            DynamicToast.makeSuccess(activity, "Product added to wishlist.").show();
-        }
-
-        @Override
-        public void onFailure(String message) {
-            binding.btnWishlist.setClickable(true);
-            DynamicToast.makeError(activity, message).show();
-        }
-    };
-
-    private ApiResponseCallback deleteWishlistCallback = new ApiResponseCallback() {
-        @Override
-        public void onSuccess(Response<?> response) {
-            wishlists = (List<WishlistResponse>) response.body();
-            binding.btnWishlist.setImageResource(R.drawable.icon_wishlist);
-            binding.btnWishlist.setColorFilter(Color.RED);
-            binding.btnWishlist.setClickable(true);
-            DynamicToast.makeSuccess(activity, "Product removed from wishlist.").show();
-        }
-
-        @Override
-        public void onFailure(String message) {
-            binding.btnWishlist.setClickable(true);
-            DynamicToast.makeError(activity, message).show();
-        }
-    };
-
-    private ApiResponseCallback isWishlistCallback = new ApiResponseCallback() {
-        @Override
-        public void onSuccess(Response<?> response) {
-            bindProductToView();
-            wishlists = (List<WishlistResponse>) response.body();
-            for (WishlistResponse wishlist : wishlists) {
-                if (wishlist.getProduct().getId().equals(binding.getProduct().getId())) {
-                    binding.btnWishlist.setImageResource(R.drawable.icon_favorite);
-                    binding.btnWishlist.setColorFilter(Color.RED);
-                }
-            }
-            loading.setValue(false);
-        }
-
-        @Override
-        public void onFailure(String message) {
-            loading.setValue(false);
-            error.setValue(message);
-        }
-    };
-
-    private ApiResponseCallback addCartCallback = new ApiResponseCallback() {
-        @Override
-        public void onSuccess(Response<?> response) {
-            binding.btnCart.revertAnimation();
-            DynamicToast.makeSuccess(activity, "Product added to cart.").show();
-        }
-
-        @Override
-        public void onFailure(String message) {
-            binding.btnCart.revertAnimation();
-            DynamicToast.makeError(activity, message).show();
-        }
-    };
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,9 +65,9 @@ public class ProductFragment extends RootBaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentProductBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -188,7 +123,7 @@ public class ProductFragment extends RootBaseFragment {
     }
 
     private void onSignInClick(View view) {
-        Navigator.navigate(parentNavController, R.id.action_productFragment_to_signInFragment, null);
+        navigate(parentNavController, R.id.action_productFragment_to_signInFragment, null);
     }
 
     private void onAddToWishlistClick(View view) {
@@ -214,8 +149,8 @@ public class ProductFragment extends RootBaseFragment {
         int quantity = binding.numberPicker.getProgress();
         String productId = binding.getProduct().getId();
 
-        if (TextUtils.isEmpty(productId) || TextUtils.isEmpty(adapter.getSize()) || quantity == 0) {
-            DynamicToast.makeWarning(activity, "Select size and quantity").show();
+        if (isEmpty(productId) || isEmpty(adapter.getSize()) || quantity == 0) {
+            makeWarning(activity, "Select size and quantity").show();
         } else {
             binding.btnCart.startAnimation();
             cartService.addCart(
@@ -227,13 +162,13 @@ public class ProductFragment extends RootBaseFragment {
     }
 
     private void initSizeAdapter() {
-        adapter = new SizeAdapter(Arrays.asList("S", "M", "L", "XL"));
+        adapter = new SizeAdapter(asList("S", "M", "L", "XL"));
         binding.sizeList.setAdapter(adapter);
     }
 
     private void bindProductToView() {
         binding.setProduct(product());
-        Glide.with(binding.getRoot())
+        with(binding.getRoot())
                 .load(urlBuilder.fileUrl(product().getProductImages().get(0).getFilename()))
                 .placeholder(R.drawable.stylouse_placeholder)
                 .into(binding.productImage);
@@ -243,4 +178,73 @@ public class ProductFragment extends RootBaseFragment {
         String productJSON = getArguments() != null ? getArguments().getString("product") : null;
         return new Gson().fromJson(productJSON, ProductResponse.class);
     }
+
+    private ApiResponseCallback addWishlistCallback = new ApiResponseCallback() {
+        @Override
+        public void onSuccess(Response<?> response) {
+            wishlists = (List<WishlistResponse>) response.body();
+            binding.btnWishlist.setImageResource(R.drawable.icon_favorite);
+            binding.btnWishlist.setColorFilter(Color.RED);
+            binding.btnWishlist.setClickable(true);
+            makeSuccess(activity, "Product added to wishlist.").show();
+        }
+
+        @Override
+        public void onFailure(String message) {
+            binding.btnWishlist.setClickable(true);
+            makeError(activity, message).show();
+        }
+    };
+
+    private ApiResponseCallback deleteWishlistCallback = new ApiResponseCallback() {
+        @Override
+        public void onSuccess(Response<?> response) {
+            wishlists = (List<WishlistResponse>) response.body();
+            binding.btnWishlist.setImageResource(R.drawable.icon_wishlist);
+            binding.btnWishlist.setColorFilter(Color.RED);
+            binding.btnWishlist.setClickable(true);
+            makeSuccess(activity, "Product removed from wishlist.").show();
+        }
+
+        @Override
+        public void onFailure(String message) {
+            binding.btnWishlist.setClickable(true);
+            makeError(activity, message).show();
+        }
+    };
+
+    private ApiResponseCallback isWishlistCallback = new ApiResponseCallback() {
+        @Override
+        public void onSuccess(Response<?> response) {
+            bindProductToView();
+            wishlists = (List<WishlistResponse>) response.body();
+            for (WishlistResponse wishlist : wishlists) {
+                if (wishlist.getProduct().getId().equals(binding.getProduct().getId())) {
+                    binding.btnWishlist.setImageResource(R.drawable.icon_favorite);
+                    binding.btnWishlist.setColorFilter(Color.RED);
+                }
+            }
+            loading.setValue(false);
+        }
+
+        @Override
+        public void onFailure(String message) {
+            loading.setValue(false);
+            error.setValue(message);
+        }
+    };
+
+    private ApiResponseCallback addCartCallback = new ApiResponseCallback() {
+        @Override
+        public void onSuccess(Response<?> response) {
+            binding.btnCart.revertAnimation();
+            makeSuccess(activity, "Product added to cart.").show();
+        }
+
+        @Override
+        public void onFailure(String message) {
+            binding.btnCart.revertAnimation();
+            makeError(activity, message).show();
+        }
+    };
 }

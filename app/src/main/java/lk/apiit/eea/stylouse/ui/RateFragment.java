@@ -1,7 +1,6 @@
 package lk.apiit.eea.stylouse.ui;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
-import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
 import javax.inject.Inject;
 
@@ -23,8 +21,12 @@ import lk.apiit.eea.stylouse.di.AuthSession;
 import lk.apiit.eea.stylouse.models.requests.ReviewRequest;
 import lk.apiit.eea.stylouse.models.responses.ProductResponse;
 import lk.apiit.eea.stylouse.services.ReviewService;
-import lk.apiit.eea.stylouse.utils.Navigator;
 import retrofit2.Response;
+
+import static android.text.TextUtils.isEmpty;
+import static com.pranavpandey.android.dynamic.toasts.DynamicToast.makeSuccess;
+import static lk.apiit.eea.stylouse.databinding.FragmentRateBinding.inflate;
+import static lk.apiit.eea.stylouse.utils.Navigator.navigate;
 
 public class RateFragment extends HomeBaseFragment {
     private MutableLiveData<String> error = new MutableLiveData<>();
@@ -35,22 +37,6 @@ public class RateFragment extends HomeBaseFragment {
     @Inject
     AuthSession authSession;
 
-    private ApiResponseCallback createCallback = new ApiResponseCallback() {
-        @Override
-        public void onSuccess(Response<?> response) {
-            DynamicToast.makeSuccess(activity,"Review submitted").show();
-            Bundle bundle = new Bundle();
-            bundle.putString("product", new Gson().toJson(product()));
-            Navigator.navigate(parentNavController, R.id.action_rateFragment_to_productFragment, bundle);
-        }
-
-        @Override
-        public void onFailure(String message) {
-            binding.btnSend.revertAnimation();
-            error.setValue(message);
-        }
-    };
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,9 +44,9 @@ public class RateFragment extends HomeBaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentRateBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -78,7 +64,7 @@ public class RateFragment extends HomeBaseFragment {
     private void onSendClick(View view) {
         float rating = binding.rate.getRating();
         String reviewText = binding.review.getText().toString();
-        if (TextUtils.isEmpty(reviewText) || rating == 0) {
+        if (isEmpty(reviewText) || rating == 0) {
             error.setValue("Fields cannot be empty");
         } else {
             binding.btnSend.startAnimation();
@@ -91,4 +77,20 @@ public class RateFragment extends HomeBaseFragment {
         String productJSON = getArguments() != null ? getArguments().getString("product") : null;
         return new Gson().fromJson(productJSON, ProductResponse.class);
     }
+
+    private ApiResponseCallback createCallback = new ApiResponseCallback() {
+        @Override
+        public void onSuccess(Response<?> response) {
+            makeSuccess(activity,"Review submitted").show();
+            Bundle bundle = new Bundle();
+            bundle.putString("product", new Gson().toJson(product()));
+            navigate(parentNavController, R.id.action_rateFragment_to_productFragment, bundle);
+        }
+
+        @Override
+        public void onFailure(String message) {
+            binding.btnSend.revertAnimation();
+            error.setValue(message);
+        }
+    };
 }

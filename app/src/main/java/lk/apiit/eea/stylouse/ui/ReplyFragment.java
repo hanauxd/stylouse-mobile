@@ -2,11 +2,9 @@ package lk.apiit.eea.stylouse.ui;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,6 +30,11 @@ import lk.apiit.eea.stylouse.models.requests.InquiryRequest;
 import lk.apiit.eea.stylouse.services.InquiryService;
 import retrofit2.Response;
 
+import static android.text.TextUtils.isEmpty;
+import static android.widget.Toast.LENGTH_SHORT;
+import static android.widget.Toast.makeText;
+import static lk.apiit.eea.stylouse.databinding.FragmentInquiryBinding.inflate;
+
 public class ReplyFragment extends RootBaseFragment {
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private MutableLiveData<List<Reply>> replyData = new MutableLiveData<>(new ArrayList<>());
@@ -49,9 +52,9 @@ public class ReplyFragment extends RootBaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentInquiryBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -89,8 +92,8 @@ public class ReplyFragment extends RootBaseFragment {
 
     private void onSendClick(View view) {
         String inquiry = binding.inquiry.getText().toString();
-        if (TextUtils.isEmpty(inquiry)) {
-            Toast.makeText(activity, "Reply is required", Toast.LENGTH_SHORT).show();
+        if (isEmpty(inquiry)) {
+            makeText(activity, "Reply is required", LENGTH_SHORT).show();
         } else {
             loading.setValue(true);
             InquiryRequest replyRequest = new InquiryRequest(inquiry().getId(), inquiry);

@@ -23,8 +23,10 @@ import lk.apiit.eea.stylouse.databinding.FragmentOrderDetailBinding;
 import lk.apiit.eea.stylouse.models.responses.CartResponse;
 import lk.apiit.eea.stylouse.models.responses.OrderItemResponse;
 import lk.apiit.eea.stylouse.models.responses.OrdersResponse;
-import lk.apiit.eea.stylouse.utils.Navigator;
-import lk.apiit.eea.stylouse.utils.StringFormatter;
+
+import static lk.apiit.eea.stylouse.databinding.FragmentOrderDetailBinding.inflate;
+import static lk.apiit.eea.stylouse.utils.Navigator.navigate;
+import static lk.apiit.eea.stylouse.utils.StringFormatter.formatCurrency;
 
 public class OrderDetailFragment extends AuthFragment {
     private FragmentOrderDetailBinding binding;
@@ -38,9 +40,9 @@ public class OrderDetailFragment extends AuthFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentOrderDetailBinding.inflate(inflater, container, false);
+        binding = inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -55,7 +57,7 @@ public class OrderDetailFragment extends AuthFragment {
         String orderJSON = getArguments() != null ? getArguments().getString("order") : null;
         OrdersResponse ordersResponse = new Gson().fromJson(orderJSON, OrdersResponse.class);
         binding.setOrder(ordersResponse);
-        binding.setTotal(StringFormatter.formatCurrency(orderTotal(ordersResponse.getOrderItems())));
+        binding.setTotal(formatCurrency(orderTotal(ordersResponse.getOrderItems())));
         carts = cartResponses(ordersResponse.getOrderItems());
     }
 
@@ -68,8 +70,12 @@ public class OrderDetailFragment extends AuthFragment {
     }
 
     private void initRecyclerView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(activity, RecyclerView.VERTICAL, false);
-        CartAdapter adapter = new CartAdapter(carts, null, this::onProductClick);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(activity,
+                RecyclerView.VERTICAL,
+                false);
+        CartAdapter adapter = new CartAdapter(carts,
+                null,
+                this::onProductClick);
         binding.orderItemList.setAdapter(adapter);
         binding.orderItemList.setLayoutManager(layoutManager);
     }
@@ -77,14 +83,17 @@ public class OrderDetailFragment extends AuthFragment {
     private void onProductClick(String productJSON) {
         Bundle bundle = new Bundle();
         bundle.putString("product", productJSON);
-        Navigator.navigate(parentNavController, R.id.action_orderDetailFragment_to_productFragment, bundle);
+        navigate(parentNavController, R.id.action_orderDetailFragment_to_productFragment, bundle);
     }
 
     private List<CartResponse> cartResponses(List<OrderItemResponse> orderItems) {
         List<CartResponse> carts = new ArrayList<>();
         for (OrderItemResponse item : orderItems) {
             double subTotal = item.getQuantity() * item.getProduct().getPrice();
-            CartResponse cart = new CartResponse(item.getProduct(), item.getQuantity(), item.getSize(), subTotal);
+            CartResponse cart = new CartResponse(item.getProduct(),
+                    item.getQuantity(),
+                    item.getSize(),
+                    subTotal);
             carts.add(cart);
         }
         return carts;
