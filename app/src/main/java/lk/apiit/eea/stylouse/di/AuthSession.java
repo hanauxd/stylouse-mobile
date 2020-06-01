@@ -35,7 +35,8 @@ public class AuthSession {
         state.observe(lc, o);
     }
 
-    public void removeObserver(LifecycleOwner lc) {
-        state.removeObservers(lc);
+    public void save(SignInResponse authToken) {
+        authToken.setExpireDate();
+        setAuthState(authToken);
     }
 }
