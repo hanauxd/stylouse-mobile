@@ -18,13 +18,14 @@ public interface ProductAPI {
     @GET("products?sort=createdAt,desc")
     Call<List<ProductResponse>> getProducts();
 
-    @GET("products/{id}")
-    Call<ProductResponse> getProduct(@Path("id") String id);
-
     @POST("products/{id}")
-    Call<ProductResponse> updateProduct(@Header("Authorization") String token, @Path("id") String id, @Body ProductResponse product);
+    Call<ProductResponse> updateProduct(@Header("Authorization") String token,
+                                        @Path("id") String id,
+                                        @Body ProductResponse product);
 
     @Multipart
     @POST("products")
-    Call<ProductResponse> createProduct(@Header("Authorization") String token, @Part("product") ProductRequest product, @Part List<MultipartBody.Part> file);
+    Call<ProductResponse> createProduct(@Header("Authorization") String token,
+                                        @Part("product") ProductRequest product,
+                                        @Part List<MultipartBody.Part> file);
 }
