@@ -60,9 +60,9 @@ public interface ApplicationComponent {
     void inject(ReplyFragment fragment);
     void inject(InboxFragment fragment);
     void inject(EditProductFragment fragment);
-    void inject(ReviewAdapter adapter);
     void inject(AddProductFragment fragment);
 
+    void inject(ReviewAdapter adapter);
     void inject(ProductAdapter adapter);
     void inject(CartAdapter adapter);
     void inject(InboxAdapter adapter);

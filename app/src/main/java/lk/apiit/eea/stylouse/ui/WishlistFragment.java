@@ -35,7 +35,7 @@ public class WishlistFragment extends AuthFragment {
     private MutableLiveData<Integer> count = new MutableLiveData<>(0);
     private FragmentWishlistBinding binding;
     private List<WishlistResponse> wishlists;
-    private List<ProductResponse> products = new ArrayList<>();;
+    private List<ProductResponse> products = new ArrayList<>();
 
     @Inject
     WishlistService wishlistService;
